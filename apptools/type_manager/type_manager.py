@@ -1,15 +1,14 @@
 """ A type manager. """
 
-
 # Enthought library imports.
 from traits.api import HasTraits, Instance, Property, Str
 
 # Local imports.
-from abstract_type_system import AbstractTypeSystem
-from adapter_manager import AdapterManager
-from factory import Factory
-from hook import add_pre, add_post, remove_pre, remove_post
-from python_type_system import PythonTypeSystem
+from .abstract_type_system import AbstractTypeSystem
+from .adapter_manager import AdapterManager
+from .factory import Factory
+from .hook import add_pre, add_post, remove_pre, remove_post
+from .python_type_system import PythonTypeSystem
 
 
 class TypeManager(HasTraits):
@@ -79,7 +78,8 @@ class TypeManager(HasTraits):
 
         # Otherwise, see if the object can be adapted to the target class.
         else:
-            result = self._adapter_manager.adapt(obj, target_class, *args,**kw)
+            result = self._adapter_manager.adapt(obj, target_class, *args, **
+                                                 kw)
 
         # If this type manager couldn't do the job, then give its parent a go!
         if result is None and self.parent is not None:
@@ -213,5 +213,6 @@ class TypeManager(HasTraits):
                          and obj.can_create(target_class, *args, **kw)
 
         return is_factory_for
+
 
 #### EOF ######################################################################

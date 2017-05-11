@@ -13,13 +13,11 @@
 #------------------------------------------------------------------------------
 """ A simple naming example. """
 
-
 # Standard library imports.
 import os, sys
 
 # Enthought library imports.
 from apptools.naming.api import Context, InitialContext
-
 
 # Application entry point.
 if __name__ == '__main__':
@@ -27,12 +25,12 @@ if __name__ == '__main__':
     # Set up the naming environment.
     klass_name = "apptools.naming.InitialContextFactory"
     klass_name = "apptools.naming.PyFSInitialContextFactory"
-    environment = {Context.INITIAL_CONTEXT_FACTORY : klass_name}
+    environment = {Context.INITIAL_CONTEXT_FACTORY: klass_name}
 
     # Create an initial context.
     context = InitialContext(environment)
     context.path = os.getcwd()
-    print 'Context', context, context.path
-    print 'Names', context.list_names('')
+    print('Context', context, context.path)
+    print('Names', context.list_names(''))
 
 ##### EOF #####################################################################

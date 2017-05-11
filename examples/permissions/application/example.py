@@ -1,6 +1,5 @@
 """A simple example of using the permissions framework."""
 
-
 # Standard library imports.
 import logging
 
@@ -11,7 +10,6 @@ from pyface.workbench.api import Workbench
 # Local imports.
 from workbench_window import ExampleWorkbenchWindow
 from person import Person
-
 
 # Log to stderr.
 logger = logging.getLogger()
@@ -69,6 +67,7 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    import sys; main(sys.argv)
+    import sys
+    main(sys.argv)
 
 #### EOF ######################################################################

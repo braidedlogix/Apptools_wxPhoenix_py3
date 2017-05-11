@@ -1,7 +1,5 @@
 """ A preferences node that adds the notion of preferences scopes. """
 
-from __future__ import print_function
-
 # Standard library imports.
 from os.path import join
 
@@ -200,7 +198,7 @@ class ScopedPreferences(Preferences):
 
         keys = set()
         for node in nodes:
-            keys.update(node.node(path).keys())
+            keys.update(list(node.node(path).keys()))
 
         return list(keys)
 
@@ -361,10 +359,8 @@ class ScopedPreferences(Preferences):
 
         scopes = [
             Preferences(
-                name     = 'application',
-                filename = self.application_preferences_filename
-            ),
-
+                name='application',
+                filename=self.application_preferences_filename),
             Preferences(name='default')
         ]
 
@@ -460,5 +456,6 @@ class ScopedPreferences(Preferences):
             child.dump(indent)
 
         return
+
 
 #### EOF ######################################################################

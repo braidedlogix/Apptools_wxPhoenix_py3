@@ -13,12 +13,11 @@
 #------------------------------------------------------------------------------
 """ The base class for all context adapter factories. """
 
-
 # Enthought library imports.
 from apptools.type_manager.api import AdapterFactory
 
 # Local imports.
-from context import Context
+from .context import Context
 
 
 class ContextAdapterFactory(AdapterFactory):
@@ -37,9 +36,9 @@ class ContextAdapterFactory(AdapterFactory):
         """ Returns an adapter that adapts an object to the target class. """
 
         adapter = self.adapter_class(
-            adaptee=adaptee, environment=environment, context=context
-        )
+            adaptee=adaptee, environment=environment, context=context)
 
         return adapter
+
 
 #### EOF ######################################################################

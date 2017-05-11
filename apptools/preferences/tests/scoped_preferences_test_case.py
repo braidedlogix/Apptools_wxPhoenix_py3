@@ -1,6 +1,5 @@
 """ Tests for scoped preferences. """
 
-
 # Standard library imports.
 import os, tempfile, unittest
 from os.path import join
@@ -12,8 +11,7 @@ from pkg_resources import resource_filename
 from apptools.preferences.api import Preferences, ScopedPreferences
 
 # Local imports.
-from preferences_test_case import PreferencesTestCase
-
+from .preferences_test_case import PreferencesTestCase
 
 # This module's package.
 PKG = 'apptools.preferences.tests'
@@ -124,14 +122,11 @@ class ScopedPreferencesTestCase(PreferencesTestCase):
     def test_ability_to_specify_primary_scope(self):
 
         preferences = ScopedPreferences(
-            scopes = [
-                Preferences(name='a'),
-                Preferences(name='b'),
+            scopes=[
+                Preferences(name='a'), Preferences(name='b'),
                 Preferences(name='c')
             ],
-
-            primary_scope_name = 'b'
-        )
+            primary_scope_name='b')
 
         # This should set the prefrrence in the primary scope.
         preferences.set('acme.foo', 'bar')
@@ -381,9 +376,9 @@ class ScopedPreferencesTestCase(PreferencesTestCase):
             """ Listener for changes to a preferences node. """
 
             listener.node = node
-            listener.key  = key
-            listener.old  = old
-            listener.new  = new
+            listener.key = key
+            listener.old = old
+            listener.new = new
 
             return
 
@@ -416,9 +411,9 @@ class ScopedPreferencesTestCase(PreferencesTestCase):
             """ Listener for changes to a preferences node. """
 
             listener.node = node
-            listener.key  = key
-            listener.old  = old
-            listener.new  = new
+            listener.key = key
+            listener.old = old
+            listener.new = new
 
             return
 

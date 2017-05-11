@@ -21,8 +21,8 @@ class Mixed(A, D):
     pass
 
 
-class Abstract(object):
-    __metaclass__ = abc.ABCMeta
+class Abstract(object, metaclass=abc.ABCMeta):
+    pass
 
 
 class Concrete(object):
@@ -35,6 +35,5 @@ class ConcreteSubclass(Concrete):
 
 for typ in (A, B, C, D, Mixed, Abstract, Concrete, ConcreteSubclass):
     typ.__module__ = 'dummies'
-
 
 Abstract.register(Concrete)

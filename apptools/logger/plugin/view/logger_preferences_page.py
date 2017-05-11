@@ -18,6 +18,7 @@ from apptools.preferences.ui.api import PreferencesPage
 from traits.api import Bool, Trait, Str
 from traitsui.api import EnumEditor, Group, Item, View
 
+
 class LoggerPreferencesPage(PreferencesPage):
     """ A preference page for the logger plugin.
     """
@@ -38,25 +39,24 @@ class LoggerPreferencesPage(PreferencesPage):
     # The path to the preferences node that contains the preferences.
     preferences_path = 'apptools.logger'
 
-
     #### Preferences ###########################################################
 
     # The log levels
-    level = Trait('Info',
-        {'Debug'    : logging.DEBUG,
-         'Info'     : logging.INFO,
-         'Warning'  : logging.WARNING,
-         'Error'    : logging.ERROR,
-         'Critical' : logging.CRITICAL,
+    level = Trait(
+        'Info',
+        {
+            'Debug': logging.DEBUG,
+            'Info': logging.INFO,
+            'Warning': logging.WARNING,
+            'Error': logging.ERROR,
+            'Critical': logging.CRITICAL,
         },
-        is_str = True,
-    )
+        is_str=True, )
 
     enable_agent = Bool(False)
     smtp_server = Str
     to_address = Str
     from_address = Str
-
 
     # The view used to change the plugin preferences
     traits_view = View(
@@ -66,30 +66,30 @@ class LoggerPreferencesPage(PreferencesPage):
                     name='level',
                     editor=EnumEditor(
                         values={
-                            'Debug'    : '1:Debug',
-                            'Info'     : '2:Info',
-                            'Warning'  : '3:Warning',
-                            'Error'    : '4:Error' ,
-                            'Critical' : '5:Critical',
-                        },
-                    ),
-                    style='simple',
-                ),
+                            'Debug': '1:Debug',
+                            'Info': '2:Info',
+                            'Warning': '3:Warning',
+                            'Error': '4:Error',
+                            'Critical': '5:Critical',
+                        }, ),
+                    style='simple', ),
                 label='Logger Settings',
-                show_border=True,
-            ),
+                show_border=True, ),
             Group(Item(name='10')),
             Group(
                 Group(
-                    Group(Item(name='enable_agent', label='Enable quality agent'), show_left=False),
-                    Group(Item(name='smtp_server', label='SMTP server'),
-                          Item(name='from_address'),
-                          Item(name='to_address'), enabled_when='enable_agent==True')),
+                    Group(
+                        Item(
+                            name='enable_agent', label='Enable quality agent'),
+                        show_left=False),
+                    Group(
+                        Item(
+                            name='smtp_server', label='SMTP server'),
+                        Item(name='from_address'),
+                        Item(name='to_address'),
+                        enabled_when='enable_agent==True')),
                 label='Quality Agent Settings',
-                show_border=True,
-            ),
-        ),
-    )
+                show_border=True, ), ), )
 
 
 #### EOF ######################################################################

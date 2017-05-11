@@ -38,6 +38,7 @@ class State(dict):
     that has class specific details like the class name, module name
     etc.
     """
+
     def __init__(self, **kw):
         dict.__init__(self, **kw)
         self.__dict__ = self
@@ -79,9 +80,9 @@ class StatePickler(Pickler):
         cls = md.get('class')
         cls_md = cls.__METADATA__
 
-        memo  = self.memo
+        memo = self.memo
         write = self.write
-        save  = self.save
+        save = self.save
 
         args = md.get('initargs')
         if len(args) > 0:
@@ -97,7 +98,8 @@ class StatePickler(Pickler):
         else:
             for arg in args:
                 save(arg)
-            write(INST + cls_md.get('module') + '\n' + cls_md.get('name') + '\n')
+            write(INST + cls_md.get('module') + '\n' + cls_md.get('name') +
+                  '\n')
 
         self.memoize(obj)
 
@@ -133,8 +135,7 @@ class StatePickler(Pickler):
                 warnings.warn("__basicnew__ special case is deprecated",
                               DeprecationWarning)
             else:
-                raise PicklingError(
-                    "args from reduce() should be a tuple")
+                raise PicklingError("args from reduce() should be a tuple")
 
         # Assert that func is callable
         #if not callable(func):
@@ -191,7 +192,7 @@ class StatePickler(Pickler):
                 if code <= 0xff:
                     write(EXT1 + chr(code))
                 elif code <= 0xffff:
-                    write("%c%c%c" % (EXT2, code&0xff, code>>8))
+                    write("%c%c%c" % (EXT2, code & 0xff, code >> 8))
                 else:
                     write(EXT4 + pack("<i", code))
                 return
@@ -205,7 +206,7 @@ class StatePickler(Pickler):
 ######################################################################
 class StateUnpickler(Unpickler):
     def _instantiate(self, klass, k):
-        args = tuple(self.stack[k+1:])
+        args = tuple(self.stack[k + 1:])
         del self.stack[k:]
         metadata = {'initargs': args, 'class': klass, 'type': 'instance'}
         value = State(__METADATA__=metadata)
@@ -225,8 +226,9 @@ class StateUnpickler(Unpickler):
             else:
                 inst.__dict__.update(state)
         if slotstate:
-            for k, v in slotstate.items():
+            for k, v in list(slotstate.items()):
                 setattr(inst, k, v)
+
     Unpickler.dispatch[BUILD] = load_build
 
     def load_newobj(self):
@@ -234,9 +236,10 @@ class StateUnpickler(Unpickler):
         cls = self.stack[-1]
         cls_md = cls.__METADATA__
         metadata = {'initargs': args, 'class': cls, 'type': 'newobj'}
-        obj = State(__METADATA__ = metadata)
+        obj = State(__METADATA__=metadata)
         #obj = cls.__new__(cls, *args)
         self.stack[-1] = obj
+
     Unpickler.dispatch[NEWOBJ] = load_newobj
 
     def load_reduce(self):
@@ -245,8 +248,9 @@ class StateUnpickler(Unpickler):
         func = stack[-1]
         func_md = func.__METADATA__
         metadata = {'initargs': args, 'class': func, 'type': 'reduce'}
-        value = State(__METADATA__ = metadata)
+        value = State(__METADATA__=metadata)
         stack[-1] = value
+
     Unpickler.dispatch[REDUCE] = load_reduce
 
     def load(self):
@@ -265,7 +269,7 @@ class StateUnpickler(Unpickler):
 
     def find_class(self, module, name):
         metadata = {'module': module, 'name': name, 'type': 'class'}
-        value = State(__METADATA__ = metadata)
+        value = State(__METADATA__=metadata)
         return value
 
 
@@ -277,9 +281,11 @@ def get_state(obj):
     str = dumps(obj)
     return StateUnpickler(BytesIO(str)).load()
 
+
 def dump_state(state, file, protocol=None, bin=None):
     """Dump the state (potentially modified) to given file."""
     StatePickler(file, protocol, bin).dump(state)
+
 
 def dumps_state(state, protocol=None, bin=None):
     """Dump the state (potentially modified) to a string and return
@@ -288,15 +294,18 @@ def dumps_state(state, protocol=None, bin=None):
     StatePickler(file, protocol, bin).dump(state)
     return file.getvalue()
 
+
 def state2object(state):
     """Creates an object from a state."""
     s = dumps_state(state)
     return pickle.loads(s)
 
+
 def load_state(file):
     """Loads the state from a file like object.  This does not import
     any modules."""
     return StateUnpickler(file).load()
+
 
 def loads_state(string):
     """Loads the state from a string object.  This does not import any

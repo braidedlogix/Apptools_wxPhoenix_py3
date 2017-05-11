@@ -13,12 +13,11 @@
 #------------------------------------------------------------------------------
 """ The base class for all initial context factories. """
 
-
 # Enthought library imports.
 from traits.api import HasTraits
 
 # Local imports.
-from context import Context
+from .context import Context
 
 
 class InitialContextFactory(HasTraits):
@@ -32,5 +31,6 @@ class InitialContextFactory(HasTraits):
         """ Creates an initial context for beginning name resolution. """
 
         return Context(environment=environment)
+
 
 #### EOF ######################################################################

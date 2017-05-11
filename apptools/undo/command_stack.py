@@ -12,8 +12,6 @@
 # Description: <Enthought undo package component>
 #------------------------------------------------------------------------------
 
-from __future__ import absolute_import
-
 # Enthought library imports.
 from traits.api import Bool, HasTraits, Instance, Int, List, Property, \
     Unicode, provides
@@ -195,8 +193,8 @@ class CommandStack(HasTraits):
             del self._stack[self._index:]
 
             # Create a new stack entry and add it to the stack.
-            entry = _StackEntry(command=command,
-                    sequence_nr=self.undo_manager.sequence_nr)
+            entry = _StackEntry(
+                command=command, sequence_nr=self.undo_manager.sequence_nr)
 
             self._stack.append(entry)
             self.undo_manager.stack_updated = self
@@ -294,7 +292,8 @@ class CommandStack(HasTraits):
         redo_name = ""
 
         if len(self._macro_stack) == 0 and self._index + 1 < len(self._stack):
-            redo_name = self._stack[self._index + 1].command.name.replace('&', '')
+            redo_name = self._stack[self._index + 1].command.name.replace('&',
+                                                                          '')
 
         return redo_name
 

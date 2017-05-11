@@ -12,17 +12,14 @@
 # Description: <Enthought logger package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import logging
 from traceback import format_exception
-
-
-
 """
     To catch exceptions with our own code this code needs to be added
     sys.excepthook = custom_excepthook
 """
+
 
 def custom_excepthook(type, value, traceback):
     """ Pass on the exception to the logging system. """
@@ -34,7 +31,7 @@ def custom_excepthook(type, value, traceback):
 
     # Try to find the module that the exception actually came from.
     name = getattr(traceback.tb_frame, 'f_globals', {}).get('__name__',
-        __name__)
+                                                            __name__)
     logger = logging.getLogger(name)
     logger.error(msg)
 

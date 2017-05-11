@@ -11,7 +11,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ Defines the ITemplateDataContext interface for accessing a named collection
     of data that can be bound to a templatized object when converting it to a
     'live' set of objects.
@@ -28,7 +27,8 @@ from traits.api\
 #  'ITemplateDataContext' interface:
 #-------------------------------------------------------------------------------
 
-class ITemplateDataContext ( Interface ):
+
+class ITemplateDataContext(Interface):
     """ Defines the ITemplateDataContext interface for accessing a named
         collection of data that can be bound to a templatized object when
         converting it to a 'live' set of objects.
@@ -41,12 +41,12 @@ class ITemplateDataContext ( Interface ):
     data_context_name = Str
 
     # A list of the names of the data values in this context:
-    data_context_values = List( Str )
+    data_context_values = List(Str)
 
     # The list of the names of the sub-contexts of this context:
-    data_contexts = List( Str )
+    data_contexts = List(Str)
 
-    def get_data_context_value ( self, name ):
+    def get_data_context_value(self, name):
         """ Returns the data value with the specified *name*. Raises a
             **ITemplateDataContextError** if *name* is not defined as a data
             value in the context.
@@ -65,7 +65,7 @@ class ITemplateDataContext ( Interface ):
             with a data value in the context.
         """
 
-    def get_data_context ( self, name ):
+    def get_data_context(self, name):
         """ Returns the **ITemplateDataContext** value associated with the
             specified *name*. Raises **ITemplateDataContextError** if *name* is
             not defined as a data context in the context.
@@ -83,12 +83,13 @@ class ITemplateDataContext ( Interface ):
             with a data context in the context.
         """
 
+
 #-------------------------------------------------------------------------------
 #  'ITemplateDataContextError' exception:
 #-------------------------------------------------------------------------------
 
-class ITemplateDataContextError ( Exception ):
+
+class ITemplateDataContextError(Exception):
     """ The exception class associated with the **ITemplateDataContext**
         interface.
     """
-

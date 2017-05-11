@@ -10,7 +10,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ A concrete implementation of the ITemplateDataSource interface based on the
     implementation of the TemplateDataName class.
 """
@@ -32,16 +31,17 @@ from apptools.template.itemplate_data_source \
 #  'TemplateDataSource' class:
 #-------------------------------------------------------------------------------
 
-class TemplateDataSource ( TemplateDataName ):
+
+class TemplateDataSource(TemplateDataName):
     """ A concrete implementation of the ITemplateDataSource interface based on
         the implementation of the TemplateDataName class.
     """
 
-    implements( ITemplateDataSource )
+    implements(ITemplateDataSource)
 
     #-- ITemplateDataSource Interface Implementation ---------------------------
 
-    def name_from_data_source ( self ):
+    def name_from_data_source(self):
         """ Allows the object to provide a description of the possibly optional
             data binding it requires.
 
@@ -51,4 +51,3 @@ class TemplateDataSource ( TemplateDataName ):
             source object requires.
         """
         return self
-

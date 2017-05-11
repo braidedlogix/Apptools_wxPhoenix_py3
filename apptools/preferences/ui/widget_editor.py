@@ -1,6 +1,5 @@
 """ An instance editor that allows total control over widget creation. """
 
-
 # Enthought library imports.
 from traits.etsconfig.api import ETSConfig
 from traits.api import Any
@@ -74,7 +73,7 @@ class WidgetEditor(EditorFactory):
     # 'object' interface.
     ###########################################################################
 
-    def __call__ (self, *args, **traits):
+    def __call__(self, *args, **traits):
         """ Call the object. """
 
         return self.set(**traits)
@@ -88,17 +87,17 @@ class WidgetEditor(EditorFactory):
 
         editor = _WidgetEditor(
             parent,
-            factory     = self,
-            ui          = ui,
-            object      = object,
-            name        = name,
-            description = description
-        )
+            factory=self,
+            ui=ui,
+            object=object,
+            name=name,
+            description=description)
 
         return editor
 
-    custom_editor   = simple_editor
-    text_editor     = simple_editor
+    custom_editor = simple_editor
+    text_editor = simple_editor
     readonly_editor = simple_editor
+
 
 #### EOF ######################################################################

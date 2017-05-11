@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ A null log handler. """
 
-
 # Standard library imports.
 import logging
 
@@ -37,5 +36,6 @@ class NullHandler(logging.Handler):
         """ Emits a log record. """
 
         pass
+
 
 #### EOF ######################################################################

@@ -1,6 +1,5 @@
 """ Tests for the preferences helper. """
 
-
 # Standard library imports.
 import time
 import unittest
@@ -33,6 +32,7 @@ def bgcolor_listener(obj, trait_name, old, new):
     bgcolor_listener.new = new
 
     return
+
 
 # This module's package.
 PKG = 'apptools.preferences.tests'
@@ -77,13 +77,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             preferences_path = 'acme.ui'
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str
-            width       = Int
-            ratio       = Float
-            visible     = Bool
+            bgcolor = Str
+            width = Int
+            ratio = Float
+            visible = Bool
             description = Unicode
-            offsets     = List(Int)
-            names       = List(Str)
+            offsets = List(Int)
+            names = List(Str)
 
         helper = AcmeUIPreferencesHelper()
         helper.on_trait_change(bgcolor_listener)
@@ -93,7 +93,7 @@ class PreferencesHelperTestCase(unittest.TestCase):
         self.assertEqual(50, helper.width)
         self.assertEqual(1.0, helper.ratio)
         self.assertEqual(True, helper.visible)
-        self.assertEqual(u'acme ui', helper.description)
+        self.assertEqual('acme ui', helper.description)
         self.assertEqual([1, 2, 3, 4], helper.offsets)
         self.assertEqual(['joe', 'fred', 'jane'], helper.names)
 
@@ -131,13 +131,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             """ A helper! """
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str
-            width       = Int
-            ratio       = Float
-            visible     = Bool
+            bgcolor = Str
+            width = Int
+            ratio = Float
+            visible = Bool
             description = Unicode
-            offsets     = List(Int)
-            names       = List(Str)
+            offsets = List(Int)
+            names = List(Str)
 
         helper = AcmeUIPreferencesHelper(preferences_path='acme.ui')
         helper.on_trait_change(bgcolor_listener)
@@ -147,7 +147,7 @@ class PreferencesHelperTestCase(unittest.TestCase):
         self.assertEqual(50, helper.width)
         self.assertEqual(1.0, helper.ratio)
         self.assertEqual(True, helper.visible)
-        self.assertEqual(u'acme ui', helper.description)
+        self.assertEqual('acme ui', helper.description)
         self.assertEqual([1, 2, 3, 4], helper.offsets)
         self.assertEqual(['joe', 'fred', 'jane'], helper.names)
 
@@ -187,13 +187,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             preferences_path = 'acme.ui'
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str('blue')
-            width       = Int(50)
-            ratio       = Float(1.0)
-            visible     = Bool(True)
-            description = Unicode(u'description')
-            offsets     = List(Int, [1, 2, 3, 4])
-            names       = List(Str, ['joe', 'fred', 'jane'])
+            bgcolor = Str('blue')
+            width = Int(50)
+            ratio = Float(1.0)
+            visible = Bool(True)
+            description = Unicode('description')
+            offsets = List(Int, [1, 2, 3, 4])
+            names = List(Str, ['joe', 'fred', 'jane'])
 
         helper = AcmeUIPreferencesHelper()
 
@@ -202,7 +202,7 @@ class PreferencesHelperTestCase(unittest.TestCase):
         self.assertEqual(50, helper.width)
         self.assertEqual(1.0, helper.ratio)
         self.assertEqual(True, helper.visible)
-        self.assertEqual(u'description', helper.description)
+        self.assertEqual('description', helper.description)
         self.assertEqual([1, 2, 3, 4], helper.offsets)
         self.assertEqual(['joe', 'fred', 'jane'], helper.names)
 
@@ -221,25 +221,24 @@ class PreferencesHelperTestCase(unittest.TestCase):
             preferences_path = 'acme.ui'
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str('blue')
-            width       = Int(50)
-            ratio       = Float(1.0)
-            visible     = Bool(True)
-            description = Unicode(u'')
-            offsets     = List(Int, [1, 2, 3, 4])
-            names       = List(Str, ['joe', 'fred', 'jane'])
+            bgcolor = Str('blue')
+            width = Int(50)
+            ratio = Float(1.0)
+            visible = Bool(True)
+            description = Unicode('')
+            offsets = List(Int, [1, 2, 3, 4])
+            names = List(Str, ['joe', 'fred', 'jane'])
 
         helper = AcmeUIPreferencesHelper()
 
-        first_unicode_str = u'U\xdc\xf2ser'
+        first_unicode_str = 'U\xdc\xf2ser'
         first_utf8_str = 'U\xc3\x9c\xc3\xb2ser'
 
         original_description = helper.description
         helper.description = first_unicode_str
         self.assertEqual(first_unicode_str, helper.description)
 
-
-        second_unicode_str = u'caf\xe9'
+        second_unicode_str = 'caf\xe9'
         second_utf8_str = 'caf\xc3\xa9'
         helper.description = second_unicode_str
         self.assertEqual(second_unicode_str, helper.description)
@@ -249,7 +248,7 @@ class PreferencesHelperTestCase(unittest.TestCase):
 
         p.load(self.example)
         self.assertEqual(second_unicode_str, p.get('acme.ui.description'))
-        self.assertEqual(u'True', p.get('acme.ui.visible'))
+        self.assertEqual('True', p.get('acme.ui.visible'))
         self.assertEqual(True, helper.visible)
 
         # reset the original description and save the example file
@@ -266,13 +265,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             """ A helper! """
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str
-            width       = Int
-            ratio       = Float
-            visible     = Bool
+            bgcolor = Str
+            width = Int
+            ratio = Float
+            visible = Bool
             description = Unicode
-            offsets     = List(Int)
-            names       = List(Str)
+            offsets = List(Int)
+            names = List(Str)
 
         # Cannot create a helper with a preferences path.
         self.assertRaises(SystemError, AcmeUIPreferencesHelper)
@@ -300,13 +299,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             preferences_path = 'acme.ui'
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str
-            width       = Int
-            ratio       = Float
-            visible     = Bool
+            bgcolor = Str
+            width = Int
+            ratio = Float
+            visible = Bool
             description = Unicode
-            offsets     = List(Int)
-            names       = List(Str)
+            offsets = List(Int)
+            names = List(Str)
 
         helper = AcmeUIPreferencesHelper()
         helper.sync_trait('bgcolor', w, 'background_color')
@@ -316,7 +315,7 @@ class PreferencesHelperTestCase(unittest.TestCase):
         self.assertEqual(50, helper.width)
         self.assertEqual(1.0, helper.ratio)
         self.assertEqual(True, helper.visible)
-        self.assertEqual(u'acme ui', helper.description)
+        self.assertEqual('acme ui', helper.description)
         self.assertEqual([1, 2, 3, 4], helper.offsets)
         self.assertEqual(['joe', 'fred', 'jane'], helper.names)
 
@@ -419,13 +418,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             preferences_path = 'acme.ui'
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str
-            width       = Int
-            ratio       = Float
-            visible     = Bool
+            bgcolor = Str
+            width = Int
+            ratio = Float
+            visible = Bool
             description = Unicode
-            offsets     = List(Int)
-            names       = List(Str)
+            offsets = List(Int)
+            names = List(Str)
 
         helper = AcmeUIPreferencesHelper()
 
@@ -485,13 +484,13 @@ class PreferencesHelperTestCase(unittest.TestCase):
             """ A helper! """
 
             # The traits that we want to initialize from preferences.
-            bgcolor     = Str
-            width       = Int
-            ratio       = Float
-            visible     = Bool
+            bgcolor = Str
+            width = Int
+            ratio = Float
+            visible = Bool
             description = Unicode
-            offsets     = List(Int)
-            names       = List(Str)
+            offsets = List(Int)
+            names = List(Str)
 
             # When the width changes, change the ratio.
             def _width_changed(self, trait_name, old, new):
@@ -508,7 +507,7 @@ class PreferencesHelperTestCase(unittest.TestCase):
         self.assertEqual(50, helper.width)
         self.assertEqual(1.0, helper.ratio)
         self.assertEqual(True, helper.visible)
-        self.assertEqual(u'acme ui', helper.description)
+        self.assertEqual('acme ui', helper.description)
         self.assertEqual([1, 2, 3, 4], helper.offsets)
         self.assertEqual(['joe', 'fred', 'jane'], helper.names)
 

@@ -16,6 +16,7 @@ from io import BytesIO
 from apptools.persistence import state_pickler
 from apptools.persistence import file_path
 
+
 class Test:
     def __init__(self):
         self.f = file_path.FilePath()
@@ -90,7 +91,6 @@ class TestFilePath(unittest.TestCase):
         self.assertEqual(state.f.abs_pth,
                          join(cwd, 'foo', 'test', curdir, 't.vtk'))
 
-
         # Create a dummy file in a subdir.
         s = BytesIO()
         # Spoof its location.
@@ -103,8 +103,7 @@ class TestFilePath(unittest.TestCase):
         # "Move" the file elsewhere
         s.name = join(cwd, 'foo', 'test', 't.mv2')
         state = state_pickler.load_state(s)
-        self.assertEqual(state.f.abs_pth,
-                         join(cwd, 'foo', 't.vtk'))
+        self.assertEqual(state.f.abs_pth, join(cwd, 'foo', 't.vtk'))
 
 
 if __name__ == "__main__":

@@ -13,26 +13,24 @@
 #------------------------------------------------------------------------------
 """ A naming context for a Python namespace. """
 
-
 # Enthought library imports.
 from traits.api import Any, Dict, Instance, Property
 
 # Local imports.
-from address import Address
-from binding import Binding
-from context import Context
-from naming_manager import naming_manager
-from py_object_factory import PyObjectFactory
-from reference import Reference
-from referenceable import Referenceable
-from referenceable_state_factory import ReferenceableStateFactory
-
+from .address import Address
+from .binding import Binding
+from .context import Context
+from .naming_manager import naming_manager
+from .py_object_factory import PyObjectFactory
+from .reference import Reference
+from .referenceable import Referenceable
+from .referenceable_state_factory import ReferenceableStateFactory
 
 # The default environment.
 ENVIRONMENT = {
     # 'Context' properties.
-    Context.OBJECT_FACTORIES : [PyObjectFactory()],
-    Context.STATE_FACTORIES  : [ReferenceableStateFactory()],
+    Context.OBJECT_FACTORIES: [PyObjectFactory()],
+    Context.STATE_FACTORIES: [ReferenceableStateFactory()],
 }
 
 
@@ -89,9 +87,9 @@ class PyContext(Context, Referenceable):
         """ Returns a reference to this object suitable for binding. """
 
         reference = Reference(
-            class_name = self.__class__.__name__,
-            addresses  = [Address(type='py_context', content=self.namespace)]
-        )
+            class_name=self.__class__.__name__,
+            addresses=[Address(
+                type='py_context', content=self.namespace)])
 
         return reference
 
@@ -114,7 +112,7 @@ class PyContext(Context, Referenceable):
     def _bind(self, name, obj):
         """ Binds a name to an object in this context. """
 
-        state = naming_manager.get_state_to_bind(obj, name,self)
+        state = naming_manager.get_state_to_bind(obj, name, self)
         self.namespace[name] = state
 
         # Trait event notification.
@@ -184,15 +182,16 @@ class PyContext(Context, Referenceable):
         """ Lists the bindings in this context. """
 
         bindings = []
-        for name, value in self.namespace.items():
-            bindings.append(Binding(name=name, obj=self._lookup(name),
-                                    context=self))
+        for name, value in list(self.namespace.items()):
+            bindings.append(
+                Binding(
+                    name=name, obj=self._lookup(name), context=self))
         return bindings
 
     def _list_names(self):
         """ Lists the names bound in this context. """
 
-        return self.namespace.keys()
+        return list(self.namespace.keys())
 
     ###########################################################################
     # Private interface.
@@ -202,5 +201,6 @@ class PyContext(Context, Referenceable):
         """ Create a sub-context. """
 
         return self.__class__(namespace=namespace)
+
 
 #### EOF ######################################################################

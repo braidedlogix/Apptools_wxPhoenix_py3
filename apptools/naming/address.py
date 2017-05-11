@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The address of a commuications endpoint. """
 
-
 # Enthought library imports.
 from traits.api import Any, HasTraits, Str
 
@@ -31,5 +30,6 @@ class Address(HasTraits):
 
     # The actual content.
     content = Any
+
 
 #### EOF ######################################################################

@@ -12,15 +12,14 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.action.api import Group, MenuManager
 from traits.api import Unicode
 
 # Local imports.
 from apptools.permissions.package_globals import get_permissions_manager
-from login_action import LoginAction
-from logout_action import LogoutAction
+from .login_action import LoginAction
+from .logout_action import LogoutAction
 
 
 class UserMenuManager(MenuManager):

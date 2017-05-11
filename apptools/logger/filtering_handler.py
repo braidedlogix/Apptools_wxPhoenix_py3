@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ A log handler that allows filtering of messages by origin. """
 
-
 # Standard library imports.
 import logging, inspect, os
 
@@ -21,7 +20,7 @@ import logging, inspect, os
 #
 # fixme: This module was just copied over from 'envisage.core' (so
 # that we don't rely on Envisage here!). Where should this module go?
-from util import get_module_name
+from .util import get_module_name
 
 
 class FilteringHandler(logging.Handler):
@@ -99,7 +98,7 @@ class FilteringHandler(logging.Handler):
     def filtered_emit(self, record):
         """ Emits a log record if it has not been filtered. """
 
-        print record.getMessage()
+        print(record.getMessage())
 
         return
 
@@ -140,7 +139,7 @@ class FilteringHandler(logging.Handler):
     def _include(self, module_name):
         """ Is the module name in the include set? """
 
-        for item, include_children in self.include.items():
+        for item, include_children in list(self.include.items()):
             if item == module_name:
                 include = True
                 break
@@ -157,7 +156,7 @@ class FilteringHandler(logging.Handler):
     def _exclude(self, module_name):
         """ Is the module name in the exclude set? """
 
-        for item, exclude_children in self.exclude.items():
+        for item, exclude_children in list(self.exclude.items()):
             if item == module_name:
                 exclude = True
                 break
@@ -190,5 +189,6 @@ class FilteringHandler(logging.Handler):
             is_child_of = False
 
         return is_child_of
+
 
 #### EOF ######################################################################

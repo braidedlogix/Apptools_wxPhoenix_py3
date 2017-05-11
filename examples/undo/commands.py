@@ -12,7 +12,6 @@
 # Description: <Enthought undo package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Instance, Int, Unicode
 from apptools.undo.api import AbstractCommand

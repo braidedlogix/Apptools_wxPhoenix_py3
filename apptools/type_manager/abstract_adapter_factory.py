@@ -7,8 +7,7 @@ import logging
 from traits.api import Delegate, HasTraits, Instance
 
 # Local imports.
-from adapter_manager import AdapterManager
-
+from .adapter_manager import AdapterManager
 
 logger = logging.getLogger(__name__)
 
@@ -78,11 +77,9 @@ class AbstractAdapterFactory(HasTraits):
         """
 
         message = '%s failed to adapt %s to %s' % (
-            self.__class__.__name__,
-            str(adaptee),
-            target_class.__name__
-        )
+            self.__class__.__name__, str(adaptee), target_class.__name__)
 
         return message
+
 
 #### EOF ######################################################################

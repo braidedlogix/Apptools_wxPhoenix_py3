@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Enum, HasTraits, Int, Unicode
 from apptools.appscripting.api import scriptable, Scriptable

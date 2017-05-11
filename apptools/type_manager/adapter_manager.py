@@ -1,12 +1,11 @@
 """ A manager for adapter factories. """
 
-
 # Enthought library imports.
 from traits.api import Dict, HasTraits, Instance, Property
 
 # Local imports.
-from abstract_type_system import AbstractTypeSystem
-from python_type_system import PythonTypeSystem
+from .abstract_type_system import AbstractTypeSystem
+from .python_type_system import PythonTypeSystem
 
 
 class AdapterManager(HasTraits):
@@ -90,9 +89,8 @@ class AdapterManager(HasTraits):
             # adapters.
             if adapter is None:
                 for adaptee_class in self.type_system.get_mro(type(adaptee)):
-                    adapter = self._adapt_type(
-                        adaptee, adaptee_class, target_class, *args, **kw
-                    )
+                    adapter = self._adapt_type(adaptee, adaptee_class,
+                                               target_class, *args, **kw)
                     if adapter is not None:
                         break
 
@@ -141,7 +139,7 @@ class AdapterManager(HasTraits):
 
         """
 
-        if isinstance(adaptee_class, basestring):
+        if isinstance(adaptee_class, str):
             adaptee_class_name = adaptee_class
 
         else:
@@ -158,7 +156,8 @@ class AdapterManager(HasTraits):
     def unregister_type_adapters(self, factory):
         """ Unregisters a type-scope adapter factory. """
 
-        for adaptee_class_name, factories in self._type_factories.items():
+        for adaptee_class_name, factories in list(self._type_factories.items(
+        )):
             if factory in factories:
                 factories.remove(factory)
 
@@ -179,7 +178,7 @@ class AdapterManager(HasTraits):
 
         """
 
-        print 'DEPRECATED: use "register_type_adapters" instead.'
+        print('DEPRECATED: use "register_type_adapters" instead.')
 
         self.register_type_adapters(factory, adaptee_class)
 
@@ -188,7 +187,7 @@ class AdapterManager(HasTraits):
     def unregister_adapters(self, factory):
         """ Unregisters an adapter factory. """
 
-        print 'DEPRECATED: use "unregister_type_adapters" instead.'
+        print('DEPRECATED: use "unregister_type_adapters" instead.')
 
         self.unregister_type_adapters(factory)
 
@@ -238,5 +237,6 @@ class AdapterManager(HasTraits):
         """ Returns the full class name for a class. """
 
         return "%s.%s" % (klass.__module__, klass.__name__)
+
 
 #### EOF ######################################################################

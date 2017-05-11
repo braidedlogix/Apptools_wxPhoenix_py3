@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Any, Instance, Str, Unicode
 from pyface.action.api import Action
@@ -56,8 +55,8 @@ class BoundAction(Action):
         if old is not None:
             if self.trait_name:
                 # Ignore any changes to the old object.
-                old.on_trait_change(self._trait_changed, self.trait_name,
-                        remove=True)
+                old.on_trait_change(
+                    self._trait_changed, self.trait_name, remove=True)
 
         enabled = False
 

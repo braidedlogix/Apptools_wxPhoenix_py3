@@ -6,7 +6,6 @@ from numpy import ndarray
 from tables import Group as PyTablesGroup
 from tables.nodes import filenode
 
-
 #: The key name which identifies array objects in the JSON dict.
 ARRAY_PROXY_KEY = '__array__'
 NODE_KEY = 'node_name'
@@ -45,8 +44,7 @@ class H5DictNode(object):
         dict_node = getattr(h5_group, self._pyobject_data_node)
         with closing(filenode.open_node(dict_node)) as f:
             self._pyobject_data = json.loads(
-                f.read().decode('ascii'), object_hook=self._object_hook
-            )
+                f.read().decode('ascii'), object_hook=self._object_hook)
 
     #--------------------------------------------------------------------------
     #  Dictionary interface
@@ -69,7 +67,7 @@ class H5DictNode(object):
         return key in self.data
 
     def keys(self):
-        return self.data.keys()
+        return list(self.data.keys())
 
     #--------------------------------------------------------------------------
     #  Public interface
@@ -136,7 +134,7 @@ class H5DictNode(object):
 
         All nodes in `_h5_group` will be removed.
         """
-        for name in self._h5_group._v_children.keys():
+        for name in list(self._h5_group._v_children.keys()):
             if name != self._pyobject_data_node:
                 self._h5_group.__getattr__(name)._f_remove()
         # Remove the dict node
@@ -204,7 +202,7 @@ class H5DictNode(object):
 
         # Convert numpy array values to H5 array nodes.
         out_data = {}
-        for key in data.keys():
+        for key in list(data.keys()):
             value = data[key]
             if isinstance(value, ndarray):
                 out_data[key] = cls._array_proxy(pyt_file, group, key, value)
@@ -213,7 +211,7 @@ class H5DictNode(object):
 
         # Remove stored arrays which are no longer in the data dictionary.
         pyt_children = group._v_children
-        for key in pyt_children.keys():
+        for key in list(pyt_children.keys()):
             if key not in data:
                 pyt_file.remove_node(group, key)
 

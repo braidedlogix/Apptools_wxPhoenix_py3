@@ -1,13 +1,12 @@
 """ Context adapter factory for Python instances. """
 
-
 # Enthought library imports.
 from apptools.naming.api import ContextAdapterFactory
 from traits.api import List, Str
 from apptools.type_manager import PythonObject
 
 # Local imports.
-from instance_context_adapter import InstanceContextAdapter
+from .instance_context_adapter import InstanceContextAdapter
 
 
 class InstanceContextAdapterFactory(ContextAdapterFactory):
@@ -39,13 +38,13 @@ class InstanceContextAdapterFactory(ContextAdapterFactory):
         """ Returns an adapter that adapts an object to the target class. """
 
         adapter = InstanceContextAdapter(
-            adaptee     = adaptee,
-            environment = environment,
-            context     = context,
-            include     = self.include,
-            exclude     = self.exclude
-        )
+            adaptee=adaptee,
+            environment=environment,
+            context=context,
+            include=self.include,
+            exclude=self.exclude)
 
         return adapter
+
 
 #### EOF ######################################################################

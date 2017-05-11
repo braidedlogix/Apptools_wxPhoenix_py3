@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Major library imports.
 import wx
 
@@ -51,5 +50,6 @@ class wxWindowAdapter(AdapterBase):
         """Set the visible state of the proxied object."""
 
         wx.Window.Show(self.proxied, value)
+
 
 AdapterBase.register_adapter(wxWindowAdapter, wx.Window)

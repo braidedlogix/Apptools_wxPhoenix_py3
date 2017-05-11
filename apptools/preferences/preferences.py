@@ -1,7 +1,5 @@
 """ The default implementation of a node in a preferences hierarchy. """
 
-from __future__ import print_function
-
 # Standard library imports.
 import logging, threading
 
@@ -12,7 +10,6 @@ from traits.api import Property, Str, Undefined, provides
 # Local imports.
 from .i_preferences import IPreferences
 
-
 # Logging.
 logger = logging.getLogger(__name__)
 
@@ -20,7 +17,6 @@ logger = logging.getLogger(__name__)
 @provides(IPreferences)
 class Preferences(HasTraits):
     """ The default implementation of a node in a preferences hierarchy. """
-
 
     #### 'IPreferences' interface #############################################
 
@@ -337,7 +333,8 @@ class Preferences(HasTraits):
             components = path.split('.')
 
             node = self._node(components[0])
-            node.remove_preferences_listener(listener,'.'.join(components[1:]))
+            node.remove_preferences_listener(listener,
+                                             '.'.join(components[1:]))
 
         return
 
@@ -367,7 +364,7 @@ class Preferences(HasTraits):
 
         # 'name' is the section name, 'value' is a dictionary containing the
         # name/value pairs in the section (the actual preferences ;^).
-        for name, value in config_obj.items():
+        for name, value in list(config_obj.items()):
             # Create/get the node from the section name.
             components = name.split('.')
 
@@ -493,7 +490,7 @@ class Preferences(HasTraits):
         """ Return the preference keys of this node. """
 
         self._lk.acquire()
-        keys = self._preferences.keys()
+        keys = list(self._preferences.keys())
         self._lk.release()
 
         return keys
@@ -515,7 +512,7 @@ class Preferences(HasTraits):
         """ Return the names of the children of this node. """
 
         self._lk.acquire()
-        node_names = self._children.keys()
+        node_names = list(self._children.keys())
         self._lk.release()
 
         return node_names
@@ -542,11 +539,11 @@ class Preferences(HasTraits):
 
     def _set(self, key, value):
         """ Set the value of a preference in this node. """
-        
+
         # everything must be unicode encoded so that ConfigObj configuration
         # can properly serialize the data. Python str are supposed to be ASCII
         # encoded.
-        value = unicode(value)
+        value = str(value)
 
         self._lk.acquire()
         old = self._preferences.get(key)
@@ -578,9 +575,10 @@ class Preferences(HasTraits):
         print(indent, 'Node(%s)' % self.name, self._preferences)
         indent += '  '
 
-        for child in self._children.values():
+        for child in list(self._children.values()):
             child.dump(indent)
 
         return
+
 
 #### EOF ######################################################################

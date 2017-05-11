@@ -1,6 +1,5 @@
 """ Tests for preferences nodes. """
 
-
 # Standard library imports.
 import os, tempfile, unittest
 from os.path import join
@@ -11,7 +10,6 @@ from pkg_resources import resource_filename
 # Enthought library imports.
 from apptools.preferences.api import Preferences
 from traits.api import HasTraits, Int, Str
-
 
 # This module's package.
 PKG = 'apptools.preferences.tests'
@@ -34,7 +32,6 @@ class PreferencesTestCase(unittest.TestCase):
 
         # A temporary directory that can safely be written to.
         self.tmpdir = tempfile.mkdtemp()
-
 
     def tearDown(self):
         """ Called immediately after each test method has been called. """
@@ -164,14 +161,14 @@ class PreferencesTestCase(unittest.TestCase):
         p = self.preferences
 
         # It should be empty to start with!
-        self.assertEqual([], p.keys())
+        self.assertEqual([], list(p.keys()))
 
         # Set some preferences in the node.
         p.set('a', '1')
         p.set('b', '2')
         p.set('c', '3')
 
-        keys = p.keys()
+        keys = list(p.keys())
         keys.sort()
 
         self.assertEqual(['a', 'b', 'c'], keys)
@@ -529,9 +526,9 @@ class PreferencesTestCase(unittest.TestCase):
             """ Listener for changes to a preferences node. """
 
             listener.node = node
-            listener.key  = key
-            listener.old  = old
-            listener.new  = new
+            listener.key = key
+            listener.old = old
+            listener.new = new
 
             return
 
@@ -564,9 +561,9 @@ class PreferencesTestCase(unittest.TestCase):
             """ Listener for changes to a preferences node. """
 
             listener.node = node
-            listener.key  = key
-            listener.old  = old
-            listener.new  = new
+            listener.key = key
+            listener.old = old
+            listener.new = new
 
             return
 
@@ -600,9 +597,9 @@ class PreferencesTestCase(unittest.TestCase):
             """ Listener for changes to a preferences node. """
 
             listener.node = node
-            listener.key  = key
-            listener.old  = old
-            listener.new  = new
+            listener.key = key
+            listener.old = old
+            listener.new = new
 
             return
 

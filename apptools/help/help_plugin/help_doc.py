@@ -13,7 +13,8 @@
 from apptools.preferences.api import PreferencesHelper
 from traits.api import Either, File, Str, provides, Bool
 
-from i_help_doc import IHelpDoc
+from .i_help_doc import IHelpDoc
+
 
 @provides(IHelpDoc)
 class HelpDoc(PreferencesHelper):
@@ -21,7 +22,6 @@ class HelpDoc(PreferencesHelper):
 
     A help doc is defined by a UI label, a filename, and a viewer program.
     """
-
 
     #### IHelpDoc interface / Preferences ######################################
 
@@ -42,4 +42,3 @@ class HelpDoc(PreferencesHelper):
     # in the program search path of the current environment, or an absolute
     # path to a program.
     viewer = Either('browser', Str)
-

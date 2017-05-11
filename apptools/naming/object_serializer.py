@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The base class for all object serializers. """
 
-
 # Standard library imports.
 import logging
 from traceback import print_exc
@@ -24,7 +23,6 @@ from os.path import splitext
 # Enthought library imports.
 import apptools.sweet_pickle as sweet_pickle
 from traits.api import HasTraits, Str
-
 
 # Setup a logger for this module.
 logger = logging.getLogger(__name__)
@@ -56,12 +54,13 @@ class ObjectSerializer(HasTraits):
         f = open(path, 'rb')
         try:
             try:
-                 obj = sweet_pickle.load(f)
+                obj = sweet_pickle.load(f)
 #                obj = cPickle.load(f)
 #                obj = pickle.load(f)
-            except Exception, ex:
+            except Exception as ex:
                 print_exc()
-                logger.exception( "Failed to load pickle file: %s, %s" % (path, ex))
+                logger.exception("Failed to load pickle file: %s, %s" %
+                                 (path, ex))
 
                 raise
         finally:
@@ -89,12 +88,13 @@ class ObjectSerializer(HasTraits):
             sweet_pickle.dump(obj, f, 1)
 #            cPickle.dump(obj, f, 1)
 #            pickle.dump(obj, f, 1)
-        except Exception, ex:
-            logger.exception( "Failed to pickle into file: %s, %s, object:%s"
-                % (path, ex, obj))
+        except Exception as ex:
+            logger.exception("Failed to pickle into file: %s, %s, object:%s" %
+                             (path, ex, obj))
             print_exc()
         f.close()
 
         return actual_path
+
 
 ### EOF #######################################################################

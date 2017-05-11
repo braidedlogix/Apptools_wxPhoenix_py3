@@ -12,8 +12,6 @@
 # Description: <Enthought undo package component>
 #------------------------------------------------------------------------------
 
-from __future__ import absolute_import
-
 # Enthought library imports.
 from pyface.action.api import Action
 from traits.api import Instance
@@ -41,7 +39,8 @@ class AbstractCommandStackAction(Action):
 
         super(AbstractCommandStackAction, self).__init__(**traits)
 
-        self.undo_manager.on_trait_event(self._on_stack_updated, 'stack_updated')
+        self.undo_manager.on_trait_event(self._on_stack_updated,
+                                         'stack_updated')
 
         # Update the action to initialise it.
         self._update_action()
@@ -58,8 +57,8 @@ class AbstractCommandStackAction(Action):
 
         """
 
-        self.undo_manager.on_trait_event(self._on_stack_updated,
-                                         'stack_updated', remove=True)
+        self.undo_manager.on_trait_event(
+            self._on_stack_updated, 'stack_updated', remove=True)
 
     ###########################################################################
     # Protected interface.

@@ -1,12 +1,11 @@
 """ Context adapter factory for trait lists. """
 
-
 # Enthought library imports.
 from apptools.naming.api import ContextAdapterFactory
 from traits.api import Str, TraitList
 
 # Local imports.
-from trait_list_context_adapter import TraitListContextAdapter
+from .trait_list_context_adapter import TraitListContextAdapter
 
 
 class TraitListContextAdapterFactory(ContextAdapterFactory):
@@ -30,12 +29,12 @@ class TraitListContextAdapterFactory(ContextAdapterFactory):
         """ Returns an adapter that adapts an object to the target class. """
 
         adapter = TraitListContextAdapter(
-            adaptee     = adaptee,
-            environment = environment,
-            context     = context,
-            trait_name  = self.trait_name
-        )
+            adaptee=adaptee,
+            environment=environment,
+            context=context,
+            trait_name=self.trait_name)
 
         return adapter
+
 
 #### EOF ######################################################################

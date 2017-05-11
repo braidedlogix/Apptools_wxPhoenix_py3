@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Major library imports.
 from pyface.qt import QtGui
 
@@ -63,5 +62,6 @@ class QWidgetAdapter(AdapterBase):
         """The replacement QWidget.show() implementation."""
 
         self.update_visible(True)
+
 
 AdapterBase.register_adapter(QWidgetAdapter, QtGui.QWidget)

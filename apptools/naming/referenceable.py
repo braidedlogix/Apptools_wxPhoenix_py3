@@ -13,12 +13,11 @@
 #------------------------------------------------------------------------------
 """ Base class for classes that can produce a reference to themselves. """
 
-
 # Enthought library imports.
 from traits.api import HasPrivateTraits, Instance
 
 # Local imports.
-from reference import Reference
+from .reference import Reference
 
 
 class Referenceable(HasPrivateTraits):
@@ -28,5 +27,6 @@ class Referenceable(HasPrivateTraits):
 
     # The object's reference suitable for binding in a naming context.
     reference = Instance(Reference)
+
 
 #### EOF ######################################################################

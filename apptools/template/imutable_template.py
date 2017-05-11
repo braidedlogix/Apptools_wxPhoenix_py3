@@ -9,7 +9,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ Defines the IMutableTemplate interface used to define modifiable templates.
 """
 
@@ -20,14 +19,15 @@
 from traits.api \
     import Event
 
-from itemplate \
+from .itemplate \
     import ITemplate
 
 #-------------------------------------------------------------------------------
 #  'IMutableTemplate' interface:
 #-------------------------------------------------------------------------------
 
-class IMutableTemplate ( ITemplate ):
+
+class IMutableTemplate(ITemplate):
     """ Defines the IMutableTemplate interface used to define modifiable
         templates.
 
@@ -38,4 +38,3 @@ class IMutableTemplate ( ITemplate ):
     # An event fired when the template mutates (i.e. changes in some way that
     # may affect the number of data sources it exposes, and so on):
     template_mutated = Event
-

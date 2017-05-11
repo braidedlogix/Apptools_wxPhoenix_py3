@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # The script manager.
 _script_manager = None
 
@@ -24,7 +23,7 @@ def get_script_manager():
     global _script_manager
 
     if _script_manager is None:
-        from script_manager import ScriptManager
+        from .script_manager import ScriptManager
 
         _script_manager = ScriptManager()
 

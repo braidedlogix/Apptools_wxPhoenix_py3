@@ -4,13 +4,12 @@
 #  All rights reserved.
 #
 #-----------------------------------------------------------------------------
-
-
 """
 A re-usable method for calculating a unique name given a list of existing
 names.
 
 """
+
 
 def make_unique_name(base, existing=[], format="%s_%s"):
     """
@@ -32,4 +31,3 @@ def make_unique_name(base, existing=[], format="%s_%s"):
 
 
 #### EOF ####################################################################
-

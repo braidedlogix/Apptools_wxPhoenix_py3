@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import datetime
 import types
@@ -23,11 +22,11 @@ from traits.api import Any, Bool, Callable, Dict, Event, HasTraits, \
         implements, Instance, Int, List, Property, Str, Unicode
 
 # Local imports.
-from bind_event import BindEvent
-from i_bind_event import IBindEvent
-from i_script_manager import IScriptManager
-from lazy_namespace import add_to_namespace, FactoryWrapper, LazyNamespace
-from scriptable_type import make_object_scriptable
+from .bind_event import BindEvent
+from .i_bind_event import IBindEvent
+from .i_script_manager import IScriptManager
+from .lazy_namespace import add_to_namespace, FactoryWrapper, LazyNamespace
+from .scriptable_type import make_object_scriptable
 
 
 @provides(IScriptManager)
@@ -286,16 +285,17 @@ class _FactoryObject(_BoundObject):
     def _get_obj(self):
         """The property getter."""
 
-        return FactoryWrapper(factory=self.factory, api=self.api,
-                includes=self.includes, excludes=self.excludes)
+        return FactoryWrapper(
+            factory=self.factory,
+            api=self.api,
+            includes=self.includes,
+            excludes=self.excludes)
 
 
 class ScriptManager(HasTraits):
     """ The ScriptManager class is the default implementation of
     IScriptManager.
     """
-
-
 
     #### 'IScriptManager' interface ###########################################
 
@@ -355,8 +355,13 @@ class ScriptManager(HasTraits):
     # 'IScriptManager' interface.
     ###########################################################################
 
-    def bind(self, obj, name=None, bind_policy='unique', api=None,
-            includes=None, excludes=None):
+    def bind(self,
+             obj,
+             name=None,
+             bind_policy='unique',
+             api=None,
+             includes=None,
+             excludes=None):
         """ Bind obj to name and make (by default) its public methods and
         traits (ie. those not beginning with an underscore) scriptable.  The
         default value of name is the type of obj with the first character
@@ -382,11 +387,16 @@ class ScriptManager(HasTraits):
         self.new_object(obj, obj.__class__, name=name, bind_policy=bind_policy)
 
         # Make it scriptable.
-        make_object_scriptable(obj, api=api, includes=includes,
-                excludes=excludes)
+        make_object_scriptable(
+            obj, api=api, includes=includes, excludes=excludes)
 
-    def bind_factory(self, factory, name, bind_policy='unique', api=None,
-            includes=None, excludes=None):
+    def bind_factory(self,
+                     factory,
+                     name,
+                     bind_policy='unique',
+                     api=None,
+                     includes=None,
+                     excludes=None):
         """ Bind factory to name.  This does the same as the bind() method
         except that it uses a factory that will be called later on to create
         the object only if the object is needed.
@@ -396,8 +406,12 @@ class ScriptManager(HasTraits):
         """
 
         name = self._unique_name(name, bind_policy)
-        self._namespace[name] = _FactoryObject(name=name, factory=factory,
-                api=api, includes=includes, excludes=excludes)
+        self._namespace[name] = _FactoryObject(
+            name=name,
+            factory=factory,
+            api=api,
+            includes=includes,
+            excludes=excludes)
 
     def run(self, script):
         """ Run the given script, either a string or a file-like object.
@@ -405,11 +419,11 @@ class ScriptManager(HasTraits):
 
         # Initialise the namespace with all explicitly bound objects.
         nspace = LazyNamespace()
-        for name, bo in self._namespace.iteritems():
+        for name, bo in self._namespace.items():
             if bo.explicitly_bound:
                 add_to_namespace(bo.obj, name, nspace)
 
-        exec script in nspace
+        exec(script, nspace)
 
     def run_file(self, file_name):
         """ Run the given script file.
@@ -483,8 +497,13 @@ class ScriptManager(HasTraits):
 
             self.script_updated = self
 
-    def new_object(self, obj, scripted_type, args=None, kwargs=None, name=None,
-            bind_policy='auto'):
+    def new_object(self,
+                   obj,
+                   scripted_type,
+                   args=None,
+                   kwargs=None,
+                   name=None,
+                   bind_policy='auto'):
         """ Register a scriptable object and the arguments used to create it.
         If no arguments were provided then assume the object is being
         explicitly bound.
@@ -500,8 +519,11 @@ class ScriptManager(HasTraits):
         obj_id = id(obj)
         obj_ref = weakref.ref(obj, self._gc_script_obj)
 
-        so = _ScriptObject(name=name, obj_id=obj_id, obj_ref=obj_ref,
-                scripted_type=scripted_type)
+        so = _ScriptObject(
+            name=name,
+            obj_id=obj_id,
+            obj_ref=obj_ref,
+            scripted_type=scripted_type)
 
         # If we are told how to create the object then it must be implicitly
         # bound.
@@ -510,7 +532,7 @@ class ScriptManager(HasTraits):
             # Doing this now avoids problems with mutable arguments.
             so.args = [self._scriptable_object_as_string(a) for a in args]
 
-            for n, value in kwargs.iteritems():
+            for n, value in kwargs.items():
                 so.kwargs[n] = self._scriptable_object_as_string(value)
 
             so.explicitly_bound = False
@@ -540,7 +562,7 @@ class ScriptManager(HasTraits):
             s = ScriptManager.arg_as_string(arg, so_needed)
             all_args.append(s)
 
-        for name, value in kwargs.iteritems():
+        for name, value in kwargs.items():
             s = ScriptManager.arg_as_string(value, so_needed)
             all_args.append('%s=%s' % (name, s))
 
@@ -559,7 +581,9 @@ class ScriptManager(HasTraits):
         if isinstance(arg, _ScriptObject):
             # Check it hasn't been unbound.
             if not arg.name:
-                raise NameError("%s has been unbound but is needed by the script" % arg.obj_ref())
+                raise NameError(
+                    "%s has been unbound but is needed by the script" %
+                    arg.obj_ref())
 
             # Add it to the needed list if it isn't already there.
             if arg not in so_needed:
@@ -589,11 +613,11 @@ class ScriptManager(HasTraits):
             nargs = nargs[1:]
 
         nkwargs = {}
-        for name, value in kwargs.iteritems():
+        for name, value in kwargs.items():
             nkwargs[name] = self._object_as_string(value)
 
-        return _ScriptMethod(name=func.func_name, so=so, args=nargs,
-                kwargs=nkwargs)
+        return _ScriptMethod(
+            name=func.__name__, so=so, args=nargs, kwargs=nkwargs)
 
     def _add_method(self, entry, result):
         """ Add a method call (returned by _new_method()), with it's associated
@@ -633,7 +657,9 @@ class ScriptManager(HasTraits):
         if result is not None:
             self._save_result(result)
 
-        self._calls.append(_ScriptTraitGet(so=so, name=name, result=result,
+        self._calls.append(
+            _ScriptTraitGet(
+                so=so, name=name, result=result,
                 has_side_effects=side_effects))
 
         return side_effects
@@ -668,7 +694,8 @@ class ScriptManager(HasTraits):
         elif bind_policy == 'rebind':
             self._unbind(bo)
         else:
-            raise NameError("\"%s\" is already bound to a scriptable object" % name)
+            raise NameError("\"%s\" is already bound to a scriptable object" %
+                            name)
 
         return name
 
@@ -691,7 +718,7 @@ class ScriptManager(HasTraits):
         """
 
         # Avoid recursive imports.
-        from package_globals import get_script_manager
+        from .package_globals import get_script_manager
 
         sm = get_script_manager()
         so = sm._so_by_ref[obj_ref]
@@ -758,7 +785,8 @@ class ScriptManager(HasTraits):
         # most likely because an appropriate __init__ hasn't been made
         # scriptable.  We don't raise an exception until the user decides to
         # convert the calls to a script.
-        return ValueError("unable to create a script representation of %s" % obj)
+        return ValueError("unable to create a script representation of %s" %
+                          obj)
 
     def _save_result(self, result):
         """ Save the result of a call to a scriptable method so that it can be
@@ -801,7 +829,8 @@ class ScriptManager(HasTraits):
             so_type = so.scripted_type
             args = self.args_as_string_list(so.args, so.kwargs)
 
-            ctors.append("%s = %s(%s)" % (so.name, so_type.__name__, ", ".join(args)))
+            ctors.append("%s = %s(%s)" %
+                         (so.name, so_type.__name__, ", ".join(args)))
 
             # See if a new import is needed.
             if so_type not in types_needed:
@@ -813,7 +842,8 @@ class ScriptManager(HasTraits):
         imports = []
 
         for so_type in types_needed:
-            imports.append("from %s import %s" % (so_type.__module__, so_type.__name__))
+            imports.append("from %s import %s" %
+                           (so_type.__module__, so_type.__name__))
 
         imports = "\n".join(imports)
 

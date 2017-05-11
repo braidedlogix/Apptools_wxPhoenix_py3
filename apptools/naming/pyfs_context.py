@@ -13,9 +13,8 @@
 #------------------------------------------------------------------------------
 """ A Python File System context. """
 
-
 # Standard library imports.
-import cPickle, glob, logging, os
+import pickle, glob, logging, os
 from os.path import join, splitext
 
 # Enthought library imports.
@@ -23,24 +22,22 @@ from apptools.io.api import File
 from traits.api import Any, Dict, Instance, Property, Str
 
 # Local imports.
-from address import Address
-from binding import Binding
-from context import Context
-from dir_context import DirContext
-from exception import NameNotFoundError, NotContextError
-from naming_event import NamingEvent
-from naming_manager import naming_manager
-from object_serializer import ObjectSerializer
-from pyfs_context_factory import PyFSContextFactory
-from pyfs_object_factory import PyFSObjectFactory
-from pyfs_state_factory import PyFSStateFactory
-from reference import Reference
-from referenceable import Referenceable
-
+from .address import Address
+from .binding import Binding
+from .context import Context
+from .dir_context import DirContext
+from .exception import NameNotFoundError, NotContextError
+from .naming_event import NamingEvent
+from .naming_manager import naming_manager
+from .object_serializer import ObjectSerializer
+from .pyfs_context_factory import PyFSContextFactory
+from .pyfs_object_factory import PyFSObjectFactory
+from .pyfs_state_factory import PyFSStateFactory
+from .reference import Reference
+from .referenceable import Referenceable
 
 # Setup a logger for this module.
 logger = logging.getLogger(__name__)
-
 
 # The name of the 'special' file in which we store object attributes.
 ATTRIBUTES_FILE = '__attributes__'
@@ -49,28 +46,27 @@ ATTRIBUTES_FILE = '__attributes__'
 FILTERS = "apptools.naming.pyfs.filters"
 OBJECT_SERIALIZERS = "apptools.naming.pyfs.object.serializers"
 
-
 # The default environment.
 ENVIRONMENT = {
     #### 'Context' properties #################################################
 
     # Object factories.
-    Context.OBJECT_FACTORIES : [PyFSObjectFactory(), PyFSContextFactory()],
+    Context.OBJECT_FACTORIES: [PyFSObjectFactory(), PyFSContextFactory()],
 
     # State factories.
-    Context.STATE_FACTORIES  : [PyFSStateFactory()],
+    Context.STATE_FACTORIES: [PyFSStateFactory()],
 
     #### 'PyFSContext' properties #############################################
 
     # Object serializers.
-    OBJECT_SERIALIZERS : [ObjectSerializer()],
+    OBJECT_SERIALIZERS: [ObjectSerializer()],
 
     # List of filename patterns to ignore.  These patterns are passed to
     # 'glob.glob', so things like '*.pyc' will do what you expect.
     #
     # fixme: We should have a generalized filter mechanism here, and '.svn'
     # should be moved elsewhere!
-    FILTERS : [ATTRIBUTES_FILE, '.svn']
+    FILTERS: [ATTRIBUTES_FILE, '.svn']
 }
 
 
@@ -113,7 +109,7 @@ class PyFSContext(DirContext, Referenceable):
 
     # A mapping from bound name to the name of the corresponding file or
     # directory on the file system.
-    _name_to_filename_map = Dict#(Str, Str)
+    _name_to_filename_map = Dict  #(Str, Str)
 
     # The attributes of every object in the context.  The attributes for the
     # context itself have the empty string as the key.
@@ -182,9 +178,8 @@ class PyFSContext(DirContext, Referenceable):
 
         # fixme: This is a bit hacky since the context in the binding may
         # not be None!
-        self.context_changed = NamingEvent(
-            new_binding=Binding(name=self.name, obj=self, context=None)
-        )
+        self.context_changed = NamingEvent(new_binding=Binding(
+            name=self.name, obj=self, context=None))
 
         return
 
@@ -200,9 +195,9 @@ class PyFSContext(DirContext, Referenceable):
         abspath = os.path.abspath(self.path)
 
         reference = Reference(
-            class_name = self.__class__.__name__,
-            addresses  = [Address(type='pyfs_context', content=abspath)]
-        )
+            class_name=self.__class__.__name__,
+            addresses=[Address(
+                type='pyfs_context', content=abspath)])
 
         return reference
 
@@ -443,7 +438,7 @@ class PyFSContext(DirContext, Referenceable):
     def _list_names(self):
         """ Lists the names bound in this context. """
 
-        return self._name_to_filename_map.keys()
+        return list(self._name_to_filename_map.keys())
 
     # fixme: YFI this is not part of the protected 'Context' interface so
     # what is it doing here?
@@ -509,7 +504,7 @@ class PyFSContext(DirContext, Referenceable):
         path = join(self.path, self.ATTRIBUTES_FILE)
 
         f = open(path, 'wb')
-        cPickle.dump(self._attributes, f, 1)
+        pickle.dump(self._attributes, f, 1)
         f.close()
 
         return
@@ -553,7 +548,7 @@ class PyFSContext(DirContext, Referenceable):
         attributes_file = File(join(self.path, self.ATTRIBUTES_FILE))
         if attributes_file.is_file:
             f = open(attributes_file.path, 'rb')
-            attributes = cPickle.load(f)
+            attributes = pickle.load(f)
             f.close()
 
         else:
@@ -571,5 +566,6 @@ class PyFSContext(DirContext, Referenceable):
         self.name, ext = os.path.splitext(basename)
 
         return
+
 
 #### EOF ######################################################################

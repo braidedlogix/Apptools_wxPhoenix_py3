@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The base class for all object factories. """
 
-
 # Enthought library imports.
 from traits.api import HasTraits
 
@@ -39,5 +38,6 @@ class ObjectFactory(HasTraits):
         """
 
         raise NotImplementedError
+
 
 ### EOF #######################################################################

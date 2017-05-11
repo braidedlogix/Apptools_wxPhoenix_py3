@@ -13,23 +13,21 @@
 #------------------------------------------------------------------------------
 """ The base class for all naming contexts. """
 
-
 # Enthought library imports.
 from traits.api import Any, Dict, Event, HasTraits, Instance
 from traits.api import Property, Str
 from apptools.type_manager.api import TypeManager
 
 # Local imports.
-from binding import Binding
-from exception import InvalidNameError, NameAlreadyBoundError
-from exception import NameNotFoundError, NotContextError
-from exception import OperationNotSupportedError
-from naming_event import NamingEvent
-from naming_manager import naming_manager
-from object_factory import ObjectFactory
-from state_factory import StateFactory
-from unique_name import make_unique_name
-
+from .binding import Binding
+from .exception import InvalidNameError, NameAlreadyBoundError
+from .exception import NameNotFoundError, NotContextError
+from .exception import OperationNotSupportedError
+from .naming_event import NamingEvent
+from .naming_manager import naming_manager
+from .object_factory import ObjectFactory
+from .state_factory import StateFactory
+from .unique_name import make_unique_name
 
 # Constants for environment property keys.
 INITIAL_CONTEXT_FACTORY = "apptools.naming.factory.initial"
@@ -39,15 +37,14 @@ STATE_FACTORIES = "apptools.naming.factory.state"
 # Non-JNDI.
 TYPE_MANAGER = "apptools.naming.factory.type.manager"
 
-
 # The default environment.
 ENVIRONMENT = {
     # 'Context' properties.
-    OBJECT_FACTORIES          : [],
-    STATE_FACTORIES           : [],
+    OBJECT_FACTORIES: [],
+    STATE_FACTORIES: [],
 
     # Non-JNDI.
-    TYPE_MANAGER              : None,
+    TYPE_MANAGER: None,
 }
 
 
@@ -97,7 +94,7 @@ class Context(HasTraits):
     # Fired when the contents of the context have changed dramatically.
     context_changed = Event(NamingEvent)
 
-     #### Protected 'Context' interface #######################################
+    #### Protected 'Context' interface #######################################
 
     # The bindings in the context.
     _bindings = Dict(Str, Any)
@@ -173,9 +170,8 @@ class Context(HasTraits):
             self._bind(atom, obj)
 
             # Trait event notification.
-            self.object_added = NamingEvent(
-                new_binding=Binding(name=name, obj=obj, context=self)
-            )
+            self.object_added = NamingEvent(new_binding=Binding(
+                name=name, obj=obj, context=self))
 
         # Otherwise, attempt to continue resolution into the next context.
         else:
@@ -217,9 +213,8 @@ class Context(HasTraits):
             self._rebind(components[0], obj)
 
             # Trait event notification.
-            self.object_changed = NamingEvent(
-                new_binding=Binding(name=name, obj=obj, context=self)
-            )
+            self.object_changed = NamingEvent(new_binding=Binding(
+                name=name, obj=obj, context=self))
 
         # Otherwise, attempt to continue resolution into the next context.
         else:
@@ -260,9 +255,8 @@ class Context(HasTraits):
             self._unbind(atom)
 
             # Trait event notification.
-            self.object_removed = NamingEvent(
-                old_binding=Binding(name=name, obj=obj, context=self)
-            )
+            self.object_removed = NamingEvent(old_binding=Binding(
+                name=name, obj=obj, context=self))
 
         # Otherwise, attempt to continue resolution into the next context.
         else:
@@ -304,9 +298,10 @@ class Context(HasTraits):
 
             # Trait event notification.
             self.object_renamed = NamingEvent(
-                old_binding=Binding(name=old_name, obj=obj, context=self),
-                new_binding=Binding(name=new_name, obj=obj, context=self)
-            )
+                old_binding=Binding(
+                    name=old_name, obj=obj, context=self),
+                new_binding=Binding(
+                    name=new_name, obj=obj, context=self))
 
         else:
             # fixme: This really needs to be transactional in case the bind
@@ -356,7 +351,6 @@ class Context(HasTraits):
             obj = next_context.lookup('/'.join(components[1:]))
 
         return obj
-
 
     # fixme: Non-JNDI
     def lookup_binding(self, name):
@@ -450,9 +444,8 @@ class Context(HasTraits):
             sub = self._create_subcontext(atom)
 
             # Trait event notification.
-            self.object_added = NamingEvent(
-                new_binding=Binding(name=name, obj=sub, context=self)
-            )
+            self.object_added = NamingEvent(new_binding=Binding(
+                name=name, obj=sub, context=self))
 
         # Otherwise, attempt to continue resolution into the next context.
         else:
@@ -483,15 +476,14 @@ class Context(HasTraits):
 
             obj = self._lookup(atom)
             if not self._is_context(atom):
-               raise NotContextError(name)
+                raise NotContextError(name)
 
             # Do the actual destruction of the sub-context.
             self._destroy_subcontext(atom)
 
             # Trait event notification.
-            self.object_removed = NamingEvent(
-                old_binding=Binding(name=name, obj=obj, context=self)
-            )
+            self.object_removed = NamingEvent(old_binding=Binding(
+                name=name, obj=obj, context=self))
 
         # Otherwise, attempt to continue resolution into the next context.
         else:
@@ -511,9 +503,8 @@ class Context(HasTraits):
 
         """
 
-        return make_unique_name(prefix, existing=self.list_names(''),
-            format='%s (%d)')
-
+        return make_unique_name(
+            prefix, existing=self.list_names(''), format='%s (%d)')
 
     def list_names(self, name=''):
         """ Lists the names bound in a context. """
@@ -602,7 +593,7 @@ class Context(HasTraits):
         # path contain the name components down to the current context
         path = []
 
-        self._search( obj, names, path, {} )
+        self._search(obj, names, path, {})
 
         return names
 
@@ -690,15 +681,15 @@ class Context(HasTraits):
         bindings = []
         for name in self._list_names():
             bindings.append(
-                Binding(name=name, obj=self._lookup(name), context=self)
-            )
+                Binding(
+                    name=name, obj=self._lookup(name), context=self))
 
         return bindings
 
     def _list_names(self):
         """ Lists the names bound in this context. """
 
-        return self._bindings.keys()
+        return list(self._bindings.keys())
 
     def _is_context(self, name):
         """ Returns True if a name is bound to a context. """
@@ -726,7 +717,7 @@ class Context(HasTraits):
 
         return next_context
 
-    def _search( self, obj, names, path, searched):
+    def _search(self, obj, names, path, searched):
         """ Append to names any name bound to obj.
             Join path and name with '/' to for a complete name from the
             top context.
@@ -735,15 +726,15 @@ class Context(HasTraits):
         # Check the bindings recursively.
         for binding in self.list_bindings():
             if binding.obj is obj:
-                path.append( binding.name )
-                names.append( '/'.join(path) )
+                path.append(binding.name)
+                names.append('/'.join(path))
                 path.pop()
 
             if isinstance( binding.obj, Context ) \
                 and not binding.obj in searched:
-                path.append( binding.name )
+                path.append(binding.name)
                 searched[binding.obj] = True
-                binding.obj._search( obj, names, path, searched )
+                binding.obj._search(obj, names, path, searched)
                 path.pop()
 
         return
@@ -761,12 +752,12 @@ class Context(HasTraits):
 
         if self.type_manager is not None:
             adapter = self.type_manager.object_as(
-                obj, Context, environment=self.environment, context=self
-            )
+                obj, Context, environment=self.environment, context=self)
 
         else:
             adapter = None
 
         return adapter
+
 
 #### EOF ######################################################################

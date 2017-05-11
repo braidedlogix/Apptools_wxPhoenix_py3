@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The node type for NON-contexts in a naming system. """
 
-
 # Enthought library imports.
 from apptools.naming.api import Context
 from pyface.tree.api import NodeType
@@ -72,5 +71,6 @@ class ObjectNodeType(NodeType):
         node.name = text
 
         return
+
 
 ##### EOF #####################################################################

@@ -6,7 +6,6 @@
 #  Author: Dave Peterson <dpeterson@enthought.com>
 #
 #-----------------------------------------------------------------------------
-
 """ Manages a singleton updater that acts as a global registry.
 
     Our goal is to enable the apptools.sweet_pickle framework to
@@ -39,14 +38,14 @@
 """
 
 try:
-    import thread as _thread
+    import _thread as _thread
 except ImportError:
-    import dummy_thread as _thread
-
+    import _dummy_thread as _thread
 
 ##############################################################################
 # function 'get_global_registry'
 ##############################################################################
+
 
 def get_global_registry():
     """ Returns the global registry in a manner that allows for lazy
@@ -65,7 +64,7 @@ def get_global_registry():
         _global_registry_lock.acquire()
         try:
             if _global_registry is None:
-                from updater import Updater
+                from .updater import Updater
                 _global_registry = Updater()
         finally:
             _global_registry_lock.release()
@@ -76,6 +75,7 @@ def get_global_registry():
 ##############################################################################
 # private function '_clear_global_registry'
 ##############################################################################
+
 
 def _clear_global_registry():
     """ Clears out the current global registry.
@@ -98,6 +98,4 @@ _global_registry = None
 # The lock used to make access to the global singleton thread safe
 _global_registry_lock = _thread.allocate_lock()
 
-
 #### EOF #####################################################################
-

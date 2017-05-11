@@ -31,20 +31,22 @@ from apptools.logger.plugin import view
 from apptools.logger.plugin.logger_service import LoggerService
 
 # Constants
-_IMAGE_MAP = { logging.DEBUG: ImageResource('debug'),
-               logging.INFO: ImageResource('info'),
-               logging.WARNING: ImageResource('warning'),
-               logging.ERROR: ImageResource('error'),
-               logging.CRITICAL: ImageResource('crit_error') }
+_IMAGE_MAP = {
+    logging.DEBUG: ImageResource('debug'),
+    logging.INFO: ImageResource('info'),
+    logging.WARNING: ImageResource('warning'),
+    logging.ERROR: ImageResource('error'),
+    logging.CRITICAL: ImageResource('crit_error')
+}
 
 
 class LogRecordAdapter(TabularAdapter):
     """ A TabularEditor adapter for logging.LogRecord objects.
     """
 
-    columns = [ ('Level', 'level'), ('Date', 'date'), ('Time', 'time'),
-                ('Message', 'message') ]
-    column_widths = [ 80, 100, 120, -1 ]
+    columns = [('Level', 'level'), ('Date', 'date'), ('Time', 'time'),
+               ('Message', 'message')]
+    column_widths = [80, 100, 120, -1]
 
     level_image = Property
     level_text = Property(Str)
@@ -98,21 +100,21 @@ class LoggerView(TraitsUIView):
     show_button = Button("Complete Text Log")
     copy_button = Button("Copy Log to Clipboard")
 
-
-    code_editor = CodeEditor(lexer='null',
-                             show_line_numbers=False)
-    log_records_editor = TabularEditor(adapter=LogRecordAdapter(),
-                                       editable=False,
-                                       activated='activated')
-    trait_view = View(Group(Item('log_records',
-                                 editor=log_records_editor),
-                            Group(Item('reset_button'),
-                                  spring,
-                                  Item('show_button'),
-                                  Item('copy_button'),
-                                  orientation='horizontal',
-                                  show_labels=False),
-                            show_labels=False))
+    code_editor = CodeEditor(lexer='null', show_line_numbers=False)
+    log_records_editor = TabularEditor(
+        adapter=LogRecordAdapter(), editable=False, activated='activated')
+    trait_view = View(
+        Group(
+            Item(
+                'log_records', editor=log_records_editor),
+            Group(
+                Item('reset_button'),
+                spring,
+                Item('show_button'),
+                Item('copy_button'),
+                orientation='horizontal',
+                show_labels=False),
+            show_labels=False))
 
     ###########################################################################
     # LogQueueHandler view interface
@@ -124,8 +126,10 @@ class LoggerView(TraitsUIView):
         """
         service = self.service
         if service.handler.has_new_records() or force:
-            log_records = [ rec for rec in service.handler.get()
-                            if rec.levelno >= service.preferences.level_ ]
+            log_records = [
+                rec for rec in service.handler.get()
+                if rec.levelno >= service.preferences.level_
+            ]
             log_records.reverse()
             self.log_records = log_records
 
@@ -143,21 +147,27 @@ class LoggerView(TraitsUIView):
         self.log_records = []
 
     def _show_button_fired(self):
-        self.edit_traits(view=View(Item('formatted_records',
-                                        editor=self.code_editor,
-                                        style='readonly',
-                                        show_label=False),
-                                   width=800, height=600, resizable=True,
-                                   buttons=[ 'OK' ],
-                                   title='Complete Text Log'))
+        self.edit_traits(view=View(
+            Item(
+                'formatted_records',
+                editor=self.code_editor,
+                style='readonly',
+                show_label=False),
+            width=800,
+            height=600,
+            resizable=True,
+            buttons=['OK'],
+            title='Complete Text Log'))
 
     def _copy_button_fired(self):
         clipboard.text_data = self.formatted_records
 
     @cached_property
     def _get_formatted_records(self):
-        return '\n'.join([ self.service.handler.formatter.format(record)
-                           for record in self.log_records ])
+        return '\n'.join([
+            self.service.handler.formatter.format(record)
+            for record in self.log_records
+        ])
 
     def _activated_changed(self):
         if self.activated is None:
@@ -167,13 +177,17 @@ class LoggerView(TraitsUIView):
             dialog = QualityAgentView(msg=msg, service=self.service)
             dialog.open()
         else:
-            self.edit_traits(view=View(Item('activated_text',
-                                            editor=self.code_editor,
-                                            style='readonly',
-                                            show_label=False),
-                                       width=800, height=600, resizable=True,
-                                       buttons=[ 'OK' ],
-                                       title='Log Message Detail'))
+            self.edit_traits(view=View(
+                Item(
+                    'activated_text',
+                    editor=self.code_editor,
+                    style='readonly',
+                    show_label=False),
+                width=800,
+                height=600,
+                resizable=True,
+                buttons=['OK'],
+                title='Log Message Detail'))
 
     @cached_property
     def _get_activated_text(self):
@@ -181,5 +195,6 @@ class LoggerView(TraitsUIView):
             return ''
         else:
             return self.activated.getMessage()
+
 
 #### EOF ######################################################################

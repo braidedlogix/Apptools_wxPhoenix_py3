@@ -1,4 +1,3 @@
-
 # Standard library imports
 import sys
 import pickle
@@ -7,12 +6,14 @@ import logging
 # Enthought library imports
 from apptools.persistence.versioned_unpickler import VersionedUnpickler
 
-
 logger = logging.getLogger(__name__)
 
 
-def load_project(pickle_filename, updater_path, application_version, protocol,
-                                                                  max_pass=-1):
+def load_project(pickle_filename,
+                 updater_path,
+                 application_version,
+                 protocol,
+                 max_pass=-1):
     """ Reads a project from a pickle file and if necessary will update it to
     the latest version of the application.
     """
@@ -26,16 +27,16 @@ def load_project(pickle_filename, updater_path, application_version, protocol,
     project_version = metadata.get('version', False)
 
     if not project_version:
-        raise ValueError, "Could not read version number from the project file"
+        raise ValueError("Could not read version number from the project file")
 
     logger.debug('Project version: %d, Application version: %d' %
-                (project_version, application_version))
+                 (project_version, application_version))
 
     # here you can temporarily force an upgrade each time for testing ....
     # project_version = 0
     latest_file = upgrade_project(pickle_filename, updater_path,
-                                project_version, application_version, protocol,
-                                max_pass)
+                                  project_version, application_version,
+                                  protocol, max_pass)
 
     # Finally we can import the project ...
     logger.info('loading %s' % latest_file)
@@ -47,7 +48,12 @@ def load_project(pickle_filename, updater_path, application_version, protocol,
     return project
 
 
-def upgrade_project(pickle_filename, updater_path, project_version, application_version, protocol, max_pass=-1):
+def upgrade_project(pickle_filename,
+                    updater_path,
+                    project_version,
+                    application_version,
+                    protocol,
+                    max_pass=-1):
     """ Repeatedly read and write the project to disk updating it one version
     at a time.
 
@@ -73,7 +79,7 @@ def upgrade_project(pickle_filename, updater_path, project_version, application_
             i_f = open(pickle_filename, 'rb')
             data = i_f.read()
             open('%s.bak' % pickle_filename, 'wb').write(data)
-            i_f.seek(0) # rewind the file to the start
+            i_f.seek(0)  # rewind the file to the start
         else:
             name = '%s.v%d' % (pickle_filename, project_version)
             i_f = open(name, 'rb')
@@ -113,4 +119,3 @@ def upgrade_project(pickle_filename, updater_path, project_version, application_
 
 
 ### EOF #################################################################
-

@@ -12,21 +12,18 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import HasTraits, Instance, provides
 
 # Local imports.
-from i_policy_storage import IPolicyStorage, PolicyStorageError
-from persistent import Persistent, PersistentError
+from .i_policy_storage import IPolicyStorage, PolicyStorageError
+from .persistent import Persistent, PersistentError
 
 
 @provides(IPolicyStorage)
 class PolicyStorage(HasTraits):
     """This implements a policy database that pickles its data in a local file.
     """
-
-
 
     #### Private interface ####################################################
 
@@ -49,8 +46,9 @@ class PolicyStorage(HasTraits):
         try:
             roles, assigns = self._db.read()
 
-            if roles.has_key(name):
-                raise PolicyStorageError("The role \"%s\" already exists." % name)
+            if name in roles:
+                raise PolicyStorageError("The role \"%s\" already exists." %
+                                         name)
 
             roles[name] = (description, perm_ids)
             self._db.write((roles, assigns))
@@ -62,7 +60,8 @@ class PolicyStorage(HasTraits):
 
         roles, _ = self._readonly_copy()
 
-        return [(name, description) for name, (description, _) in roles.items()]
+        return [(name, description)
+                for name, (description, _) in list(roles.items())]
 
     def delete_role(self, name):
         """Delete a role."""
@@ -72,13 +71,14 @@ class PolicyStorage(HasTraits):
         try:
             roles, assigns = self._db.read()
 
-            if not roles.has_key(name):
-                raise PolicyStorageError("The role \"%s\" does not exist." % name)
+            if name not in roles:
+                raise PolicyStorageError("The role \"%s\" does not exist." %
+                                         name)
 
             del roles[name]
 
             # Remove the role from any users who have it.
-            for user, role_names in assigns.items():
+            for user, role_names in list(assigns.items()):
                 try:
                     role_names.remove(name)
                 except ValueError:
@@ -136,8 +136,8 @@ class PolicyStorage(HasTraits):
 
         # Return any role that starts with the name.
         roles = [(full_name, description, perm_ids)
-                for full_name, (description, perm_ids) in roles.items()
-                        if full_name.startswith(name)]
+                 for full_name, (description, perm_ids) in list(roles.items())
+                 if full_name.startswith(name)]
 
         return sorted(roles)
 
@@ -149,8 +149,9 @@ class PolicyStorage(HasTraits):
         try:
             roles, assigns = self._db.read()
 
-            if not roles.has_key(name):
-                raise PolicyStorageError("The role \"%s\" does not exist." % name)
+            if name not in roles:
+                raise PolicyStorageError("The role \"%s\" does not exist." %
+                                         name)
 
             roles[name] = (description, perm_ids)
             self._db.write((roles, assigns))
@@ -187,7 +188,7 @@ class PolicyStorage(HasTraits):
         """Return the default persisted database."""
 
         return Persistent(self._db_factory, 'ets_perms_policydb',
-                "the policy database")
+                          "the policy database")
 
     ###########################################################################
     # Private interface.
@@ -203,7 +204,7 @@ class PolicyStorage(HasTraits):
                 data = self._db.read()
             finally:
                 self._db.unlock()
-        except PersistentError, e:
+        except PersistentError as e:
             raise PolicyStorageError(str(e))
 
         return data

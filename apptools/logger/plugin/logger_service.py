@@ -1,5 +1,5 @@
 # Standard library imports
-from cStringIO import StringIO
+from io import StringIO
 import logging
 import os
 import zipfile
@@ -40,15 +40,22 @@ class LoggerService(HasTraits):
     def whole_log_text(self):
         """ Return all of the logged data as formatted text.
         """
-        lines = [ self.handler.format(rec) for rec in self.handler.get() ]
+        lines = [self.handler.format(rec) for rec in self.handler.get()]
         # Ensure that we end with a newline.
         lines.append('')
         text = '\n'.join(lines)
         return text
 
-    def create_email_message(self, fromaddr, toaddrs, ccaddrs, subject,
-                             priority, include_userdata=False, stack_trace="",
-                             comments="", include_environment=True):
+    def create_email_message(self,
+                             fromaddr,
+                             toaddrs,
+                             ccaddrs,
+                             subject,
+                             priority,
+                             include_userdata=False,
+                             stack_trace="",
+                             comments="",
+                             include_environment=True):
         """ Format a bug report email from the log files.
         """
         from email.mime.application import MIMEApplication
@@ -62,7 +69,7 @@ class LoggerService(HasTraits):
         message['From'] = fromaddr
         message.preamble = 'You will not see this in a MIME-aware mail ' \
             'reader.\n'
-        message.epilogue = ' ' # To guarantee the message ends with a newline
+        message.epilogue = ' '  # To guarantee the message ends with a newline
 
         # First section is simple ASCII data ...
         m = []
@@ -88,8 +95,8 @@ class LoggerService(HasTraits):
         # Include the log file ...
         logtext = self.whole_log_text()
         msg = MIMEText(logtext)
-        msg.add_header('Content-Disposition', 'attachment',
-            filename='logfile.txt')
+        msg.add_header(
+            'Content-Disposition', 'attachment', filename='logfile.txt')
         message.attach(msg)
 
         # Include the environment variables ...
@@ -103,7 +110,9 @@ class LoggerService(HasTraits):
                 entries.append('%30s : %s\n' % (key, value))
 
             msg = MIMEText(''.join(entries))
-            msg.add_header('Content-Disposition', 'attachment',
+            msg.add_header(
+                'Content-Disposition',
+                'attachment',
                 filename='environment.txt')
             message.attach(msg)
 
@@ -115,13 +124,14 @@ class LoggerService(HasTraits):
             zf.close()
 
             msg = MIMEApplication(f.getvalue())
-            msg.add_header('Content-Disposition', 'attachment',
-                filename='userdata.zip')
+            msg.add_header(
+                'Content-Disposition', 'attachment', filename='userdata.zip')
             message.attach(msg)
 
         return message
 
-    def send_bug_report(self, smtp_server, fromaddr, toaddrs, ccaddrs, message):
+    def send_bug_report(self, smtp_server, fromaddr, toaddrs, ccaddrs,
+                        message):
         """ Send a bug report email.
         """
         try:
@@ -132,7 +142,7 @@ class LoggerService(HasTraits):
             #server.set_debuglevel(1)
             server.sendmail(fromaddr, toaddrs + ccaddrs, message.as_string())
             server.quit()
-        except Exception, e:
+        except Exception as e:
             logger.exception("Problem sending error report")
 
     #### Traits stuff #########################################################
@@ -144,6 +154,6 @@ class LoggerService(HasTraits):
     @on_trait_change('preferences.level_')
     def _level_changed(self, new):
         if (new is not None and new is not Undefined and
-            self.handler is not None):
+                self.handler is not None):
             root_logger.setLevel(self.preferences.level_)
             self.handler.setLevel(self.preferences.level_)

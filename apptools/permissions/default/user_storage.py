@@ -12,21 +12,18 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import HasTraits, Instance, provides
 
 # Local imports.
-from i_user_storage import IUserStorage, UserStorageError
-from persistent import Persistent, PersistentError
+from .i_user_storage import IUserStorage, UserStorageError
+from .persistent import Persistent, PersistentError
 
 
 @provides(IUserStorage)
 class UserStorage(HasTraits):
     """This implements a user database that pickles its data in a local file.
     """
-
-
 
     #### 'IUserStorage' interface #############################################
 
@@ -51,8 +48,9 @@ class UserStorage(HasTraits):
         try:
             users = self._db.read()
 
-            if users.has_key(name):
-                raise UserStorageError("The user \"%s\" already exists." % name)
+            if name in users:
+                raise UserStorageError("The user \"%s\" already exists." %
+                                       name)
 
             users[name] = (description, {}, password)
             self._db.write(users)
@@ -86,7 +84,8 @@ class UserStorage(HasTraits):
             try:
                 del users[name]
             except KeyError:
-                raise UserStorageError("The user \"%s\" does not exist." % name)
+                raise UserStorageError("The user \"%s\" does not exist." %
+                                       name)
 
             self._db.write(users)
         finally:
@@ -102,8 +101,10 @@ class UserStorage(HasTraits):
         given name."""
 
         # Return any user that starts with the name.
-        users = [(full_name, description) for full_name, (description, _, _)
-                in self._readonly_copy().items() if full_name.startswith(name)]
+        users = [(full_name, description)
+                 for full_name, (description, _, _
+                                 ) in list(self._readonly_copy().items())
+                 if full_name.startswith(name)]
 
         return sorted(users)
 
@@ -118,7 +119,8 @@ class UserStorage(HasTraits):
             try:
                 _, blob, _ = users[name]
             except KeyError:
-                raise UserStorageError("The user \"%s\" does not exist." % name)
+                raise UserStorageError("The user \"%s\" does not exist." %
+                                       name)
 
             users[name] = (description, blob, password)
             self._db.write(users)
@@ -136,7 +138,8 @@ class UserStorage(HasTraits):
             try:
                 description, _, password = users[name]
             except KeyError:
-                raise UserStorageError("The user \"%s\" does not exist." % name)
+                raise UserStorageError("The user \"%s\" does not exist." %
+                                       name)
 
             users[name] = (description, blob, password)
             self._db.write(users)
@@ -160,7 +163,8 @@ class UserStorage(HasTraits):
             try:
                 description, blob, _ = users[name]
             except KeyError:
-                raise UserStorageError("The user \"%s\" does not exist." % name)
+                raise UserStorageError("The user \"%s\" does not exist." %
+                                       name)
 
             users[name] = (description, blob, password)
             self._db.write(users)
@@ -190,7 +194,7 @@ class UserStorage(HasTraits):
                 data = self._db.read()
             finally:
                 self._db.unlock()
-        except PersistentError, e:
+        except PersistentError as e:
             raise UserStorageError(str(e))
 
         return data

@@ -1,6 +1,5 @@
 """The workbench window for the permissions framework example."""
 
-
 # Enthought library imports.
 from pyface.action.api import Action, Group, MenuManager
 from pyface.workbench.api import EditorManager, WorkbenchWindow
@@ -32,7 +31,8 @@ class ExampleEditorManager(EditorManager):
 
         if isinstance(obj, HasTraits):
             # The superclass handles Traits objects.
-            editor = super(ExampleEditorManager, self).create_editor(window, obj, kind)
+            editor = super(ExampleEditorManager, self).create_editor(window,
+                                                                     obj, kind)
         else:
             # Assume it is handled by a toolkit specific editor.
             editor = ToolkitEditor(window=window, obj=obj)
@@ -48,19 +48,15 @@ class ExampleWorkbenchWindow(WorkbenchWindow):
     # The available perspectives.
     perspectives = [
         Perspective(
-            name     = 'Foo',
-            contents = [
-                PerspectiveItem(id='Black', position='bottom'),
-                PerspectiveItem(id='Debug', position='left')
-            ]
-        ),
-
-        Perspective(
-            name     = 'Bar',
-            contents = [
-                PerspectiveItem(id='Debug', position='left')
-            ]
-        )
+            name='Foo',
+            contents=[
+                PerspectiveItem(
+                    id='Black', position='bottom'), PerspectiveItem(
+                        id='Debug', position='left')
+            ]), Perspective(
+                name='Bar',
+                contents=[PerspectiveItem(
+                    id='Debug', position='left')])
     ]
 
     #### Private interface ####################################################
@@ -86,8 +82,11 @@ class ExampleWorkbenchWindow(WorkbenchWindow):
     def _menu_bar_manager_default(self):
         """Trait initializer."""
 
-        file_menu = MenuManager(self._new_person_action, self._exit_action,
-                name='&File', id='FileMenu')
+        file_menu = MenuManager(
+            self._new_person_action,
+            self._exit_action,
+            name='&File',
+            id='FileMenu')
         view_menu = ViewMenuManager(name='&View', id='ViewMenu', window=self)
         user_menu = UserMenuManager(id='UserMenu', window=self)
 
@@ -131,5 +130,6 @@ class ExampleWorkbenchWindow(WorkbenchWindow):
         """Create a new person."""
 
         self.workbench.edit(Person(name='New', age=100))
+
 
 #### EOF ######################################################################

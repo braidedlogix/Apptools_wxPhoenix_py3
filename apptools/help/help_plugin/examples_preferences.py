@@ -10,12 +10,12 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
 
-
 from apptools.preferences.api import PreferencesHelper
 from traits.api import Either, Enum, File, Str, provides
 
 # This module's package.
 PKG = '.'.join(__name__.split('.')[:-1])
+
 
 class ExamplesPreferences(PreferencesHelper):
     """ Preferences for all help examples.
@@ -30,4 +30,3 @@ class ExamplesPreferences(PreferencesHelper):
     # 'external'. It is a command to run, which may be in the program search
     # path of the current environment, or an absolute path to a program.
     editor = Str
-

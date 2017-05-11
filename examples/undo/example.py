@@ -12,7 +12,6 @@
 # Description: <Enthought undo package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import logging
 
@@ -23,7 +22,6 @@ from pyface.workbench.api import Workbench
 # Local imports.
 from example_undo_window import ExampleUndoWindow
 from model import Label
-
 
 # Log to stderr.
 logging.getLogger().addHandler(logging.StreamHandler())
@@ -81,6 +79,7 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    import sys; main(sys.argv)
+    import sys
+    main(sys.argv)
 
 #### EOF ######################################################################

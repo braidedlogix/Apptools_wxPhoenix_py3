@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The node manager for a naming tree. """
 
-
 # Enthought library imports.
 from pyface.tree.api import NodeManager
 
@@ -49,5 +48,6 @@ class NamingNodeManager(NodeManager):
             hash_value = id(obj)
 
         return hash_value
+
 
 ##### EOF #####################################################################

@@ -29,7 +29,8 @@ logger = logging.getLogger(__name__)
 # This module's parent package.
 PARENT = '.'.join(__name__.split('.')[:-2])
 
-from util import get_sys_prefix_relative_filename
+from .util import get_sys_prefix_relative_filename
+
 
 # Implementation of the ImageResource class to be used for the DocAction class.
 @provides(IExtensionPointUser)
@@ -42,10 +43,10 @@ class DemoImageResource(ImageResource):
     # Image to display when the specified image file cannot be located.
     _image_not_found = ImageResource('python_run')
 
+
 class DemoAction(WorkbenchAction):
     """
     """
-
 
     ### Action interface ##############################################
 
@@ -83,11 +84,12 @@ class DemoAction(WorkbenchAction):
         """
         if self.my_help_code is not None:
             if self.my_help_code.filename:
-                filename = get_sys_prefix_relative_filename(self.my_help_code.filename)
+                filename = get_sys_prefix_relative_filename(
+                    self.my_help_code.filename)
                 if filename is not None:
                     try:
                         Popen([sys.executable, filename])
-                    except OSError, err:
+                    except OSError as err:
                         logger.error(
                                 'Could not execute Python file for Demo "%s".\n\n' \
                                  % self.my_help_code.label + str(err) + \

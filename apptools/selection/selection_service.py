@@ -1,8 +1,7 @@
 from traits.api import Dict, HasTraits
 
 from apptools.selection.errors import (
-    ProviderNotRegisteredError, IDConflictError, ListenerNotConnectedError
-)
+    ProviderNotRegisteredError, IDConflictError, ListenerNotConnectedError)
 
 
 class SelectionService(HasTraits):
@@ -149,8 +148,8 @@ class SelectionService(HasTraits):
         try:
             self._listeners[provider_id].remove(func)
         except (ValueError, KeyError):
-            raise ListenerNotConnectedError(provider_id=provider_id,
-                                            listener=func)
+            raise ListenerNotConnectedError(
+                provider_id=provider_id, listener=func)
 
     #### Private protocol #####################################################
 

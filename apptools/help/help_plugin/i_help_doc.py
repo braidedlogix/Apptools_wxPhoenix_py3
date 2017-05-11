@@ -12,6 +12,7 @@
 
 from traits.api import Interface, Either, File, Str, Bool
 
+
 class IHelpDoc(Interface):
     """ The interface for help docs.
 

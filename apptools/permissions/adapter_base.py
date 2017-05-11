@@ -12,13 +12,12 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Any, Bool, HasTraits, Instance, List
 
 # Local imports.
-from package_globals import get_permissions_manager
-from permission import Permission
+from .package_globals import get_permissions_manager
+from .permission import Permission
 
 
 class AdapterBase(HasTraits):
@@ -59,19 +58,20 @@ class AdapterBase(HasTraits):
         """
 
         # Find a suitable adapter type.
-        for object_type, adapter_type in cls._adapter_types.items():
+        for object_type, adapter_type in list(cls._adapter_types.items()):
             if isinstance(proxied, object_type):
                 break
         else:
-            raise TypeError, "no SecureProxy adapter registered for %s" % proxied
+            raise TypeError("no SecureProxy adapter registered for %s" %
+                            proxied)
 
-        adapter = adapter_type(proxied=proxied, permissions=permissions,
-                show=show)
+        adapter = adapter_type(
+            proxied=proxied, permissions=permissions, show=show)
 
         # Refresh the state of the object when the authentication state of the
         # current user changes.
-        get_permissions_manager().user_manager.on_trait_event(adapter._refresh,
-                'user_authenticated')
+        get_permissions_manager().user_manager.on_trait_event(
+            adapter._refresh, 'user_authenticated')
 
         return adapter
 

@@ -44,7 +44,10 @@ copyright = '2008-2016, Enthought'
 # The short X.Y version.
 # The full version, including alpha/beta/rc tags.
 d = {}
-execfile(os.path.join('..', '..', 'apptools', '__init__.py'), d)
+exec(
+    compile(
+        open(os.path.join('..', '..', 'apptools', '__init__.py')).read(),
+        os.path.join('..', '..', 'apptools', '__init__.py'), 'exec'), d)
 version = release = d['__version__']
 
 # There are two options for replacing |today|: either, you set today to some
@@ -76,7 +79,6 @@ today_fmt = '%B %d, %Y'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
-
 
 # Options for HTML output
 # -----------------------
@@ -145,7 +147,6 @@ html_last_updated_fmt = '%b %d, %Y'
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'AppToolsdoc'
 
-
 # Options for LaTeX output
 # ------------------------
 
@@ -158,7 +159,7 @@ htmlhelp_basename = 'AppToolsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'AppTools.tex', 'AppTools Documentation', 'Enthought', 'manual'),
+    ('index', 'AppTools.tex', 'AppTools Documentation', 'Enthought', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

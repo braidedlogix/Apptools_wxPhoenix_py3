@@ -1,6 +1,5 @@
 """ Tests for preference bindings. """
 
-
 # Standard library imports.
 import os, tempfile, unittest
 from os.path import join
@@ -13,7 +12,6 @@ from apptools.preferences.api import Preferences, PreferenceBinding
 from apptools.preferences.api import ScopedPreferences, bind_preference
 from apptools.preferences.api import set_default_preferences
 from traits.api import Bool, HasTraits, Int, Float, Str
-
 
 # This module's package.
 PKG = 'apptools.preferences.tests'
@@ -67,8 +65,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
             # The traits that we want to initialize from preferences.
             bgcolor = Str
-            width   = Int
-            ratio   = Float
+            width = Int
+            ratio = Float
             visible = Bool
 
         acme_ui = AcmeUI()
@@ -76,8 +74,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
         # Make some bindings.
         bind_preference(acme_ui, 'bgcolor', 'acme.ui.bgcolor')
-        bind_preference(acme_ui, 'width',   'acme.ui.width')
-        bind_preference(acme_ui, 'ratio',   'acme.ui.ratio')
+        bind_preference(acme_ui, 'width', 'acme.ui.width')
+        bind_preference(acme_ui, 'ratio', 'acme.ui.ratio')
         bind_preference(acme_ui, 'visible', 'acme.ui.visible')
 
         # Make sure the object was initialized properly.
@@ -130,16 +128,16 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
             # The traits that we want to initialize from preferences.
             bgcolor = Str('blue')
-            width   = Int(50)
-            ratio   = Float(1.0)
+            width = Int(50)
+            ratio = Float(1.0)
             visible = Bool(True)
 
         acme_ui = AcmeUI()
 
         # Make some bindings.
         bind_preference(acme_ui, 'bgcolor', 'acme.ui.bgcolor')
-        bind_preference(acme_ui, 'width',   'acme.ui.width')
-        bind_preference(acme_ui, 'ratio',   'acme.ui.ratio')
+        bind_preference(acme_ui, 'width', 'acme.ui.width')
+        bind_preference(acme_ui, 'ratio', 'acme.ui.ratio')
         bind_preference(acme_ui, 'visible', 'acme.ui.visible')
 
         # Make sure the helper was initialized properly.
@@ -161,16 +159,16 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
             # The traits that we want to initialize from preferences.
             bgcolor = Str('red')
-            width   = Int(60)
-            ratio   = Float(2.0)
+            width = Int(60)
+            ratio = Float(2.0)
             visible = Bool(False)
 
         acme_ui = AcmeUI()
 
         # Make some bindings.
         bind_preference(acme_ui, 'bgcolor', 'acme.ui.bgcolor')
-        bind_preference(acme_ui, 'width',   'acme.ui.width')
-        bind_preference(acme_ui, 'ratio',   'acme.ui.ratio')
+        bind_preference(acme_ui, 'width', 'acme.ui.width')
+        bind_preference(acme_ui, 'ratio', 'acme.ui.ratio')
         bind_preference(acme_ui, 'visible', 'acme.ui.visible')
 
         # Make sure the helper was initialized properly (with the values in
@@ -198,8 +196,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
         # Make some bindings.
         bind_preference(acme_ui, 'bgcolor', 'acme.ui.bgcolor')
-        bind_preference(acme_ui, 'width',   'acme.ui.width')
-        bind_preference(acme_ui, 'ratio',   'acme.ui.ratio')
+        bind_preference(acme_ui, 'width', 'acme.ui.width')
+        bind_preference(acme_ui, 'ratio', 'acme.ui.ratio')
         bind_preference(acme_ui, 'visible', 'acme.ui.visible')
 
         # Make sure the helper was initialized properly (with the values in
@@ -226,8 +224,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
             # The traits that we want to initialize from preferences.
             bgcolor = Str
-            width   = Int
-            ratio   = Float
+            width = Int
+            ratio = Float
             visible = Bool
 
         acme_ui = AcmeUI()
@@ -239,8 +237,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
         # Make some bindings.
         bind_preference(acme_ui, 'bgcolor', 'acme.ui.bgcolor', preferences)
-        bind_preference(acme_ui, 'width',   'acme.ui.width')
-        bind_preference(acme_ui, 'ratio',   'acme.ui.ratio', preferences)
+        bind_preference(acme_ui, 'width', 'acme.ui.width')
+        bind_preference(acme_ui, 'ratio', 'acme.ui.ratio', preferences)
         bind_preference(acme_ui, 'visible', 'acme.ui.visible')
 
         # Make sure the object was initialized properly.
@@ -262,8 +260,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
             # The traits that we want to initialize from preferences.
             bgcolor = Str
-            width   = Int
-            ratio   = Float
+            width = Int
+            ratio = Float
             visible = Bool
 
             def _width_changed(self, trait_name, old, new):
@@ -278,8 +276,8 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
         # Make some bindings.
         bind_preference(acme_ui, 'bgcolor', 'acme.ui.bgcolor')
-        bind_preference(acme_ui, 'width',   'acme.ui.width')
-        bind_preference(acme_ui, 'ratio',   'acme.ui.ratio')
+        bind_preference(acme_ui, 'width', 'acme.ui.width')
+        bind_preference(acme_ui, 'ratio', 'acme.ui.ratio')
         bind_preference(acme_ui, 'visible', 'acme.ui.visible')
 
         # Make sure the object was initialized properly.
@@ -329,7 +327,6 @@ class PreferenceBindingTestCase(unittest.TestCase):
 
         return
 
-        
 
 # Entry point for stand-alone testing.
 if __name__ == '__main__':

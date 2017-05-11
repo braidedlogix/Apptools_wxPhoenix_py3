@@ -12,12 +12,11 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Bool, Event, Instance, Interface, Unicode
 
 # Local imports.
-from i_bind_event import IBindEvent
+from .i_bind_event import IBindEvent
 
 
 class IScriptManager(Interface):
@@ -47,14 +46,20 @@ class IScriptManager(Interface):
 
     # This event is fired when the recorded script changes.  The value of the
     # event will be the ScriptManager instance.
-    script_updated = Event(Instance('apptools.appscripting.api.IScriptManager'))
+    script_updated = Event(
+        Instance('apptools.appscripting.api.IScriptManager'))
 
     ###########################################################################
     # 'IScriptManager' interface.
     ###########################################################################
 
-    def bind(self, obj, name=None, bind_policy='unique', api=None,
-            includes=None, excludes=None):
+    def bind(self,
+             obj,
+             name=None,
+             bind_policy='unique',
+             api=None,
+             includes=None,
+             excludes=None):
         """ Bind obj to name and make (by default) its public methods and
         traits (ie. those not beginning with an underscore) scriptable.  The
         default value of name is the type of obj with the first character
@@ -76,8 +81,13 @@ class IScriptManager(Interface):
         scriptable except those in the excludes list.
         """
 
-    def bind_factory(self, factory, name, bind_policy='unique', api=None,
-            includes=None, excludes=None):
+    def bind_factory(self,
+                     factory,
+                     name,
+                     bind_policy='unique',
+                     api=None,
+                     includes=None,
+                     excludes=None):
         """ Bind factory to name.  This does the same as the bind() method
         except that it uses a factory that will be called later on to create
         the object only if the object is needed.

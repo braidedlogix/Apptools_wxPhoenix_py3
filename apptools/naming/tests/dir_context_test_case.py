@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ Tests the default directory context. """
 
-
 # Enthought library imports.
 from apptools.naming.api import *
 
@@ -43,7 +42,7 @@ class DirContextTestCase(ContextTestCase):
         # Convenience.
         context = self.context
         sub = self.context.lookup('sub')
-        self.assert_(isinstance(sub, DirContext))
+        self.assertTrue(isinstance(sub, DirContext))
 
         #### Generic name resolution tests ####
 
@@ -56,7 +55,7 @@ class DirContextTestCase(ContextTestCase):
         # Attempt to resolve via an existing name that is not a context.
         context.bind('sub/a', 1)
         self.assertEqual(len(sub.list_bindings('')), 1)
-        self.assertRaises(NotContextError,context.get_attributes,'sub/a/x')
+        self.assertRaises(NotContextError, context.get_attributes, 'sub/a/x')
 
         #### Operation specific tests ####
 
@@ -73,31 +72,28 @@ class DirContextTestCase(ContextTestCase):
     def test_set_get_attributes(self):
         """ get and set attributes """
 
-        defaults = {'colour' : 'blue'}
+        defaults = {'colour': 'blue'}
 
         # Convenience.
         context = self.context
         sub = self.context.lookup('sub')
-        self.assert_(isinstance(sub, DirContext))
+        self.assertTrue(isinstance(sub, DirContext))
 
         #### Generic name resolution tests ####
 
         # Non-existent name.
-        self.assertRaises(
-            NameNotFoundError, context.set_attributes, 'x', defaults
-        )
+        self.assertRaises(NameNotFoundError, context.set_attributes, 'x',
+                          defaults)
 
         # Attempt to resolve via a non-existent context.
-        self.assertRaises(
-            NameNotFoundError, context.set_attributes, 'x/a', defaults
-        )
+        self.assertRaises(NameNotFoundError, context.set_attributes, 'x/a',
+                          defaults)
 
         # Attempt to resolve via an existing name that is not a context.
         context.bind('sub/a', 1)
         self.assertEqual(len(sub.list_bindings('')), 1)
-        self.assertRaises(
-            NotContextError, context.set_attributes, 'sub/a/xx', defaults
-        )
+        self.assertRaises(NotContextError, context.set_attributes, 'sub/a/xx',
+                          defaults)
 
         #### Operation specific tests ####
 
@@ -122,5 +118,6 @@ class DirContextTestCase(ContextTestCase):
         self.assertEqual(attributes['colour'], 'blue')
 
         return
+
 
 #### EOF ######################################################################

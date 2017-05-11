@@ -14,6 +14,7 @@ import apptools.sweet_pickle as sweet_pickle
 
 ########################################
 
+
 # Usecase1: generic case
 class A(object):
     def __init__(self, b=None):
@@ -61,7 +62,7 @@ class B(object):
 
 
 def test_generic():
-    print '\nRunning generic test...'
+    print('\nRunning generic test...')
 
     a = A()
     b = B()
@@ -74,24 +75,26 @@ def test_generic():
     s = pickle.dumps(a)
     new_a = pickle.loads(s)
     try:
-        print '\ta.x: %s' % new_a.x
-        print '\ta.b_ref.y: %s' % new_a.b_ref.y
-    except Exception, msg:
-        print '\t%s' % 'Expected Error'.center(75,'*')
-        print '\t%s' % msg
-        print '\t%s' % ('*'*75)
+        print('\ta.x: %s' % new_a.x)
+        print('\ta.b_ref.y: %s' % new_a.b_ref.y)
+    except Exception as msg:
+        print('\t%s' % 'Expected Error'.center(75, '*'))
+        print('\t%s' % msg)
+        print('\t%s' % ('*' * 75))
 
     # This will work!
     s = pickle.dumps(a)
     new_a = sweet_pickle.loads(s)
     assert new_a.x == new_a.b_ref.y == value
 
-    print 'Generic test succesfull.\n\n'
+    print('Generic test succesfull.\n\n')
 
 
 ########################################
 # Usecase2: Toy Application
 import re
+
+
 class StringFinder(object):
     def __init__(self, source, pattern):
         self.pattern = pattern
@@ -111,7 +114,8 @@ class StringFinder(object):
     def find(self):
         pattern = self.pattern
         string = self.source.data
-        self.data = [(x.start(), x.end()) for x in re.finditer(pattern, string)]
+        self.data = [(x.start(), x.end())
+                     for x in re.finditer(pattern, string)]
 
 
 class XMLFileReader(object):
@@ -133,7 +137,7 @@ class XMLFileReader(object):
 
     def read(self):
         # Make up random data from the filename
-        data = [10*x for x in self.file_name]
+        data = [10 * x for x in self.file_name]
         random.shuffle(data)
         self.data = ' '.join(data)
         self.initialized = True
@@ -145,12 +149,12 @@ class Application(object):
         self.finder = StringFinder(self.reader, 'e')
 
     def get(self):
-        print '\t%s' % self.finder.data
-        print '\t%s' % self.reader.data
+        print('\t%s' % self.finder.data)
+        print('\t%s' % self.reader.data)
 
 
 def test_toy_app():
-    print '\nRunning toy app test...'
+    print('\nRunning toy app test...')
 
     a = Application()
     a.finder.find()
@@ -160,19 +164,19 @@ def test_toy_app():
     # Won't work.
     try:
         b.get()
-    except Exception, msg:
-        print '\t%s' % 'Expected Error'.center(75,'*')
-        print '\t%s' % msg
-        print '\t%s' % ('*'*75)
+    except Exception as msg:
+        print('\t%s' % 'Expected Error'.center(75, '*'))
+        print('\t%s' % msg)
+        print('\t%s' % ('*' * 75))
 
     # Works fine.
     c = sweet_pickle.loads(s)
     c.get()
 
-    print 'Toy app test succesfull.\n\n'
+    print('Toy app test succesfull.\n\n')
 
 
 if __name__ == '__main__':
     test_generic()
     test_toy_app()
-    print 'ALL TESTS SUCCESFULL\n'
+    print('ALL TESTS SUCCESFULL\n')

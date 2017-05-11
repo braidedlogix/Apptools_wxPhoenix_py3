@@ -5,7 +5,6 @@ this go?
 
 """
 
-
 # Standard library imports.
 import os
 from os.path import basename, dirname, isdir, splitdrive, splitext
@@ -48,6 +47,7 @@ def get_module_name(filename):
         module_name = get_module_name_from_zip(filename)
 
     return module_name
+
 
 # fixme: WIP
 def get_module_name_from_zip(filename):
@@ -94,6 +94,7 @@ def get_module_name_from_zip(filename):
 
     return '.'.join(module_path)
 
+
 # fixme: WIP
 def path_exists_in_zip(zfile, path):
 
@@ -104,6 +105,7 @@ def path_exists_in_zip(zfile, path):
         exists = False
 
     return exists
+
 
 # fixme: WIP
 def is_zip_path(path):
@@ -116,6 +118,7 @@ def is_zip_path(path):
         filepath = dirname(filepath)
 
     return is_zipfile(filepath)
+
 
 # fixme: WIP
 def get_zip_path(filename):
@@ -137,5 +140,6 @@ def get_zip_path(filename):
             zippath = tail
 
     return zippath
+
 
 #### EOF ######################################################################

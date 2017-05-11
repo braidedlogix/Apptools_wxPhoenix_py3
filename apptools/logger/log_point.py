@@ -19,7 +19,7 @@
 
 # Standard library imports.
 import inspect
-from cStringIO import StringIO
+from io import StringIO
 
 
 def log_point(msg='\n'):
@@ -43,5 +43,6 @@ def log_point(msg='\n'):
     s = output.getvalue()
 
     return s
+
 
 ## EOF ##################################################################

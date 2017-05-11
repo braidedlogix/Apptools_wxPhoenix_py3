@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ Convenience functions for creating logging handlers etc. """
 
-
 # Standard library imports.
 import logging
 from logging.handlers import RotatingFileHandler
@@ -22,8 +21,7 @@ from logging.handlers import RotatingFileHandler
 from traits.util.api import deprecated
 
 # Local imports.
-from log_queue_handler import LogQueueHandler
-
+from .log_queue_handler import LogQueueHandler
 
 # The default logging level.
 LEVEL = logging.DEBUG
@@ -36,11 +34,14 @@ class LogFileHandler(RotatingFileHandler):
     """ The default log file handler.
     """
 
-    def __init__(self, path, maxBytes=1000000, backupCount=3, level=None,
-        formatter=None):
+    def __init__(self,
+                 path,
+                 maxBytes=1000000,
+                 backupCount=3,
+                 level=None,
+                 formatter=None):
         RotatingFileHandler.__init__(
-            self, path, maxBytes=maxBytes, backupCount=3
-        )
+            self, path, maxBytes=maxBytes, backupCount=3)
 
         if level is None:
             level = LEVEL
@@ -50,9 +51,13 @@ class LogFileHandler(RotatingFileHandler):
         self.setFormatter(formatter)
         self.setLevel(level)
 
+
 @deprecated('use "LogFileHandler"')
-def create_log_file_handler(path, maxBytes=1000000, backupCount=3, level=None,
-    formatter=None):
+def create_log_file_handler(path,
+                            maxBytes=1000000,
+                            backupCount=3,
+                            level=None,
+                            formatter=None):
     """ Creates a log file handler.
 
     This is just a convenience function to make it easy to create the same
@@ -68,8 +73,7 @@ def create_log_file_handler(path, maxBytes=1000000, backupCount=3, level=None,
         formatter = FORMATTER
 
     handler = RotatingFileHandler(
-        path, maxBytes=maxBytes, backupCount=backupCount
-    )
+        path, maxBytes=maxBytes, backupCount=backupCount)
 
     handler.setFormatter(formatter)
     handler.setLevel(level)

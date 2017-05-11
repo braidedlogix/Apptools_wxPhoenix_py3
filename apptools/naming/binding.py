@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The representation of a name-to-object binding in a context. """
 
-
 # Enthought libary imports.
 from traits.api import Any, HasTraits, Property, Str
 
@@ -59,7 +58,7 @@ class Binding(HasTraits):
         """ Returns an informal string representation of the object. """
 
         return super(Binding, self).__str__() + '(name=%s, obj=%s)' % (
-               self.name, self.obj)
+            self.name, self.obj)
 
     ###########################################################################
     # 'Binding' interface.
@@ -106,5 +105,6 @@ class Binding(HasTraits):
             namespace_name = self.name
 
         return namespace_name
+
 
 #### EOF ######################################################################

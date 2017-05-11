@@ -36,6 +36,7 @@ def start_recording(object, ui=True, **kw):
     r.register(object, **kw)
     return r
 
+
 def stop_recording(object, save=True):
     """Stop recording the object.  If `save` is `True`, this will pop up
     a UI to ask where to save the script.

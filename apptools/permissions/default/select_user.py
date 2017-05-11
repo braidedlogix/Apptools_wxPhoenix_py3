@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import HasTraits, Instance, List, Unicode
 from traitsui.api import Item, TableEditor, View
@@ -44,22 +43,30 @@ class _UsersView(HasTraits):
     selection = Instance(_User)
 
     # The editor used by the view.
-    table_editor = TableEditor(columns=[ObjectColumn(name='name'),
-                    ObjectColumn(name='description')],
-            selected='selection', sort_model=True, configurable=False)
+    table_editor = TableEditor(
+        columns=[ObjectColumn(name='name'), ObjectColumn(name='description')],
+        selected='selection',
+        sort_model=True,
+        configurable=False)
 
     # The default view.
-    traits_view = View(Item('model', show_label=False, editor=table_editor),
-            title="Select a User", style='readonly', kind='modal',
-            buttons=OKCancelButtons)
+    traits_view = View(
+        Item(
+            'model', show_label=False, editor=table_editor),
+        title="Select a User",
+        style='readonly',
+        kind='modal',
+        buttons=OKCancelButtons)
 
 
 def select_user(users):
     """Return a single user from the given list of users."""
 
     # Construct the model.
-    model = [_User(name=name, description=description)
-            for name, description in users]
+    model = [
+        _User(
+            name=name, description=description) for name, description in users
+    ]
 
     # Construct the view.
     view = _UsersView(model=model)

@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ The base class for all state factories. """
 
-
 # Enthought library imports.
 from traits.api import HasPrivateTraits
 
@@ -39,5 +38,6 @@ class StateFactory(HasPrivateTraits):
         """
 
         raise NotImplementedError
+
 
 ### EOF #######################################################################

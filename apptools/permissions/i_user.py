@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Bool, Dict, Interface, Unicode
 

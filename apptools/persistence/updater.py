@@ -7,10 +7,7 @@ def __replacement_setstate__(self, state):
     return
 
 
-
-
 class Updater:
-
     """ An abstract class to provide functionality common to the updaters.
     """
 
@@ -24,10 +21,10 @@ class Updater:
             name = self.strip(name)
             # returns the new module and name if it exists otherwise defaults
             # to using the original module and name
-            module, name = self.refactorings.get((module, name), (module, name))
+            module, name = self.refactorings.get((module, name),
+                                                 (module, name))
 
         return module, name
-
 
     def strip(self, string):
         # Who would have thought that pickle would pass us
@@ -37,5 +34,6 @@ class Updater:
             return string[:-1]
 
         return string
+
 
 #### EOF #######################################################################

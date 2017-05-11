@@ -1,6 +1,5 @@
 """ A default adapter class. """
 
-
 # Enthought library imports.
 from traits.api import Any, HasTraits
 
@@ -17,5 +16,6 @@ class Adapter(HasTraits):
 
     # The object that we are adapting.
     adaptee = Any
+
 
 #### EOF ######################################################################

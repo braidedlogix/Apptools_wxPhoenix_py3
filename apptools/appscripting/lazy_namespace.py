@@ -12,14 +12,13 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Any, Callable, HasTraits
 
 # Local imports.
-from bind_event import BindEvent
-from package_globals import get_script_manager
-from scriptable_type import make_object_scriptable
+from .bind_event import BindEvent
+from .package_globals import get_script_manager
+from .scriptable_type import make_object_scriptable
 
 
 class FactoryWrapper(HasTraits):

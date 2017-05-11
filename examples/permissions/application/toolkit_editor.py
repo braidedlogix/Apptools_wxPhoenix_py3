@@ -2,7 +2,6 @@
 ability to apply permissions to toolkit specific widgets.
 """
 
-
 # Enthought library imports.
 from traits.etsconfig.api import ETSConfig
 from apptools.permissions.api import SecureProxy
@@ -25,15 +24,15 @@ class ToolkitEditor(Editor):
         if tk == 'wx':
             import wx
 
-            control = wx.StaticText(parent, -1, self.obj,
-                    style=wx.ALIGN_CENTER)
+            control = wx.StaticText(
+                parent, -1, self.obj, style=wx.ALIGN_CENTER)
         elif tk == 'qt4':
             from PyQt4 import QtCore, QtGui
 
             control = QtGui.QLabel(self.obj, parent)
             control.setAlignment(QtCore.Qt.AlignHCenter)
         else:
-            raise ValueError, "unsupported toolkit: %s" % tk
+            raise ValueError("unsupported toolkit: %s" % tk)
 
         # Return the wrapped control.
         return SecureProxy(control, [EnableWidgetPerm])
@@ -61,5 +60,6 @@ class ToolkitEditor(Editor):
         """Return an informal string representation of the object."""
 
         return ETSConfig.toolkit + " Editor"
+
 
 #### EOF ######################################################################

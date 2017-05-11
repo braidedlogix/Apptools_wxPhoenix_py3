@@ -29,8 +29,9 @@ def git_version():
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
         out = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, env=env,
-        ).communicate()[0]
+            cmd,
+            stdout=subprocess.PIPE,
+            env=env, ).communicate()[0]
         return out
 
     try:
@@ -89,24 +90,30 @@ if not is_released:
         fullversion += '.dev{0}'.format(dev_num)
 
     with open(filename, "wt") as fp:
-        fp.write(template.format(version=VERSION,
-                                 full_version=fullversion,
-                                 git_revision=git_rev,
-                                 is_released=IS_RELEASED))
+        fp.write(
+            template.format(
+                version=VERSION,
+                full_version=fullversion,
+                git_revision=git_rev,
+                is_released=IS_RELEASED))
+
 
 if __name__ == "__main__":
     write_version_py()
     from apptools import __version__, __requires__
 
-    setup(name='apptools',
-          version=__version__,
-          author='Enthought, Inc.',
-          author_email='info@enthought.com',
-          maintainer='ETS Developers',
-          maintainer_email='enthought-dev@enthought.com',
-          url='https://docs.enthought.com/apptools',
-          download_url=('https://www.github.com/enthought/apptools'),
-          classifiers=[c.strip() for c in """\
+    setup(
+        name='apptools',
+        version=__version__,
+        author='Enthought, Inc.',
+        author_email='info@enthought.com',
+        maintainer='ETS Developers',
+        maintainer_email='enthought-dev@enthought.com',
+        url='https://docs.enthought.com/apptools',
+        download_url=('https://www.github.com/enthought/apptools'),
+        classifiers=[
+            c.strip()
+            for c in """\
                 Development Status :: 5 - Production/Stable
                 Intended Audience :: Developers
                 Intended Audience :: Science/Research
@@ -120,22 +127,22 @@ if __name__ == "__main__":
                 Topic :: Scientific/Engineering
                 Topic :: Software Development
                 Topic :: Software Development :: Libraries
-              """.splitlines() if len(c.strip()) > 0],
-          description='application tools',
-          long_description=open('README.rst').read(),
-          include_package_data=True,
-          package_data={'apptools': ['help/help_plugin/*.ini',
-                                     'help/help_plugin/action/images/*.png',
-                                     'logger/plugin/*.ini',
-                                     'logger/plugin/view/images/*.png',
-                                     'naming/ui/images/*.png',
-                                     'preferences/tests/*.ini'
-                                     ]
-                        },
-          install_requires=__requires__,
-          license='BSD',
-          packages=find_packages(),
-          platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
-          zip_safe=False,
-          use_2to3=True
-          )
+              """.splitlines() if len(c.strip()) > 0
+        ],
+        description='application tools',
+        long_description=open('README.rst').read(),
+        include_package_data=True,
+        package_data={
+            'apptools': [
+                'help/help_plugin/*.ini',
+                'help/help_plugin/action/images/*.png', 'logger/plugin/*.ini',
+                'logger/plugin/view/images/*.png', 'naming/ui/images/*.png',
+                'preferences/tests/*.ini'
+            ]
+        },
+        install_requires=__requires__,
+        license='BSD',
+        packages=find_packages(),
+        platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
+        zip_safe=False,
+        use_2to3=False)

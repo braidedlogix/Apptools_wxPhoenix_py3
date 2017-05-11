@@ -17,6 +17,7 @@ from traitsui.api import Group, Item, Label, View
 # This module's package.
 PKG = '.'.join(__name__.split('.')[:-1])
 
+
 class HelpPreferencesPage(PreferencesPage):
     """ Base class for root preference pages for the help plugin.
     """
@@ -38,15 +39,18 @@ class HelpPreferencesPage(PreferencesPage):
 
     traits_view = View()
 
+
 class DocumentsPreferencesPage(HelpPreferencesPage):
     """ (Blank) page for the "Documents" preferences tree node.
     """
     name = 'Documents'
 
+
 class DemosPreferencesPage(HelpPreferencesPage):
     """ (Blank) page for the "Demos" preferences tree node.
     """
     name = 'Demos'
+
 
 class ExamplesPreferencesPage(HelpPreferencesPage):
     """ Page for the "Examples" preferences tree node.
@@ -59,9 +63,9 @@ class ExamplesPreferencesPage(HelpPreferencesPage):
     editor = Str
 
     traits_view = View(
-        Item( name='editor',
-              label='Command for external editor'),
-    )
+        Item(
+            name='editor', label='Command for external editor'), )
+
 
 class HelpDocPreferencesPage(PreferencesPage):
     """ Base class for preferences pages for help documents.
@@ -97,14 +101,16 @@ class HelpDocPreferencesPage(PreferencesPage):
 
     traits_view = View(
         Group(
-            Item('viewer', show_label=True),
+            Item(
+                'viewer', show_label=True),
             Label("Viewer can be 'browser' or a path to a program."),
-            show_border=True,
-        ),
-            Item('filename', show_label=True),
-            Label("Filename can be absolute, or relative to the Python directory."),
-
+            show_border=True, ),
+        Item(
+            'filename', show_label=True),
+        Label(
+            "Filename can be absolute, or relative to the Python directory."),
     )
+
 
 class HelpDemoPreferencesPage(PreferencesPage):
     """ Base class for preferences pages for help demos.
@@ -137,8 +143,10 @@ class HelpDemoPreferencesPage(PreferencesPage):
     filename = File
 
     traits_view = View(
-        Item('filename', show_label=True),
-        Label("Filename can be absolute, or relative to the Python directory."),
+        Item(
+            'filename', show_label=True),
+        Label(
+            "Filename can be absolute, or relative to the Python directory."),
     )
 
 
@@ -173,8 +181,11 @@ class HelpExamplePreferencesPage(PreferencesPage):
     filename = File
 
     traits_view = View(
-        Item('filename', show_label=True),
-        Label("Filename can be absolute, or relative to the Python directory."),
+        Item(
+            'filename', show_label=True),
+        Label(
+            "Filename can be absolute, or relative to the Python directory."),
     )
+
 
 #### EOF ######################################################################

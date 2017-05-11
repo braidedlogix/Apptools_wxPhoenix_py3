@@ -22,10 +22,10 @@ from envisage.ui.action.api import ActionSet, Group, Menu
 from traits.api import Instance, List, Str
 
 # Local imports
-from help_code import HelpCode
-from help_doc import HelpDoc
-from i_help_code import IHelpCode
-from i_help_doc import IHelpDoc
+from .help_code import HelpCode
+from .help_doc import HelpDoc
+from .i_help_code import IHelpCode
+from .i_help_doc import IHelpDoc
 
 # Logging.
 logger = logging.getLogger(__name__)
@@ -59,8 +59,8 @@ class HelpPlugin(Plugin):
     HELP_DOWNLOADS = PKG + '.help_downloads'
 
     # IDs of extension points this plugin contributes to.
-    WORKBENCH_ACTION_SETS='envisage.ui.workbench.action_sets'
-    PREFERENCES       = 'envisage.preferences'
+    WORKBENCH_ACTION_SETS = 'envisage.ui.workbench.action_sets'
+    PREFERENCES = 'envisage.preferences'
     PREFERENCES_PAGES = 'envisage.ui.workbench.preferences_pages'
 
     #### 'IPlugin' interface ##################################################
@@ -80,7 +80,9 @@ class HelpPlugin(Plugin):
     #### Extension points offered by this plugin ##############################
 
     help_docs = ExtensionPoint(
-        List(IHelpDoc), id=HELP_DOCS, desc="""
+        List(IHelpDoc),
+        id=HELP_DOCS,
+        desc="""
 
         A help doc is defined by a preference node that specifies a UI label,
         a filename for the document, and a (path to a) viewer for viewing the
@@ -104,11 +106,12 @@ class HelpPlugin(Plugin):
         3. For each document, contribute a HelpDoc to this extension point,
            and specify its *preferences_path* as the corresponding node
            name from your preferences file.
-        """
-    )
+        """)
 
     help_demos = ExtensionPoint(
-        List(IHelpCode), id=HELP_DEMOS, desc="""
+        List(IHelpCode),
+        id=HELP_DEMOS,
+        desc="""
 
         A help demo is a Python program that is run when it is selected from
         the Help>Demos submenu. It is defined by a preference node that
@@ -132,11 +135,12 @@ class HelpPlugin(Plugin):
         3. For each demo, contribute a HelpDemo to this extension point,
            and specify its *preferences_path* as the corresponding node
            name from your preferences file.
-        """
-    )
+        """)
 
     help_examples = ExtensionPoint(
-        List(IHelpCode), id=HELP_EXAMPLES, desc="""
+        List(IHelpCode),
+        id=HELP_EXAMPLES,
+        desc="""
 
         A help example is a Python file that is opened for viewing when it is
         selected from the Help>Examples submenu. It is defined by a preference
@@ -161,11 +165,12 @@ class HelpPlugin(Plugin):
         3. For each example, contribute a HelpCode to this extension point,
            and specify its *preferences_path* as the corresponding node
            name from your preferences file.
-        """
-    )
+        """)
 
     help_downloads = ExtensionPoint(
-        List(IHelpDoc), id=HELP_DOWNLOADS, desc="""
+        List(IHelpDoc),
+        id=HELP_DOWNLOADS,
+        desc="""
 
         A help download is a url that is opened in a browser for viewing when it
         is selected from the Help>Downloads submenu. It is defined by a
@@ -189,8 +194,7 @@ class HelpPlugin(Plugin):
         3. For each document, contribute a HelpDoc to this extension point,
            and specify its *preferences_path* as the corresponding node
            name from your preferences file.
-        """
-    )
+        """)
 
     # FIXME: Ideally, there should be an extension point to allow plugins to
     #        offer editors to display examples (e.g., TextEditorPlugin or
@@ -198,33 +202,36 @@ class HelpPlugin(Plugin):
     #        launched with subprocess.Popen. The user can set the editor
     #        command in the Examples preferences page.
 
-
     ###### Contributions to extension points made by this plugin ######
 
     help_action_sets = List(contributes_to=WORKBENCH_ACTION_SETS)
+
     def _help_action_sets_default(self):
         """ Returns a list containing an action set class whose **actions**
             correspond to the help docs in the help_docs extension point.
         """
         extension_point_mapping = {
-                                DOCS_MENU: self.help_docs,
-                                EXAMPLES_MENU: self.help_examples,
-                                DEMOS_MENU: self.help_demos,
-                                DOWNLOADS_MENU: self.help_downloads}
+            DOCS_MENU: self.help_docs,
+            EXAMPLES_MENU: self.help_examples,
+            DEMOS_MENU: self.help_demos,
+            DOWNLOADS_MENU: self.help_downloads
+        }
 
         # Construct traits for the action set
-        ns = {'id': 'apptools.help.help_plugin.help_action_set',
-              'name': 'Help Plugin ActionSet',
-              'groups': [ Group( id=DOCS_GROUP, before='AboutGroup',
-                                 path=HELP_MENU ) ]
-              }
+        ns = {
+            'id': 'apptools.help.help_plugin.help_action_set',
+            'name': 'Help Plugin ActionSet',
+            'groups':
+            [Group(
+                id=DOCS_GROUP, before='AboutGroup', path=HELP_MENU)]
+        }
 
-        for (menu_name, items) in extension_point_mapping.items():
+        for (menu_name, items) in list(extension_point_mapping.items()):
             if len(items) > 0:
-                menu = Menu( name = menu_name,
-                             class_name =
-                             PKG + '.help_submenu_manager:%sMenuManager' %
-                             menu_name )
+                menu = Menu(
+                    name=menu_name,
+                    class_name=PKG + '.help_submenu_manager:%sMenuManager' %
+                    menu_name)
                 if menu_name in self.menus:
                     menu.path = 'MenuBar'
                     menu.before = 'Help'
@@ -235,13 +242,15 @@ class HelpPlugin(Plugin):
                 # Append the menu.
                 ns.setdefault('menus', []).append(menu)
 
-        return [new.classobj('SPLHelpActionSet', (ActionSet,), ns)]
+        return [new.classobj('SPLHelpActionSet', (ActionSet, ), ns)]
 
     preferences = List(contributes_to=PREFERENCES)
+
     def _preferences_default(self):
         return ['pkgfile://%s/preferences.ini' % PKG]
 
     preferences_pages = List(contributes_to=PREFERENCES_PAGES)
+
     def _preferences_pages_default(self):
         from apptools.help.help_plugin.preferences_pages import \
             DocumentsPreferencesPage, DemosPreferencesPage, \
@@ -250,28 +259,31 @@ class HelpPlugin(Plugin):
         pages = []
         if len(self.help_docs) > 0:
             pages.append(DocumentsPreferencesPage)
-            pages.extend(
-                [ new.classobj(doc.preferences_path + 'PreferencesPage',
-                              (HelpDocPreferencesPage,),
-                              {'preferences_path': doc.preferences_path},
-                             ) for doc in self.help_docs
-                ])
+            pages.extend([
+                new.classobj(
+                    doc.preferences_path + 'PreferencesPage',
+                    (HelpDocPreferencesPage, ),
+                    {'preferences_path': doc.preferences_path}, )
+                for doc in self.help_docs
+            ])
         if len(self.help_demos) > 0:
             pages.append(DemosPreferencesPage)
-            pages.extend(
-                [ new.classobj(demo.preferences_path + 'PreferencesPage',
-                              (HelpDemoPreferencesPage,),
-                              {'preferences_path': demo.preferences_path},
-                             ) for demo in self.help_demos
-                ])
+            pages.extend([
+                new.classobj(
+                    demo.preferences_path + 'PreferencesPage',
+                    (HelpDemoPreferencesPage, ),
+                    {'preferences_path': demo.preferences_path}, )
+                for demo in self.help_demos
+            ])
         if len(self.help_examples) > 0:
             pages.append(ExamplesPreferencesPage)
-            pages.extend(
-                [ new.classobj(example.preferences_path + 'PreferencesPage',
-                              (HelpExamplePreferencesPage,),
-                              {'preferences_path': example.preferences_path},
-                             ) for example in self.help_examples
-                ])
+            pages.extend([
+                new.classobj(
+                    example.preferences_path + 'PreferencesPage',
+                    (HelpExamplePreferencesPage, ),
+                    {'preferences_path': example.preferences_path}, )
+                for example in self.help_examples
+            ])
         return pages
 
     #my_help_demos = List(contributes_to=HELP_DEMOS)

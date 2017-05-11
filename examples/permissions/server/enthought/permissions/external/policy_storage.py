@@ -12,21 +12,18 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from apptools.permissions.default.api import IPolicyStorage, \
         PolicyStorageError
 from traits.api import HasTraits, provides
 
 # Local imports.
-from proxy_server import ProxyServer
+from .proxy_server import ProxyServer
 
 
 @provides(IPolicyStorage)
 class PolicyStorage(HasTraits):
     """This implements a policy database accessed via XML RPC."""
-
-
 
     ###########################################################################
     # 'IPolicyStorage' interface.
@@ -37,7 +34,7 @@ class PolicyStorage(HasTraits):
 
         try:
             ProxyServer.add_role(name, description, perm_ids, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def all_roles(self):
@@ -45,7 +42,7 @@ class PolicyStorage(HasTraits):
 
         try:
             return ProxyServer.all_roles(ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def delete_role(self, name):
@@ -53,7 +50,7 @@ class PolicyStorage(HasTraits):
 
         try:
             ProxyServer.delete_role(name, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def get_assignment(self, user_name):
@@ -61,7 +58,7 @@ class PolicyStorage(HasTraits):
 
         try:
             return ProxyServer.get_assignment(user_name, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def get_policy(self, name):
@@ -72,7 +69,7 @@ class PolicyStorage(HasTraits):
         if ProxyServer.key is not None:
             try:
                 name, perm_ids = ProxyServer.get_policy(name, ProxyServer.key)
-            except Exception, e:
+            except Exception as e:
                 raise PolicyStorageError(ProxyServer.error(e))
 
             # Save the permissions ids in the persistent cache.
@@ -90,7 +87,7 @@ class PolicyStorage(HasTraits):
 
         try:
             return ProxyServer.is_empty_policy()
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def matching_roles(self, name):
@@ -99,7 +96,7 @@ class PolicyStorage(HasTraits):
 
         try:
             return ProxyServer.matching_roles(name, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def modify_role(self, name, description, perm_ids):
@@ -107,8 +104,8 @@ class PolicyStorage(HasTraits):
 
         try:
             ProxyServer.modify_role(name, description, perm_ids,
-                    ProxyServer.key)
-        except Exception, e:
+                                    ProxyServer.key)
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))
 
     def set_assignment(self, user_name, role_names):
@@ -116,5 +113,5 @@ class PolicyStorage(HasTraits):
 
         try:
             ProxyServer.set_assignment(user_name, role_names, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise PolicyStorageError(ProxyServer.error(e))

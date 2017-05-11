@@ -1,6 +1,5 @@
 """ Tests the type manager. """
 
-
 # Standard library imports.
 import unittest
 
@@ -21,11 +20,14 @@ class SubOfFoo(Foo):
     def foogle(self):
         return 'Sub.foogle.%s' % self.name
 
+
 class EmptySubOfFoo(Foo):
     pass
 
+
 class Bar(HasTraits):
     name = Str
+
     def blargle(self):
         return 'Bar.blargle.%s' % self.name
 
@@ -36,6 +38,7 @@ class FooToBarAdapter(HasTraits):
 
     def blargle(self):
         return self.adaptee.foogle()
+
 
 class FooToBarAdapterFactory(AdapterFactory):
 
@@ -57,6 +60,7 @@ class SubOfFooToBarAdapter(HasTraits):
 
     def blargle(self):
         return self.adaptee.foogle()
+
 
 class SubOfFooToBarAdapterFactory(AdapterFactory):
     #### 'AdapterFactory' interface ###########################################
@@ -114,7 +118,7 @@ class TypeManagerTestCase(unittest.TestCase):
         bar = self.type_manager.object_as(b, Bar)
 
         # The type manager should simply return the same object.
-        self.assert_(bar is b)
+        self.assertTrue(bar is b)
 
         return
 
@@ -140,15 +144,13 @@ class TypeManagerTestCase(unittest.TestCase):
 
         # Register an adapter Foo->Bar on the INSTANCE (this one should take
         # precedence).
-        self.type_manager.register_instance_adapters(
-            FooToBarAdapterFactory(), foo
-        )
+        self.type_manager.register_instance_adapters(FooToBarAdapterFactory(),
+                                                     foo)
 
         # Register an adapter Foo->Bar on the TYPE (this will fail if it gets
         # picked up since it won't actually adapt 'Foo' objects!).
         self.type_manager.register_instance_adapters(
-            SubOfFooToBarAdapterFactory(), Foo
-        )
+            SubOfFooToBarAdapterFactory(), Foo)
 
         # Adapt it to a Bar.
         bar = self.type_manager.object_as(foo, Bar)
@@ -224,9 +226,8 @@ class TypeManagerTestCase(unittest.TestCase):
         """ ignore an adapter on an object's actual class. """
 
         # Register an adapter SubOfFoo->Bar on the Foo class.
-        self.type_manager.register_type_adapters(
-            SubOfFooToBarAdapterFactory(), Foo
-        )
+        self.type_manager.register_type_adapters(SubOfFooToBarAdapterFactory(),
+                                                 Foo)
 
         # Create a Foo.
         foo = Foo(name='fred')
@@ -243,9 +244,8 @@ class TypeManagerTestCase(unittest.TestCase):
         """ ignore an adapter registered on a derived class. """
 
         # Register an adapter Foo->Bar on the SubOfFoo class.
-        self.type_manager.register_type_adapters(
-            FooToBarAdapterFactory(), SubOfFoo
-        )
+        self.type_manager.register_type_adapters(FooToBarAdapterFactory(),
+                                                 SubOfFoo)
 
         # Create a Foo.
         foo = Foo(name='fred')
@@ -302,6 +302,7 @@ class TypeManagerTestCase(unittest.TestCase):
         """ pre hook """
 
         l = []
+
         def hook(*args, **kw):
             l.append('Hello')
 
@@ -358,6 +359,7 @@ class TypeManagerTestCase(unittest.TestCase):
         """ test pre hook on an inherited method """
 
         l = []
+
         def hook(*args, **kw):
             l.append('Hello')
 
@@ -417,5 +419,6 @@ class TypeManagerTestCase(unittest.TestCase):
         self.assertEqual(bar.blargle(), 'Foo.foogle.fred')
 
         return
+
 
 #### EOF ######################################################################

@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from apptools.permissions.adapter_base import AdapterBase
 from pyface.action.api import Action
@@ -52,5 +51,6 @@ class ActionAdapter(AdapterBase):
             self.update_visible(value)
         else:
             super(ActionAdapter, self).setattr(name, value)
+
 
 AdapterBase.register_adapter(ActionAdapter, Action)

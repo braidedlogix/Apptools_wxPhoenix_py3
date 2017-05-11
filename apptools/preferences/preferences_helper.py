@@ -1,6 +1,5 @@
 """ An object that can be initialized from a preferences node. """
 
-
 # Standard library imports.
 import logging
 
@@ -10,7 +9,6 @@ from traits.api import HasTraits, Instance, Str, Unicode
 # Local imports.
 from .i_preferences import IPreferences
 from .package_globals import get_default_preferences
-
 
 # Logging.
 logger = logging.getLogger(__name__)
@@ -77,9 +75,8 @@ class PreferencesHelper(HasTraits):
 
         # Stop listening to the old preferences node.
         if old is not None:
-            old.remove_preferences_listener(
-                self._preferences_changed_listener, self._get_path()
-            )
+            old.remove_preferences_listener(self._preferences_changed_listener,
+                                            self._get_path())
 
         if new is not None:
             # Initialize with the new preferences node (this also adds a
@@ -167,8 +164,7 @@ class PreferencesHelper(HasTraits):
 
         # Listen for changes to the node's preferences.
         preferences.add_preferences_listener(
-            self._preferences_changed_listener, path
-        )
+            self._preferences_changed_listener, path)
 
         return
 
@@ -182,5 +178,6 @@ class PreferencesHelper(HasTraits):
             return False
 
         return True
+
 
 #### EOF ######################################################################

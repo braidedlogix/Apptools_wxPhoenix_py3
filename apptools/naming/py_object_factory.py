@@ -13,10 +13,9 @@
 #------------------------------------------------------------------------------
 """ Object factory for Python namespace contexts. """
 
-
 # Local imports.
-from object_factory import ObjectFactory
-from reference import Reference
+from .object_factory import ObjectFactory
+from .reference import Reference
 
 
 class PyObjectFactory(ObjectFactory):
@@ -43,5 +42,6 @@ class PyObjectFactory(ObjectFactory):
                 obj = context._context_factory(name, state)
 
         return obj
+
 
 ### EOF #######################################################################

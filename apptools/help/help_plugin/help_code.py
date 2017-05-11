@@ -15,7 +15,8 @@
 from apptools.preferences.api import PreferencesHelper
 from traits.api import File, Str, provides
 
-from i_help_code import IHelpCode
+from .i_help_code import IHelpCode
+
 
 @provides(IHelpCode)
 class HelpCode(PreferencesHelper):
@@ -23,7 +24,6 @@ class HelpCode(PreferencesHelper):
 
     A help code is defined by a UI label and a filename.
     """
-
 
     #### IHelpCode interface / Preferences #####################################
 
@@ -39,4 +39,3 @@ class HelpCode(PreferencesHelper):
     # The code to execute. This is executed when filename is None or an empty
     # string.
     code = Str
-

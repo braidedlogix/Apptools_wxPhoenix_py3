@@ -10,7 +10,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ Defines the ITemplateDataSource interface for creating 'live' application
     data sources from a templatized data source object.
 """
@@ -26,12 +25,13 @@ from traits.api \
 #  'ITemplateDataSource' interface:
 #-------------------------------------------------------------------------------
 
-class ITemplateDataSource ( Interface ):
+
+class ITemplateDataSource(Interface):
     """ Defines the ITemplateDataSource interface for creating 'live'
         application data sources from a templatized data source object.
     """
 
-    def name_from_data_source ( self ):
+    def name_from_data_source(self):
         """ Allows the object to provide a description of the possibly optional
             data binding it requires.
 
@@ -40,4 +40,3 @@ class ITemplateDataSource ( Interface ):
             A **TemplateDataName** object describing the binding the data
             source object requires.
         """
-

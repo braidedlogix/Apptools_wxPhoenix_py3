@@ -1,6 +1,5 @@
 """ Tests for Python-esque '.ini' files. """
 
-
 # Standard library imports.
 import os, tempfile, unittest
 from os.path import join
@@ -9,8 +8,7 @@ from os.path import join
 from pkg_resources import resource_filename
 
 # Enthought library imports.
-from py_config_file import PyConfigFile
-
+from .py_config_file import PyConfigFile
 
 # This module's package.
 PKG = 'apptools.preferences.tests'
@@ -50,7 +48,7 @@ class PyConfigFileTestCase(unittest.TestCase):
         self.assertEqual(50, config['acme.ui']['width'])
         self.assertEqual(1.0, config['acme.ui']['ratio'])
         self.assertEqual(True, config['acme.ui']['visible'])
-        self.assertEqual({'a' : 1, 'b' : 2}, config['acme.ui']['foo'])
+        self.assertEqual({'a': 1, 'b': 2}, config['acme.ui']['foo'])
         self.assertEqual([1, 2, 3, 4], config['acme.ui']['bar'])
         self.assertEqual((1, 'a', 6, 4), config['acme.ui']['baz'])
         self.assertEqual('red', config['acme.ui.other']['fred'])
@@ -69,7 +67,7 @@ class PyConfigFileTestCase(unittest.TestCase):
         self.assertEqual(50, config['acme.ui']['width'])
         self.assertEqual(1.0, config['acme.ui']['ratio'])
         self.assertEqual(True, config['acme.ui']['visible'])
-        self.assertEqual({'a' : 1, 'b' : 2}, config['acme.ui']['foo'])
+        self.assertEqual({'a': 1, 'b': 2}, config['acme.ui']['foo'])
         self.assertEqual([1, 2, 3, 4], config['acme.ui']['bar'])
         self.assertEqual((1, 'a', 6, 4), config['acme.ui']['baz'])
         self.assertEqual('red', config['acme.ui.other']['fred'])
@@ -88,7 +86,7 @@ class PyConfigFileTestCase(unittest.TestCase):
         self.assertEqual(50, config['acme.ui']['width'])
         self.assertEqual(1.0, config['acme.ui']['ratio'])
         self.assertEqual(True, config['acme.ui']['visible'])
-        self.assertEqual({'a' : 1, 'b' : 2}, config['acme.ui']['foo'])
+        self.assertEqual({'a': 1, 'b': 2}, config['acme.ui']['foo'])
         self.assertEqual([1, 2, 3, 4], config['acme.ui']['bar'])
         self.assertEqual('red', config['acme.ui.other']['fred'])
         self.assertEqual(100, config['acme.ui.other']['wilma'])
@@ -97,11 +95,11 @@ class PyConfigFileTestCase(unittest.TestCase):
 
         # Save the config to another file.
         tmpdir = tempfile.mkdtemp()
-        tmp    = join(tmpdir, 'tmp.ini')
+        tmp = join(tmpdir, 'tmp.ini')
 
         config.save(tmp)
         try:
-            self.assert_(os.path.exists(tmp))
+            self.assertTrue(os.path.exists(tmp))
 
             # Make sure we can read the file back in and that we get the same
             # values!
@@ -111,7 +109,7 @@ class PyConfigFileTestCase(unittest.TestCase):
             self.assertEqual(50, config['acme.ui']['width'])
             self.assertEqual(1.0, config['acme.ui']['ratio'])
             self.assertEqual(True, config['acme.ui']['visible'])
-            self.assertEqual({'a' : 1, 'b' : 2}, config['acme.ui']['foo'])
+            self.assertEqual({'a': 1, 'b': 2}, config['acme.ui']['foo'])
             self.assertEqual([1, 2, 3, 4], config['acme.ui']['bar'])
             self.assertEqual((1, 'a', 6, 4), config['acme.ui']['baz'])
             self.assertEqual('red', config['acme.ui.other']['fred'])
@@ -135,7 +133,7 @@ class PyConfigFileTestCase(unittest.TestCase):
         self.assertEqual(50, config['acme.ui']['width'])
         self.assertEqual(1.0, config['acme.ui']['ratio'])
         self.assertEqual(True, config['acme.ui']['visible'])
-        self.assertEqual({'a' : 1, 'b' : 2}, config['acme.ui']['foo'])
+        self.assertEqual({'a': 1, 'b': 2}, config['acme.ui']['foo'])
         self.assertEqual([1, 2, 3, 4], config['acme.ui']['bar'])
         self.assertEqual((1, 'a', 6, 4), config['acme.ui']['baz'])
         self.assertEqual('red', config['acme.ui.other']['fred'])
@@ -151,7 +149,7 @@ class PyConfigFileTestCase(unittest.TestCase):
         self.assertEqual(50, config['acme.ui']['width'])
         self.assertEqual(1.0, config['acme.ui']['ratio'])
         self.assertEqual(True, config['acme.ui']['visible'])
-        self.assertEqual({'a' : 1, 'b' : 2}, config['acme.ui']['foo'])
+        self.assertEqual({'a': 1, 'b': 2}, config['acme.ui']['foo'])
         self.assertEqual([1, 2, 3, 4], config['acme.ui']['bar'])
         self.assertEqual((1, 'a', 6, 4), config['acme.ui']['baz'])
         self.assertEqual('red', config['acme.ui.other']['fred'])

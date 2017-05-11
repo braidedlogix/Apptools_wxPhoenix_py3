@@ -12,9 +12,8 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
-import cPickle as pickle
+import pickle as pickle
 import errno
 import os
 
@@ -40,7 +39,7 @@ class Persistent(object):
 
         # Get the name of the file to use.
         data_dir = os.environ.get('ETS_PERMS_DATA_DIR',
-                ETSConfig.application_home)
+                                  ETSConfig.application_home)
         self._fname = os.path.join(data_dir, file_name)
         self._lock = self._fname + '.lock'
 
@@ -54,7 +53,7 @@ class Persistent(object):
 
         try:
             os.mkdir(self._lock)
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.EEXIST:
                 msg = "The lock on %s is held by another application or user." % self._desc
             else:
@@ -67,8 +66,9 @@ class Persistent(object):
 
         try:
             os.rmdir(self._lock)
-        except OSError, e:
-            raise PersistentError("Unable to release lock on %s: %s." % (self._desc, e))
+        except OSError as e:
+            raise PersistentError("Unable to release lock on %s: %s." %
+                                  (self._desc, e))
 
     def read(self):
         """Read and return the persisted data."""
@@ -83,11 +83,12 @@ class Persistent(object):
                     raise PersistentError("Unable to read %s." % self._desc)
             finally:
                 f.close()
-        except IOError, e:
+        except IOError as e:
             if e.errno == errno.ENOENT:
                 data = self._factory()
             else:
-                raise PersistentError("Unable to open %s: %s." % (self._desc, e))
+                raise PersistentError("Unable to open %s: %s." %
+                                      (self._desc, e))
 
         return data
 
@@ -104,7 +105,7 @@ class Persistent(object):
                     raise PersistentError("Unable to write %s." % self._desc)
             finally:
                 f.close()
-        except IOError, e:
+        except IOError as e:
             raise PersistentError("Unable to create %s: %s." % (self._desc, e))
 
 

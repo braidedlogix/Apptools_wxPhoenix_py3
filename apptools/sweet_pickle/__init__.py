@@ -6,7 +6,6 @@
 #  Author: Dave Peterson <dpeterson@enthought.com>
 #
 #-----------------------------------------------------------------------------
-
 """ A pickle framework that supports unpickling of refactored versions of
     old classes. Part of the AppTools project of the Enthought Tool Suite.
 
@@ -106,11 +105,13 @@
 ##############################################################################
 
 # Expose our custom pickler as the standard Unpickler
-from versioned_unpickler import VersionedUnpickler as Unpickler
+from .versioned_unpickler import VersionedUnpickler as Unpickler
+
 
 # Use our custom unpickler to load from files
 def load(file, max_pass=-1):
     return Unpickler(file).load(max_pass)
+
 
 # Use our custom unpickler to load from strings
 def loads(str, max_pass=-1):
@@ -119,48 +120,50 @@ def loads(str, max_pass=-1):
 
     return Unpickler(file).load(max_pass)
 
+
 # We don't customize the Python pickler, though we do use the cPickle module
 # for improved performance.
-from cPickle import Pickler
+from pickle import Pickler
+
 
 # Implement the dump and dumps methods so that all traits in a HasTraits object
 # get included in the pickle.
 def dump(obj, file, protocol=2):
     _flush_traits(obj)
-    from cPickle import dump as d
+    from pickle import dump as d
     return d(obj, file, protocol)
+
 
 def dumps(obj, protocol=2):
     _flush_traits(obj)
-    from cPickle import dumps as ds
+    from pickle import dumps as ds
     return ds(obj, protocol)
+
 
 # We don't customize exceptions so just map to the Python pickle package
 from pickle import PickleError, PicklingError, UnpicklingError
-
 
 ##############################################################################
 # Allow retrieval of the global registry
 ##############################################################################
 
-from global_registry import get_global_registry
-
+from .global_registry import get_global_registry
 
 ##############################################################################
 # Expose our Updater class so users can explicitly create their own.
 ##############################################################################
 
-from updater import Updater
-
+from .updater import Updater
 
 ##############################################################################
 # Method to ensure that all traits on a has traits object are included in a
 # pickle.
 ##############################################################################
 
+
 def _flush_traits(obj):
     if hasattr(obj, 'trait_names'):
-        for name, value in obj.traits().items():
+        for name, value in list(obj.traits().items()):
             if value.type == 'trait':
                 try:
                     getattr(obj, name)

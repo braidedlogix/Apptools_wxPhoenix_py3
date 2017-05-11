@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.action.api import Action
 from traits.api import Bool, Unicode
@@ -39,7 +38,8 @@ class LogoutAction(Action):
 
         super(LogoutAction, self).__init__(**traits)
 
-        get_permissions_manager().user_manager.on_trait_event(self._refresh_enabled, 'user_authenticated')
+        get_permissions_manager().user_manager.on_trait_event(
+            self._refresh_enabled, 'user_authenticated')
 
     ###########################################################################
     # 'Action' interface.

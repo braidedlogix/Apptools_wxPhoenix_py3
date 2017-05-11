@@ -12,13 +12,12 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Bool, HasTraits, Instance
 
 # Local imports.
-from i_policy_manager import IPolicyManager
-from i_user_manager import IUserManager
+from .i_policy_manager import IPolicyManager
+from .i_user_manager import IUserManager
 
 
 class PermissionsManager(HasTraits):
@@ -101,4 +100,4 @@ class PermissionsManager(HasTraits):
 
         return (self.allow_bootstrap_permissions and
                 (self.policy_manager.bootstrapping() or
-                        self.user_manager.bootstrapping()))
+                 self.user_manager.bootstrapping()))

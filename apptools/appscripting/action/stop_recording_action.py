@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.action.api import Action
 from traits.api import Bool, Unicode

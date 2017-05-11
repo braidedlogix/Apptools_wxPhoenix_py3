@@ -12,7 +12,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ A concrete implementation of the ITemplateDataContext interface intended to
     be used for creating the *output_data_context* value of an
     **ITemplateDataNameItem** implementation (although they are not required to
@@ -34,14 +33,15 @@ from apptools.template.itemplate_data_context \
 #  'TemplateDataContext' class:
 #-------------------------------------------------------------------------------
 
-class TemplateDataContext ( HasPrivateTraits ):
+
+class TemplateDataContext(HasPrivateTraits):
     """ A concrete implementation of the ITemplateDataContext interface
         intended to be used for creating the *output_data_context* value of an
         **ITemplateDataNameItem** implementation (although they are not
         required to use it).
     """
 
-    implements( ITemplateDataContext )
+    implements(ITemplateDataContext)
 
     #-- 'ITemplateDataContext' Interface Traits --------------------------------
 
@@ -52,36 +52,36 @@ class TemplateDataContext ( HasPrivateTraits ):
     data_context_name = Str
 
     # A list of the names of the data values in this context:
-    data_context_values = Property # List( Str )
+    data_context_values = Property  # List( Str )
 
     # The list of the names of the sub-contexts of this context:
-    data_contexts = Property # List( Str )
+    data_contexts = Property  # List( Str )
 
     #-- Public Traits ---------------------------------------------------------
 
     # The data context values dictionary:
-    values = Dict( Str, Any )
+    values = Dict(Str, Any)
 
     # The data contexts dictionary:
-    contexts = Dict( Str, ITemplateDataContext )
+    contexts = Dict(Str, ITemplateDataContext)
 
     #-- 'ITemplateDataContext' Property Implementations ------------------------
 
     @cached_property
-    def _get_data_context_values ( self ):
-        values = self.values.keys()
+    def _get_data_context_values(self):
+        values = list(self.values.keys())
         values.sort()
         return values
 
     @cached_property
-    def _get_data_contexts ( self ):
-        contexts = self.contexts.keys()
+    def _get_data_contexts(self):
+        contexts = list(self.contexts.keys())
         contexts.sort()
         return contexts
 
     #-- 'ITemplateDataContext' Interface Implementation ------------------------
 
-    def get_data_context_value ( self, name ):
+    def get_data_context_value(self, name):
         """ Returns the data value with the specified *name*. Raises a
             **ITemplateDataContextError** if *name* is not defined as a data
             value in the context.
@@ -100,11 +100,11 @@ class TemplateDataContext ( HasPrivateTraits ):
             with a data value in the context.
         """
         try:
-            return self.values[ name ]
+            return self.values[name]
         except:
-            raise ITemplateDataContextError( "Value '%s' not found." % name )
+            raise ITemplateDataContextError("Value '%s' not found." % name)
 
-    def get_data_context ( self, name ):
+    def get_data_context(self, name):
         """ Returns the **ITemplateDataContext** value associated with the
             specified *name*. Raises **ITemplateDataContextError** if *name* is
             not defined as a data context in the context.
@@ -122,7 +122,6 @@ class TemplateDataContext ( HasPrivateTraits ):
             with a data context in the context.
         """
         try:
-            return self.context[ name ]
+            return self.context[name]
         except:
-            raise ITemplateDataContextError( "Context '%s' not found." % name )
-
+            raise ITemplateDataContextError("Context '%s' not found." % name)

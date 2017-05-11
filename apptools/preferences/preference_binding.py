@@ -1,6 +1,5 @@
 """ A binding between a trait on an object and a preference value. """
 
-
 # Enthought library imports.
 from traits.api import Any, HasTraits, Instance, Str, Undefined
 from traits.api import Unicode
@@ -101,7 +100,7 @@ class PreferenceBinding(HasTraits):
 
         # If the trait type is 'Unicode' then we convert the raw value.
         elif type(handler) is Unicode:
-            value = unicode(value)
+            value = str(value)
 
         # Otherwise, we eval it!
         else:
@@ -123,11 +122,10 @@ class PreferenceBinding(HasTraits):
 
         # Listen for the preference value being changed.
         components = self.preference_path.split('.')
-        node       = '.'.join(components[:-1])
+        node = '.'.join(components[:-1])
 
-        self.preferences.add_preferences_listener(
-            self._preferences_listener, node
-        )
+        self.preferences.add_preferences_listener(self._preferences_listener,
+                                                  node)
 
         return
 
@@ -137,7 +135,7 @@ class PreferenceBinding(HasTraits):
         value = self.preferences.get(self.preference_path, Undefined)
         if value is not Undefined:
             trait_value = self._get_value(self.trait_name, value)
-            traits      = {self.trait_name : trait_value}
+            traits = {self.trait_name: trait_value}
 
             self.obj.set(trait_change_notify=notify, **traits)
 
@@ -161,14 +159,15 @@ def bind_preference(obj, trait_name, preference_path, preferences=None):
     # constructor (we could of course split that out, which may be the 'right'
     # way to do it ;^).
     traits = {
-        'obj'             : obj,
-        'trait_name'      : trait_name,
-        'preference_path' : preference_path
+        'obj': obj,
+        'trait_name': trait_name,
+        'preference_path': preference_path
     }
 
     if preferences is not None:
         traits['preferences'] = preferences
 
     return PreferenceBinding(**traits)
+
 
 #### EOF ######################################################################

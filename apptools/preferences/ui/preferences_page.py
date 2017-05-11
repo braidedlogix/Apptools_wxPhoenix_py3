@@ -1,19 +1,16 @@
 """ A page in a preferences dialog. """
 
-
 # Enthought library imports.
 from apptools.preferences.api import PreferencesHelper
 from traits.api import Any, Dict, Str, provides
 
 # Local imports.
-from i_preferences_page import IPreferencesPage
+from .i_preferences_page import IPreferencesPage
 
 
 @provides(IPreferencesPage)
 class PreferencesPage(PreferencesHelper):
     """ A page in a preferences dialog. """
-
-
 
     #### 'IPreferencesPage' interface #########################################
 
@@ -51,7 +48,7 @@ class PreferencesPage(PreferencesHelper):
 
         path = self._get_path()
 
-        for trait_name, value in self._changed.items():
+        for trait_name, value in list(self._changed.items()):
             if self._is_preference_trait(trait_name):
                 self.preferences.set('%s.%s' % (path, trait_name), value)
 
@@ -62,22 +59,22 @@ class PreferencesPage(PreferencesHelper):
     # fixme: We would like to be able to have the following API so that
     # developers are not forced into using traits UI for their preferences
     # pages, but at the moment I can't work out how to do it!
-##     def create_control(self, parent):
-##         """ Create the toolkit-specific control that represents the page. """
+    ##     def create_control(self, parent):
+    ##         """ Create the toolkit-specific control that represents the page. """
 
-##         if self._ui is None:
-##             self._ui = self.edit_traits(parent=parent, kind='subpanel')
+    ##         if self._ui is None:
+    ##             self._ui = self.edit_traits(parent=parent, kind='subpanel')
 
-##         return self._ui.control
+    ##         return self._ui.control
 
-##     def destroy_control(self):
-##         """ Destroy the toolkit-specific control that represents the page. """
+    ##     def destroy_control(self):
+    ##         """ Destroy the toolkit-specific control that represents the page. """
 
-##         if self._ui is not None:
-##             self._ui.dispose()
-##             self._ui = None
+    ##         if self._ui is not None:
+    ##             self._ui.dispose()
+    ##             self._ui = None
 
-##         return
+    ##         return
 
     ###########################################################################
     # Private interface.
@@ -117,5 +114,6 @@ class PreferencesPage(PreferencesHelper):
             return False
 
         return True
+
 
 #### EOF ######################################################################

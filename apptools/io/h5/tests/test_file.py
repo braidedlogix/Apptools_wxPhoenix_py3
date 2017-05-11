@@ -10,7 +10,6 @@ from ..dict_node import H5DictNode
 from ..table_node import H5TableNode
 from .utils import open_h5file, temp_h5_file
 
-
 H5_TEST_FILE = '_temp_test_filt.h5'
 
 
@@ -154,8 +153,8 @@ def test_shape_and_dtype():
     array = np.ones((3, 4), dtype=np.uint8)
     with open_h5file(H5_TEST_FILE, mode='w') as h5:
         for node, chunked in (('/array', False), ('/carray', True)):
-            h5array = h5.create_array(node, array.shape, dtype=array.dtype,
-                                      chunked=chunked)
+            h5array = h5.create_array(
+                node, array.shape, dtype=array.dtype, chunked=chunked)
             assert h5array.dtype == array.dtype
             assert h5array.shape == array.shape
 
@@ -221,7 +220,7 @@ def test_delete_existing_table_with_H5File():
         # New table with the same node name should delete old table
         h5.create_table('/table', new_description)
         tab = h5['/table']
-        tab.append({'Pop': (1,), 'Toot': (np.pi,)})
+        tab.append({'Pop': (1, ), 'Toot': (np.pi, )})
         assert tab.ix[0][0] == np.pi
 
 
@@ -233,7 +232,7 @@ def test_delete_existing_table_with_H5Group():
         # New table with the same node name should delete old table
         h5.root.create_table('/table', new_description, delete_existing=True)
         tab = h5['/table']
-        tab.append({'Pop': (1,), 'Toot': (np.pi,)})
+        tab.append({'Pop': (1, ), 'Toot': (np.pi, )})
         assert tab.ix[0][0] == np.pi
 
 
@@ -509,15 +508,15 @@ def test_attribute_iteration_methods():
         attrs['count'] = 42
         attrs['alpha'] = 0xff
 
-        items = attrs.items()
+        items = list(attrs.items())
 
         assert all(isinstance(x, tuple) for x in items)
 
         # unfold the pairs
-        keys, vals = map(list, zip(*items))
+        keys, vals = list(map(list, list(zip(*items))))
 
-        assert keys == attrs.keys()
-        assert vals == attrs.values()
+        assert keys == list(attrs.keys())
+        assert vals == list(attrs.values())
 
         # Check that __iter__ is consistent
         assert keys == list(iter(attrs))
@@ -526,14 +525,14 @@ def test_attribute_iteration_methods():
 
 def test_bad_node_name():
     with open_h5file(H5_TEST_FILE, mode='w') as h5:
-        testing.assert_raises(ValueError, h5.create_array,
-                              '/attrs', np.zeros(3))
+        testing.assert_raises(ValueError, h5.create_array, '/attrs',
+                              np.zeros(3))
 
 
 def test_bad_group_name():
     with open_h5file(H5_TEST_FILE, mode='w') as h5:
-        testing.assert_raises(ValueError, h5.create_array,
-                              '/attrs/array', np.zeros(3))
+        testing.assert_raises(ValueError, h5.create_array, '/attrs/array',
+                              np.zeros(3))
 
 
 def test_create_dict_with_H5File():
@@ -560,7 +559,7 @@ def test_create_table_with_H5File():
         h5.create_table('/table', description)
         tab = h5['/table']
         assert isinstance(tab, H5TableNode)
-        tab.append({'foo': (1,), 'bar': (np.pi,)})
+        tab.append({'foo': (1, ), 'bar': (np.pi, )})
         assert tab.ix[0][0] == 1
         assert tab.ix[0][1] == np.pi
 
@@ -576,7 +575,7 @@ def test_create_table_with_H5Group():
         group.create_table('table', description)
         tab = h5[node_path]
         assert isinstance(tab, H5TableNode)
-        tab.append({'foo': (1,), 'bar': (np.pi,)})
+        tab.append({'foo': (1, ), 'bar': (np.pi, )})
         assert tab.ix[0][0] == 1
         assert tab.ix[0][1] == np.pi
 

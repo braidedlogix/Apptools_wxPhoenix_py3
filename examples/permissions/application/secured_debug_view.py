@@ -1,6 +1,5 @@
 """The secured DebugView for the permissions framework example."""
 
-
 # Enthought library imports.
 from pyface.workbench.debug.api import DebugView
 from apptools.permissions.api import SecureProxy
@@ -22,5 +21,6 @@ class SecuredDebugView(DebugView):
         control = DebugView.create_control(self, parent)
 
         return SecureProxy(control, permissions=[DebugViewPerm])
+
 
 #### EOF ######################################################################

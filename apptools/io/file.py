@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ A representation of files and folders in a file system. """
 
-
 # Standard/built-in imports.
 import mimetypes, os, shutil, stat
 
@@ -338,5 +337,6 @@ class File(HasPrivateTraits):
         shutil.move(self.path, destination.path)
 
         return
+
 
 #### EOF ######################################################################

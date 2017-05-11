@@ -5,7 +5,6 @@ these should go? Class methods on 'TypeManager'?
 
 """
 
-
 # Standard library imports.
 from inspect import getclasstree
 
@@ -55,5 +54,6 @@ def get_classes(hierarchy):
             classes.extend(get_classes(item))
 
     return classes
+
 
 #### EOF ######################################################################

@@ -28,9 +28,9 @@ from apptools.persistence import state_pickler
 
 # A simple class to test instances.
 class A(object):
-
     def __init__(self):
         self.a = 'a'
+
 
 # NOTE: I think that TVTK specific testing should be moved to the
 #       TVTK package.
@@ -38,7 +38,6 @@ class A(object):
 
 # A classic class for testing the pickler.
 class TestClassic:
-
     def __init__(self):
         self.b = False
         self.i = 7
@@ -47,7 +46,7 @@ class TestClassic:
         self.c = complex(1.01234, 2.3)
         self.n = None
         self.s = 'String'
-        self.u = u'Unicode'
+        self.u = 'Unicode'
         self.inst = A()
         self.tuple = (1, 2, 'a', A())
         self.list = [1, 1.1, 'a', 1j, self.inst]
@@ -68,7 +67,7 @@ class TestTraits(HasTraits):
     c = Complex(complex(1.01234, 2.3))
     n = Any
     s = Str('String')
-    u = Unicode(u'Unicode')
+    u = Unicode('Unicode')
     inst = Instance(A)
     tuple = Tuple
     list = List
@@ -88,22 +87,19 @@ class TestTraits(HasTraits):
 
 
 class TestDictPickler(unittest.TestCase):
-
     def set_object(self, obj):
         """Changes the objects properties to test things."""
         obj.b = True
         obj.i = 8
         obj.s = 'string'
-        obj.u = u'unicode'
+        obj.u = 'unicode'
         obj.inst.a = 'b'
         obj.list[0] = 2
         obj.tuple[-1].a = 't'
         obj.dict['a'] = 10
         if TVTK_AVAILABLE:
             obj._tvtk.trait_set(
-                point_size=3, specular_color=(1, 0, 0),
-                representation='w'
-            )
+                point_size=3, specular_color=(1, 0, 0), representation='w')
 
     def _check_instance_and_references(self, obj, data):
         """Asserts that there is one instance and two references in the state.
@@ -149,8 +145,7 @@ class TestDictPickler(unittest.TestCase):
         num_attr = 'numeric' if data['numeric']['type'] == 'numeric' else 'ref'
         decodestring = getattr(base64, 'decodebytes', base64.decodestring)
         junk = state_pickler.gunzip_string(
-            decodestring(data[num_attr]['data'])
-        )
+            decodestring(data[num_attr]['data']))
         num = numpy.loads(junk)
         self.assertEqual(numpy.alltrue(numpy.ravel(num == obj.numeric)), 1)
 
@@ -207,8 +202,7 @@ class TestDictPickler(unittest.TestCase):
             self.assertEqual(_tvtk.point_size, obj._tvtk.point_size)
 
     def verify_state(self, state1, state):
-        self.assertEqual(state.__metadata__,
-                         state1.__metadata__)
+        self.assertEqual(state.__metadata__, state1.__metadata__)
         self.assertEqual(state.b, state1.b)
         self.assertEqual(state.i, state1.i)
         self.assertEqual(state.l, state1.l)
@@ -223,7 +217,7 @@ class TestDictPickler(unittest.TestCase):
         if TVTK_AVAILABLE:
             instances = ('inst', '_tvtk')
         else:
-            instances = ('inst',)
+            instances = ('inst', )
 
         for attr in instances:
             getattr(state1, attr).__metadata__['id'] = \
@@ -247,7 +241,6 @@ class TestDictPickler(unittest.TestCase):
         self.assertEqual(id(state.ref), id(state.numeric))
         self.assertEqual(id(state1.ref), id(state1.numeric))
 
-
     def test_has_instance(self):
         """Test to check has_instance correctness."""
         a = A()
@@ -264,7 +257,6 @@ class TestDictPickler(unittest.TestCase):
         self.assertEqual(r['a'][1].__metadata__['has_instance'], True)
 
         class B:
-
             def __init__(self):
                 self.a = [1, A()]
 
@@ -283,7 +275,7 @@ class TestDictPickler(unittest.TestCase):
 
         # First check if all the attributes are handled.
         keys = sorted(state['data']['data'].keys())
-        expect = [x for x in t.__dict__.keys() if '__' not in x]
+        expect = [x for x in list(t.__dict__.keys()) if '__' not in x]
         expect.sort()
         self.assertEqual(keys, expect)
         # Check each attribute.
@@ -321,8 +313,10 @@ class TestDictPickler(unittest.TestCase):
         # Now create a new instance and test the setter.
         t1 = state_pickler.create_instance(res)
 
-        keys = ['c', 'b', 'f', 'i', 'tuple', 'list', 'l', 'numeric',
-                'n', 's', 'u', 'pure_list', 'inst', 'ref', 'dict']
+        keys = [
+            'c', 'b', 'f', 'i', 'tuple', 'list', 'l', 'numeric', 'n', 's', 'u',
+            'pure_list', 'inst', 'ref', 'dict'
+        ]
         ignore = list(keys)
         ignore.remove('b')
         first = ['b']
@@ -333,7 +327,7 @@ class TestDictPickler(unittest.TestCase):
         # Rest are unchanged.
         self.assertEqual(t1.i, 7)
         self.assertEqual(t1.s, 'String')
-        self.assertEqual(t1.u, u'Unicode')
+        self.assertEqual(t1.u, 'Unicode')
         self.assertEqual(t1.inst.a, 'a')
         self.assertEqual(t1.list[0], 1)
         self.assertEqual(t1.tuple[-1].a, 'a')
@@ -357,7 +351,7 @@ class TestDictPickler(unittest.TestCase):
 
         # First check if all the attributes are handled.
         keys = sorted(state['data']['data'].keys())
-        expect = [x for x in t.__dict__.keys() if '__' not in x]
+        expect = [x for x in list(t.__dict__.keys()) if '__' not in x]
         expect.sort()
         self.assertEqual(keys, expect)
         # Check each attribute.
@@ -389,11 +383,13 @@ class TestDictPickler(unittest.TestCase):
 
     def test_reference_cycle(self):
         """Test if reference cycles are handled when setting the state."""
+
         class A:
             pass
 
         class B:
             pass
+
         a = A()
         b = B()
         a.a = b
@@ -432,8 +428,8 @@ class TestDictPickler(unittest.TestCase):
 
     def test_get_pure_state(self):
         """Test if get_pure_state is called first."""
-        class B:
 
+        class B:
             def __init__(self):
                 self.a = 'dict'
 
@@ -442,6 +438,7 @@ class TestDictPickler(unittest.TestCase):
 
             def __getstate__(self):
                 return {'a': 'getstate'}
+
         b = B()
         s = state_pickler.get_state(b)
         self.assertEqual(s.a, 'get_pure_state')

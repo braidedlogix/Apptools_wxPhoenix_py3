@@ -13,13 +13,12 @@
 #------------------------------------------------------------------------------
 """ Object factory for Python File System contexts. """
 
-
 # Enthought library imports.
 from apptools.io.api import File
 
 # Local imports.
-from object_factory import ObjectFactory
-from reference import Reference
+from .object_factory import ObjectFactory
+from .reference import Reference
 
 
 class PyFSObjectFactory(ObjectFactory):
@@ -35,9 +34,10 @@ class PyFSObjectFactory(ObjectFactory):
         obj = None
 
         if isinstance(state, Reference):
-            if state.class_name == 'File' and  len(state.addresses) > 0:
+            if state.class_name == 'File' and len(state.addresses) > 0:
                 obj = File(state.addresses[0].content)
 
         return obj
+
 
 ### EOF #######################################################################

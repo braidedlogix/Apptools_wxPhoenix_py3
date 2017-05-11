@@ -11,7 +11,6 @@
 #  (c) Copy 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ A simple dual scatter-plot template defined as a test for the template
     package.
 """
@@ -44,10 +43,10 @@ from chaco.scatter_markers \
 from apptools.template.api \
     import Template, TRange, TStr, TInstance, TDerived
 
-from enable_editor \
+from .enable_editor \
     import EnableEditor
 
-from scatter_plot \
+from .scatter_plot \
     import ScatterPlot
 
 #-------------------------------------------------------------------------------
@@ -55,43 +54,44 @@ from scatter_plot \
 #-------------------------------------------------------------------------------
 
 # Template color trait:
-TColor = ColorTrait( template = 'copy' )
+TColor = ColorTrait(template='copy')
 
 #-------------------------------------------------------------------------------
 #  'ScatterPlot2' class:
 #-------------------------------------------------------------------------------
 
-class ScatterPlot2 ( Template ):
+
+class ScatterPlot2(Template):
 
     #-- Template Traits --------------------------------------------------------
 
     # The title of the plot:
-    title = TStr( 'Dual Scatter Plots' )
+    title = TStr('Dual Scatter Plots')
 
     # The type of marker to use.  This is a mapped trait using strings as the
     # keys:
-    marker = marker_trait( template = 'copy', event = 'update' )
+    marker = marker_trait(template='copy', event='update')
 
     # The pixel size of the marker (doesn't include the thickness of the
     # outline):
-    marker_size = TRange( 1, 5, 1, event = 'update' )
+    marker_size = TRange(1, 5, 1, event='update')
 
     # The thickness, in pixels, of the outline to draw around the marker.  If
     # this is 0, no outline will be drawn.
-    line_width = TRange( 0.0, 5.0, 1.0 )
+    line_width = TRange(0.0, 5.0, 1.0)
 
     # The fill color of the marker:
-    color = TColor( 'red', event = 'update' )
+    color = TColor('red', event='update')
 
     # The color of the outline to draw around the marker
-    outline_color = TColor( 'black', event = 'update' )
+    outline_color = TColor('black', event='update')
 
     # The amount of space between plots:
-    spacing = TRange( 0.0, 20.0, 0.0 )
+    spacing = TRange(0.0, 20.0, 0.0)
 
     # The contained scatter plots:
-    scatter_plot_1 = TInstance( ScatterPlot, () )
-    scatter_plot_2 = TInstance( ScatterPlot, () )
+    scatter_plot_1 = TInstance(ScatterPlot, ())
+    scatter_plot_2 = TInstance(ScatterPlot, ())
 
     #-- Derived Traits ---------------------------------------------------------
 
@@ -102,49 +102,54 @@ class ScatterPlot2 ( Template ):
     # The scatter plot view:
     template_view = View(
         VGroup(
-            Item( 'title',
-                  show_label = False,
-                  style      = 'readonly',
-                  editor     = ThemedTextEditor(
-                                 theme = Theme( '@GBB', alignment = 'center' ) )
-            ),
-            Item( 'plot',
-                  show_label = False,
-                  resizable  = True,
-                  editor     = EnableEditor(),
-                  item_theme = Theme( '@GF5', margins = 0 )
-            )
-        ),
-        resizable = True
-    )
+            Item(
+                'title',
+                show_label=False,
+                style='readonly',
+                editor=ThemedTextEditor(theme=Theme(
+                    '@GBB', alignment='center'))),
+            Item(
+                'plot',
+                show_label=False,
+                resizable=True,
+                editor=EnableEditor(),
+                item_theme=Theme(
+                    '@GF5', margins=0))),
+        resizable=True)
 
     # The scatter plot options view:
     options_view = View(
         VGroup(
             VGroup(
-                Label( 'Scatter Plot Options',
-                       item_theme = Theme( '@GBB', alignment = 'center' ) ),
-                show_labels = False
-            ),
+                Label(
+                    'Scatter Plot Options',
+                    item_theme=Theme(
+                        '@GBB', alignment='center')),
+                show_labels=False),
             VGroup(
-                Item( 'title', editor = TextEditor() ),
-                Item( 'marker' ),
-                Item( 'marker_size', editor = ThemedSliderEditor() ),
-                Item( 'line_width',
-                      label  = 'Line Width',
-                      editor = ThemedSliderEditor() ),
-                Item( 'spacing', editor = ThemedSliderEditor() ),
-                Item( 'color',         label = 'Fill Color' ),
-                Item( 'outline_color', label = 'Outline Color' ),
-                group_theme = Theme( '@GF5', margins = ( -5, -1 ) ),
-                item_theme  = Theme( '@G0B', margins = 0 )
-            )
-        )
-    )
+                Item(
+                    'title', editor=TextEditor()),
+                Item('marker'),
+                Item(
+                    'marker_size', editor=ThemedSliderEditor()),
+                Item(
+                    'line_width',
+                    label='Line Width',
+                    editor=ThemedSliderEditor()),
+                Item(
+                    'spacing', editor=ThemedSliderEditor()),
+                Item(
+                    'color', label='Fill Color'),
+                Item(
+                    'outline_color', label='Outline Color'),
+                group_theme=Theme(
+                    '@GF5', margins=(-5, -1)),
+                item_theme=Theme(
+                    '@G0B', margins=0))))
 
     #-- ITemplate Interface Implementation -------------------------------------
 
-    def activate_template ( self ):
+    def activate_template(self):
         """ Converts all contained 'TDerived' objects to real objects using the
             template traits of the object. This method must be overridden in
             subclasses.
@@ -153,29 +158,31 @@ class ScatterPlot2 ( Template ):
             -------
             None
         """
-        plots = [ p for p in [ self.scatter_plot_1.plot,
-                               self.scatter_plot_2.plot ] if p is not None ]
-        if len( plots ) == 2:
-            self.plot = HPlotContainer( spacing = self.spacing )
-            self.plot.add( *plots )
-        elif len( plots ) == 1:
+        plots = [
+            p for p in [self.scatter_plot_1.plot, self.scatter_plot_2.plot]
+            if p is not None
+        ]
+        if len(plots) == 2:
+            self.plot = HPlotContainer(spacing=self.spacing)
+            self.plot.add(*plots)
+        elif len(plots) == 1:
             self.plot = plots[0]
 
     #-- Default Values ---------------------------------------------------------
 
-    def _scatter_plot_1_default ( self ):
+    def _scatter_plot_1_default(self):
         """ Returns the default value for the first scatter plot.
         """
         result = ScatterPlot()
-        result.index.description  = 'Shared Plot Index'
+        result.index.description = 'Shared Plot Index'
         result.value.description += ' 1'
 
         return result
 
-    def _scatter_plot_2_default ( self ):
+    def _scatter_plot_2_default(self):
         """ Returns the default value for the second scatter plot.
         """
-        result = ScatterPlot( index = self.scatter_plot_1.index )
+        result = ScatterPlot(index=self.scatter_plot_1.index)
         result.value.description += ' 2'
         result.value.optional = True
 
@@ -183,15 +190,14 @@ class ScatterPlot2 ( Template ):
 
     #-- Trait Event Handlers ---------------------------------------------------
 
-    def _update_changed ( self, name, old, new ):
+    def _update_changed(self, name, old, new):
         """ Handles a plot option being changed.
         """
-        setattr( self.scatter_plot_1, name, new )
-        setattr( self.scatter_plot_2, name, new )
+        setattr(self.scatter_plot_1, name, new)
+        setattr(self.scatter_plot_2, name, new)
         self.plot = Undefined
 
-    def _spacing_changed ( self, spacing ):
+    def _spacing_changed(self, spacing):
         """ Handles the spacing between plots being changed.
         """
         self.plot = Undefined
-

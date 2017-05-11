@@ -12,19 +12,16 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Any, HasTraits, provides, Str
 
 # Local imports.
-from i_bind_event import IBindEvent
+from .i_bind_event import IBindEvent
 
 
 @provides(IBindEvent)
 class BindEvent(HasTraits):
     """The default implementation of the bind event interface."""
-
-
 
     #### 'IBindEvent' interface ###############################################
 

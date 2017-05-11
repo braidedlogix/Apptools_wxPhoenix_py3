@@ -42,7 +42,8 @@ class TestLazyRegistry(unittest.TestCase):
 
     def test_abc(self):
         self.registry.push_abc(Abstract, 'foo:Abstract')
-        self.assertEqual(self.registry.lookup_by_type(Concrete),
-            'Imported foo:Abstract')
-        self.assertEqual(self.registry.lookup_by_type(ConcreteSubclass),
+        self.assertEqual(
+            self.registry.lookup_by_type(Concrete), 'Imported foo:Abstract')
+        self.assertEqual(
+            self.registry.lookup_by_type(ConcreteSubclass),
             'Imported foo:Abstract')

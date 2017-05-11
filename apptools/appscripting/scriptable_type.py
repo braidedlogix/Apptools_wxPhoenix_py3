@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import inspect
 import types
@@ -21,12 +20,17 @@ import types
 from traits.api import HasTraits
 
 # Local imports.
-from package_globals import get_script_manager
-from scriptable import scriptable, Scriptable
+from .package_globals import get_script_manager
+from .scriptable import scriptable, Scriptable
 
 
-def create_scriptable_type(scripted_type, name=None, bind_policy='auto',
-        api=None, includes=None, excludes=None, script_init=True):
+def create_scriptable_type(scripted_type,
+                           name=None,
+                           bind_policy='auto',
+                           api=None,
+                           includes=None,
+                           excludes=None,
+                           script_init=True):
     """Create and return a new type based on the given scripted_type that will
     (by default) have its public methods and traits (ie. those not beginning
     with an underscore) made scriptable.
@@ -58,7 +62,7 @@ def create_scriptable_type(scripted_type, name=None, bind_policy='auto',
         """Initialise the dynamic sub-class instance."""
 
         get_script_manager().new_object(self, scripted_type, args, kwargs,
-                name, bind_policy)
+                                        name, bind_policy)
         scripted_type.__init__(self, *args, **kwargs)
 
     # See if we need to pull all attribute names from a type.
@@ -78,7 +82,7 @@ def create_scriptable_type(scripted_type, name=None, bind_policy='auto',
 
         for cls in src:
             if issubclass(cls, HasTraits):
-                for n in cls.class_traits().keys():
+                for n in list(cls.class_traits().keys()):
                     if not n.startswith('_') and not n.startswith('trait'):
                         ndict[n] = None
 
@@ -86,7 +90,7 @@ def create_scriptable_type(scripted_type, name=None, bind_policy='auto',
                 if c is HasTraits:
                     break
 
-                for n in c.__dict__.keys():
+                for n in list(c.__dict__.keys()):
                     if not n.startswith('_'):
                         ndict[n] = None
 
@@ -98,7 +102,7 @@ def create_scriptable_type(scripted_type, name=None, bind_policy='auto',
                 except KeyError:
                     pass
 
-        names = ndict.keys()
+        names = list(ndict.keys())
 
     # Create the type dictionary containing replacements for everything that
     # needs to be scriptable.
@@ -144,8 +148,12 @@ def make_object_scriptable(obj, api=None, includes=None, excludes=None):
     """
 
     # Create the new scriptable type.
-    new_type = create_scriptable_type(obj.__class__, api=api,
-            includes=includes, excludes=excludes, script_init=False)
+    new_type = create_scriptable_type(
+        obj.__class__,
+        api=api,
+        includes=includes,
+        excludes=excludes,
+        script_init=False)
 
     # Fix the object's type to make it scriptable.
     obj.__class__ = new_type

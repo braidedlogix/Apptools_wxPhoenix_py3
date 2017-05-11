@@ -10,7 +10,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ Defines the ITemplateDataNameItem interface used by elements of a
     TemplateDataName.
 """
@@ -22,17 +21,18 @@
 from traits.api \
     import Interface, Instance, List
 
-from itemplate_data_context \
+from .itemplate_data_context \
     import ITemplateDataContext
 
-from itemplate_choice \
+from .itemplate_choice \
     import ITemplateChoice
 
 #-------------------------------------------------------------------------------
 #  'ITemplateDataNameItem' interface:
 #-------------------------------------------------------------------------------
 
-class ITemplateDataNameItem ( Interface ):
+
+class ITemplateDataNameItem(Interface):
     """ Defines the ITemplateDataNameItem interface used by elements of a
         TemplateDataName.
 
@@ -52,20 +52,18 @@ class ITemplateDataNameItem ( Interface ):
 
     # The data context which this data name item should match against. This
     # value must be read/write.
-    input_data_context = Instance( ITemplateDataContext )
+    input_data_context = Instance(ITemplateDataContext)
 
     # The data context containing the data values and/or contexts this data
     # name item matches. This value must be read/write.
-    output_data_context = Instance( ITemplateDataContext )
+    output_data_context = Instance(ITemplateDataContext)
 
     # The ITemplateChoice instance representing the current settings of the
     # data name item. This value must be read/write.
-    data_name_item_choice = Instance( ITemplateChoice )
+    data_name_item_choice = Instance(ITemplateChoice)
 
     # The alternative choices the user has for the data name item settings for
     # the current input data context. The list may be empty, in which case the
     # user cannot change the settings of the data name item. This value can be
     # read only.
-    data_name_item_choices = List( ITemplateChoice )
-
-
+    data_name_item_choices = List(ITemplateChoice)

@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import HasTraits, Instance, List, Unicode
 from traitsui.api import Item, TableEditor, View
@@ -47,22 +46,31 @@ class _RolesView(HasTraits):
     selection = Instance(_Role)
 
     # The editor used by the view.
-    table_editor = TableEditor(columns=[ObjectColumn(name='name'),
-                    ObjectColumn(name='description')],
-            selected='selection', sort_model=True, configurable=False)
+    table_editor = TableEditor(
+        columns=[ObjectColumn(name='name'), ObjectColumn(name='description')],
+        selected='selection',
+        sort_model=True,
+        configurable=False)
 
     # The default view.
-    traits_view = View(Item('model', show_label=False, editor=table_editor),
-            title="Select a Role", style='readonly', kind='modal',
-            buttons=OKCancelButtons)
+    traits_view = View(
+        Item(
+            'model', show_label=False, editor=table_editor),
+        title="Select a Role",
+        style='readonly',
+        kind='modal',
+        buttons=OKCancelButtons)
 
 
 def select_role(roles):
     """Return a single role from the given list of roles."""
 
     # Construct the model.
-    model = [_Role(name=name, description=description, permissions=permissions)
-            for name, description, permissions in roles]
+    model = [
+        _Role(
+            name=name, description=description, permissions=permissions)
+        for name, description, permissions in roles
+    ]
 
     # Construct the view.
     view = _RolesView(model=model)

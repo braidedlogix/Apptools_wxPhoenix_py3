@@ -7,8 +7,8 @@ from types import GeneratorType
 # Enthought library imports
 from apptools.persistence.updater import __replacement_setstate__
 
-
 logger = logging.getLogger(__name__)
+
 
 ##############################################################################
 # class 'NewUnpickler'
@@ -54,7 +54,8 @@ class NewUnpickler(Unpickler):
                     generators.append((obj, ret))
                 elif ret is not None:
                     raise UnpicklingError('Unexpected return value from '
-                        '__initialize__.  %s returned %s' % (obj, ret))
+                                          '__initialize__.  %s returned %s' %
+                                          (obj, ret))
 
         # Ensure a maximum number of passes
         if max_pass < 0:
@@ -72,7 +73,7 @@ class NewUnpickler(Unpickler):
                 raise UnpicklingError(msg)
             for o, g in generators[:]:
                 try:
-                    g.next()
+                    next(g)
                 except StopIteration:
                     generators.remove((o, g))
 
@@ -87,6 +88,7 @@ class NewUnpickler(Unpickler):
         if isinstance(obj, NewUnpickler):
             obj.objects.append(obj.stack[-2])
         Unpickler.load_build(obj)
+
     load_build = classmethod(load_build)
 
 
@@ -103,12 +105,10 @@ class VersionedUnpickler(NewUnpickler):
     actual version numbers - all it needs to do is upgrade one release.
     """
 
-
     def __init__(self, file, updater=None):
         Unpickler.__init__(self, file)
         self.updater = updater
         return
-
 
     def find_class(self, module, name):
         """ Overridden method from Unpickler.
@@ -119,7 +119,7 @@ class VersionedUnpickler(NewUnpickler):
         if self.updater:
             # check to see if this class needs to be mapped to a new class
             # or module name
-            original_module, original_name  = module, name
+            original_module, original_name = module, name
             #logger.debug('omodule:%s oname:%s' % (original_module, original_name))
             module, name = self.updater.get_latest(module, name)
             #logger.debug('module:%s name:%s' % (module, name))
@@ -140,7 +140,8 @@ class VersionedUnpickler(NewUnpickler):
                 klass = Unpickler.find_class(self, module, name)
             except:
                 logger.error("Looking for [%s] [%s]" % (module, name))
-                logger.exception('Problem using default unpickle functionality')
+                logger.exception(
+                    'Problem using default unpickle functionality')
 
             # restore the original __setstate__ if necessary
             fn = getattr(klass, '__setstate_original__', False)
@@ -149,7 +150,6 @@ class VersionedUnpickler(NewUnpickler):
                 setattr(klass, '__setstate__', m)
 
         return klass
-
 
     def add_updater(self, module, name, klass):
         """ If there is an updater defined for this class we will add it to the
@@ -176,7 +176,6 @@ class VersionedUnpickler(NewUnpickler):
 
         return
 
-
     def backup_setstate(self, module, klass):
         """ If the class has a user defined __setstate__ we back it up.
         """
@@ -201,7 +200,6 @@ class VersionedUnpickler(NewUnpickler):
 
         return
 
-
     def import_name(self, module, name):
         """
         If the class is needed for the latest version of the application then
@@ -217,5 +215,6 @@ class VersionedUnpickler(NewUnpickler):
         #print "importing %s %s" % (name, module)
         module = __import__(module, globals(), locals(), [name])
         return vars(module)[name]
+
 
 ### EOF #################################################################

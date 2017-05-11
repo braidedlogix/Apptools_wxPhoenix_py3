@@ -12,7 +12,6 @@
 # Description: <Enthought undo package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.action.api import Action, Group, MenuManager
 from pyface.workbench.api import WorkbenchWindow
@@ -22,7 +21,7 @@ from apptools.undo.action.api import CommandAction, RedoAction, UndoAction
 
 # Local imports.
 from example_editor_manager import ExampleEditorManager
-from commands import LabelIncrementSizeCommand, LabelDecrementSizeCommand, \
+from subprocess import LabelIncrementSizeCommand, LabelDecrementSizeCommand, \
         LabelNormalFontCommand, LabelBoldFontCommand, LabelItalicFontCommand
 
 
@@ -69,15 +68,19 @@ class ExampleUndoWindow(WorkbenchWindow):
     def __label_menu_default(self):
         """ Trait initialiser. """
 
-        size_group = Group(CommandAction(command=LabelIncrementSizeCommand),
-                           CommandAction(command=LabelDecrementSizeCommand))
+        size_group = Group(
+            CommandAction(command=LabelIncrementSizeCommand),
+            CommandAction(command=LabelDecrementSizeCommand))
 
-        normal = CommandAction(id='normal', command=LabelNormalFontCommand,
-                               style='radio', checked=True)
-        bold = CommandAction(id='bold', command=LabelBoldFontCommand,
-                             style='radio')
-        italic = CommandAction(id='italic', command=LabelItalicFontCommand,
-                               style='radio')
+        normal = CommandAction(
+            id='normal',
+            command=LabelNormalFontCommand,
+            style='radio',
+            checked=True)
+        bold = CommandAction(
+            id='bold', command=LabelBoldFontCommand, style='radio')
+        italic = CommandAction(
+            id='italic', command=LabelItalicFontCommand, style='radio')
 
         style_group = Group(normal, bold, italic, id='style')
 
@@ -96,8 +99,8 @@ class ExampleUndoWindow(WorkbenchWindow):
     def _menu_bar_manager_default(self):
         """ Trait initialiser. """
 
-        return MenuBarManager(self._file_menu, self._label_menu,
-                self._undo_menu, window=self)
+        return MenuBarManager(
+            self._file_menu, self._label_menu, self._undo_menu, window=self)
 
     def _tool_bar_manager_default(self):
         """ Trait initialiser. """
@@ -113,7 +116,6 @@ class ExampleUndoWindow(WorkbenchWindow):
 
         if new is not None:
             new.command_stack.undo_manager.active_stack = new.command_stack
-
 
         # Walk the label editor menu.
         for grp in self._label_menu.groups:
@@ -136,5 +138,6 @@ class ExampleUndoWindow(WorkbenchWindow):
                         action.checked = (action.data.style == action.id)
                 else:
                     action.enabled = False
+
 
 #### EOF ######################################################################

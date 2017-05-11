@@ -12,12 +12,11 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Bool, Instance, Interface
 
 # Local imports.
-from i_user_storage import IUserStorage
+from .i_user_storage import IUserStorage
 
 
 class IUserDatabase(Interface):

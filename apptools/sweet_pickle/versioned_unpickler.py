@@ -9,7 +9,6 @@
 #-----------------------------------------------------------------------------
 # The code for two-stage unpickling support has been taken from a PEP draft
 # prepared by Dave Peterson and Prabhu Ramachandran.
-
 """ An unpickler that is tolerant of class refactorings, and implements a
 two-stage pickling process to make it possible to unpickle complicated Python
 object hierarchies where the unserialized state of an object depends on the
@@ -32,10 +31,8 @@ from pickle import UnpicklingError, BUILD
 # Enthought library imports
 from traits.api import HasTraits, Instance
 
-
 # Setup a logger for this module
 logger = logging.getLogger(__name__)
-
 
 ##############################################################################
 # constants
@@ -50,10 +47,10 @@ _SETSTATE_NAME = '__setstate__'
 # The name we store our unpickling data under.
 _UNPICKLER_DATA = '__enthought_sweet_pickle_unpickler__'
 
-
 ##############################################################################
 # function '__replacement_setstate__'
 ##############################################################################
+
 
 def __replacement_setstate__(self, state):
     """ Called to enable an unpickler to modify the state of this instance.
@@ -75,6 +72,7 @@ def __replacement_setstate__(self, state):
 # function 'load_build_with_meta_data'
 ##############################################################################
 
+
 def load_build_with_meta_data(self):
     """ Called prior to the actual load_build() unpickling method which primes
         the state dictionary with meta-data.
@@ -89,7 +87,7 @@ def load_build_with_meta_data(self):
         # If a file object is used, reference the file name
         if hasattr(self._file, 'name'):
             pickle_file_name = path.abspath(self._file.name)
-        else :
+        else:
             pickle_file_name = ""
 
         # Add any meta-data needed by __setstate__() methods here...
@@ -143,7 +141,8 @@ class NewUnpickler(Unpickler):
                     generators.append((obj, ret))
                 elif ret is not None:
                     raise UnpicklingError('Unexpected return value from '
-                        '__initialize__.  %s returned %s' % (obj, ret))
+                                          '__initialize__.  %s returned %s' %
+                                          (obj, ret))
 
         # Ensure a maximum number of passes
         if max_pass < 0:
@@ -161,7 +160,7 @@ class NewUnpickler(Unpickler):
                 raise UnpicklingError(msg)
             for o, g in generators[:]:
                 try:
-                    g.next()
+                    next(g)
                 except StopIteration:
                     generators.remove((o, g))
 
@@ -182,6 +181,7 @@ class NewUnpickler(Unpickler):
 ##############################################################################
 # class 'VersionedUnpickler'
 ##############################################################################
+
 
 class VersionedUnpickler(NewUnpickler, HasTraits):
     """ An unpickler that is tolerant of class refactorings.
@@ -206,7 +206,6 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
     # The updater used to modify the objects being unpickled.
     updater = Instance('apptools.sweet_pickle.updater.Updater')
 
-
     ##########################################################################
     # 'object' interface
     ##########################################################################
@@ -218,10 +217,10 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
 
         self._file = file
         if self.updater is None:
-            from global_registry import get_global_registry
+            from .global_registry import get_global_registry
             self.updater = get_global_registry()
         logger.debug('VersionedUnpickler [%s] using Updater [%s]', self,
-            self.updater)
+                     self.updater)
 
         # Update the BUILD instruction to use an overridden load_build method
         # NOTE: this is being disabled since, on some platforms, the object
@@ -231,7 +230,6 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
         # the BUILD instruction replaced with one that uses _file, and it
         # should have _file defined.
         #self.dispatch[BUILD[0]] = load_build_with_meta_data
-
 
     ##########################################################################
     # 'Unpickler' interface
@@ -271,18 +269,19 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
             module, name = self._get_target_class(module, name)
             if module != original_module or name != original_name:
                 logger.debug('Unpickling [%s.%s] as [%s.%s]', original_module,
-                    original_name, module, name)
+                             original_name, module, name)
 
         # Retrieve the target class definition
         try:
             klass = super(VersionedUnpickler, self).find_class(module, name)
-        except Exception, e:
+        except Exception as e:
             from apptools.sweet_pickle import UnpicklingError
             logger.debug('Traceback when finding class [%s.%s]:' \
                          % (module, name), exc_info=True)
             raise UnpicklingError('Unable to load class [%s.%s]. '
-                'Original exception was, "%s".  map:%s' % (
-                module, name, str(e), self.updater.class_map))
+                                  'Original exception was, "%s".  map:%s' %
+                                  (module, name, str(e),
+                                   self.updater.class_map))
 
         # Make sure we run the updater's state functions if any are declared
         # for the target class.
@@ -291,7 +290,6 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
             self._add_unpickler(klass, original_module, original_name)
 
         return klass
-
 
     ##########################################################################
     # 'VersionedUnpickler' interface
@@ -332,7 +330,7 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
             key = self.updater.get_version_attribute(module, name)
             while (module, name, next_version) in self.updater.state_functions:
                 functions = self.updater.state_functions[(module, name,
-                    next_version)]
+                                                          next_version)]
                 for f in functions:
                     logger.debug('Modifying state from [%s.%s (v.%s)] to ' + \
                         '[%s.%s (v.%s)] using function %s', module, name,
@@ -381,7 +379,6 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
 
         return result
 
-
     ### protected interface ##################################################
 
     def _add_unpickler(self, klass, module, name):
@@ -398,7 +395,6 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
         # Add the information necessary to allow this unpickler to run
         setattr(klass, _UNPICKLER_DATA, (self, module, name))
 
-
     def _backup_setstate(self, klass):
         """ Backs up the specified class's setstate method.
         """
@@ -406,10 +402,9 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
         method = getattr(klass, _SETSTATE_NAME, None)
         if method is not None:
             logger.debug('Backing up method [%s] to [%s] on [%s]',
-                _SETSTATE_NAME, _BACKUP_NAME, klass)
+                         _SETSTATE_NAME, _BACKUP_NAME, klass)
             m = method.__get__(None, klass)
             setattr(klass, _BACKUP_NAME, m)
-
 
     def _get_target_class(self, module, name):
         """ Returns the class info that the class, within the specified module
@@ -434,7 +429,7 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
                     'mapping from [%s.%s] to [%s.%s] within Updater [%s]' % \
                     (original_module, original_name, module, name,
                     self.updater))
-            visited.append( (module, name) )
+            visited.append((module, name))
 
             # Get the mapping for the current class and try loading the class
             # to ensure any mappings away from it are registered.
@@ -442,11 +437,11 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
             try:
                 super(VersionedUnpickler, self).find_class(module, name)
             except:
-                logger.exception("_get_target_class can't find: %s" % (module, name))
+                logger.exception("_get_target_class can't find: %s" %
+                                 (module, name))
                 pass
 
         return module, name
-
 
     def _has_state_function(self, module, name):
         """ Returns True if the updater contains any state functions that could
@@ -475,7 +470,6 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
 
         return result
 
-
     def _remove_unpickler(self, klass):
         """ Restores the specified class to its unmodified state.  Meaning
             we won't get called when its next instance is unpickled.
@@ -489,15 +483,14 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
         # don't pollute the 'real' attributes of the class.
         delattr(klass, _UNPICKLER_DATA)
 
-
     def _restore_setstate(self, klass):
         """ Restores the original setstate method back to its rightful place.
         """
         # We only need to restore if the backup actually exists.
         method = getattr(klass, _BACKUP_NAME, None)
         if method is not None:
-            logger.debug('Restoring method [%s] to [%s] on [%s]',
-                _BACKUP_NAME, _SETSTATE_NAME, klass)
+            logger.debug('Restoring method [%s] to [%s] on [%s]', _BACKUP_NAME,
+                         _SETSTATE_NAME, klass)
             delattr(klass, _BACKUP_NAME)
             m = method.__get__(None, klass)
             setattr(klass, _SETSTATE_NAME, m)
@@ -508,4 +501,3 @@ class VersionedUnpickler(NewUnpickler, HasTraits):
 
 
 ### EOF ######################################################################
-

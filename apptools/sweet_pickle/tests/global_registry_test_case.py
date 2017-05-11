@@ -6,7 +6,6 @@
 #  Author: Dave Peterson <dpeterson@enthought.com>
 #
 #-----------------------------------------------------------------------------
-
 """ Tests the global registry functionality of the sweet_pickle framework.
 """
 
@@ -17,10 +16,10 @@ import unittest
 import apptools.sweet_pickle as sweet_pickle
 from apptools.sweet_pickle.global_registry import _clear_global_registry
 
-
 ##############################################################################
 # class 'GlobalRegistryTestCase'
 ##############################################################################
+
 
 class GlobalRegistryTestCase(unittest.TestCase):
     """ Tests the global registry functionality of the sweet_pickle framework.
@@ -44,7 +43,6 @@ class GlobalRegistryTestCase(unittest.TestCase):
         # Cache a reference to the new global registry
         self.registry = sweet_pickle.get_global_registry()
 
-
     ##########################################################################
     # 'GlobalRegistryTestCase' interface
     ##########################################################################
@@ -57,7 +55,6 @@ class GlobalRegistryTestCase(unittest.TestCase):
         _clear_global_registry()
         self.assertNotEqual(self.registry, sweet_pickle.get_global_registry())
 
-
     def test_registry_starts_empty(self):
         """ Validates that the registry is starting empty for each test.
         """
@@ -65,7 +62,6 @@ class GlobalRegistryTestCase(unittest.TestCase):
         self.assertEqual(0, len(self.registry.state_functions))
         self.assertEqual(0, len(self.registry.version_attribute_map))
         self.assertEqual(0, len(self.registry._state_function_classes))
-
 
     def test_returns_singleton(self):
         """ Validates that the getter returns the same global registry
@@ -78,6 +74,5 @@ class GlobalRegistryTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
 
 ### EOF ######################################################################

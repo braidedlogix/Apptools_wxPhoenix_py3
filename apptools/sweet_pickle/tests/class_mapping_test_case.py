@@ -6,7 +6,6 @@
 #  Author: Dave Peterson <dpeterson@enthought.com>
 #
 #-----------------------------------------------------------------------------
-
 """ Tests the class mapping functionality of the enthought.pickle
     framework.
 """
@@ -17,7 +16,6 @@ import unittest
 # Enthought library imports
 import apptools.sweet_pickle as sweet_pickle
 from apptools.sweet_pickle.global_registry import _clear_global_registry
-
 
 ##############################################################################
 # Classes to use within the tests
@@ -31,6 +29,7 @@ from apptools.sweet_pickle.tests.class_mapping_classes import Foo, Bar, Baz
 ##############################################################################
 # class 'ClassMappingTestCase'
 ##############################################################################
+
 
 class ClassMappingTestCase(unittest.TestCase):
     """ Tests the class mapping functionality of the apptools.sweet_pickle
@@ -55,7 +54,6 @@ class ClassMappingTestCase(unittest.TestCase):
         # Cache a reference to the new global registry
         self.registry = sweet_pickle.get_global_registry()
 
-
     ##########################################################################
     # 'ClassMappingTestCase' interface
     ##########################################################################
@@ -75,10 +73,10 @@ class ClassMappingTestCase(unittest.TestCase):
         # instance anywhere within the circular definition.
         def fn(o):
             sweet_pickle.loads(sweet_pickle.dumps(o))
+
         self.assertRaises(sweet_pickle.UnpicklingError, fn, Foo())
         self.assertRaises(sweet_pickle.UnpicklingError, fn, Bar())
         self.assertRaises(sweet_pickle.UnpicklingError, fn, Baz())
-
 
     def test_unpickled_class_mapping(self):
 
@@ -101,6 +99,5 @@ class ClassMappingTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
 
 ### EOF ######################################################################

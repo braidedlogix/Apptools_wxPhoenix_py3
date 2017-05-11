@@ -13,14 +13,13 @@
 #------------------------------------------------------------------------------
 """ State factory for Python File System contexts. """
 
-
 # Enthought library imports.
 from apptools.io.api import File
 
 # Local imports.
-from address import Address
-from reference import Reference
-from state_factory import StateFactory
+from .address import Address
+from .reference import Reference
+from .state_factory import StateFactory
 
 
 class PyFSStateFactory(StateFactory):
@@ -40,10 +39,11 @@ class PyFSStateFactory(StateFactory):
             # context then we create and bind a reference to it.
             if obj.parent.path != context.path:
                 state = Reference(
-                    class_name = obj.__class__.__name__,
-                    addresses  = [Address(type='file', content=obj.path)]
-                )
+                    class_name=obj.__class__.__name__,
+                    addresses=[Address(
+                        type='file', content=obj.path)])
 
         return state
+
 
 ### EOF #######################################################################

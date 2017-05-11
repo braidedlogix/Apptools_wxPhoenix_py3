@@ -1,6 +1,5 @@
 """ An example of using the preferences manager. """
 
-
 # Enthought library imports.
 from traits.api import Color, Int, Float, Str
 from traitsui.api import View
@@ -10,7 +9,6 @@ from apptools.preferences.api import Preferences, PreferencesHelper
 from apptools.preferences.api import get_default_preferences
 from apptools.preferences.api import set_default_preferences
 from apptools.preferences.ui.api import PreferencesManager, PreferencesPage
-
 
 # Create a preferences collection from a file and make it the default root
 # preferences node for all preferences helpers etc.
@@ -38,7 +36,7 @@ class AcmePreferencesPage(PreferencesPage):
 
     #### Preferences ##########################################################
 
-    width  = Int(800)
+    width = Int(800)
     height = Int(600)
 
     #### Traits UI views ######################################################
@@ -80,10 +78,7 @@ if __name__ == '__main__':
 
     # Create a manager with some pages.
     preferences_manager = PreferencesManager(
-        pages = [
-            AcmePreferencesPage(), AcmeWorkbenchPreferencesPage()
-        ]
-    )
+        pages=[AcmePreferencesPage(), AcmeWorkbenchPreferencesPage()])
 
     # Show the UI...
     preferences_manager.configure_traits()

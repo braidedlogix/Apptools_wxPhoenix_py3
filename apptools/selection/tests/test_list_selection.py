@@ -6,7 +6,6 @@ from apptools.selection.api import ListSelection
 
 
 class TestListSelection(unittest.TestCase):
-
     def test_list_selection(self):
         all_items = ['a', 'b', 'c', 'd']
         selected = ['d', 'b']
@@ -26,7 +25,7 @@ class TestListSelection(unittest.TestCase):
         self.assertEqual(list_selection.indices, [2, 1])
 
     def test_list_selection_of_numpy_array_items(self):
-        data = numpy.array(range(10))
+        data = numpy.array(list(range(10)))
         all_items = [data, data + 10, data + 30]
         selected = [all_items[0], all_items[2]]
 
@@ -37,9 +36,9 @@ class TestListSelection(unittest.TestCase):
         self.assertEqual(list_selection.indices, [0, 2])
 
     def test_list_selection_with_invalid_selected_items(self):
-        data = numpy.array(range(10))
+        data = numpy.array(list(range(10)))
         all_items = [data, data + 10, data + 30]
-        selected = [data-10, ]
+        selected = [data - 10, ]
 
         with self.assertRaises(ValueError):
             ListSelection.from_available_items(

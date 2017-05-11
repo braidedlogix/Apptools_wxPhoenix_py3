@@ -10,7 +10,6 @@ import sys
 import inspect
 import logging
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -32,7 +31,7 @@ def get_version(obj):
             version = cls.__version__
         except AttributeError:
             version = -1
-        res.append( ( (class_name, module), version) )
+        res.append(((class_name, module), version))
     res.reverse()
     return res
 
@@ -62,7 +61,7 @@ class HandlerRegistry:
         """
         key = (class_name, module)
         if key in self.handlers:
-            msg = 'Overwriting version handler for (%s, %s)'%(key[0], key[1])
+            msg = 'Overwriting version handler for (%s, %s)' % (key[0], key[1])
             logger.warn(msg)
         self.handlers[(class_name, module)] = handler
 
@@ -75,7 +74,7 @@ class HandlerRegistry:
         """Updates the given state using the handlers.  Note that the
         state is modified in-place.
         """
-        if (not self.handlers) or  (not hasattr(state, '__metadata__')):
+        if (not self.handlers) or (not hasattr(state, '__metadata__')):
             return
         versions = state.__metadata__['version']
         for ver in versions:
@@ -90,7 +89,7 @@ def _create_registry():
     """Creates a reload safe, singleton registry.
     """
     registry = None
-    for key in sys.modules.keys():
+    for key in list(sys.modules.keys()):
         if 'version_registry' in key:
             mod = sys.modules[key]
             if hasattr(mod, 'registry'):
@@ -103,4 +102,3 @@ def _create_registry():
 
 # The singleton registry.
 registry = _create_registry()
-

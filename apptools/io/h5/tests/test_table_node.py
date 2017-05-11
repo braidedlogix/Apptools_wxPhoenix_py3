@@ -5,7 +5,6 @@ from pandas import DataFrame
 from ..table_node import H5TableNode
 from .utils import temp_h5_file
 
-
 NODE = '/table_node'
 
 
@@ -35,8 +34,7 @@ def test_getitem():
         h5table = H5TableNode.add_to_h5file(h5, NODE, description)
         h5table.append({'a': [1, 2], 'b': [3, 4]})
         assert_allclose(h5table['a'], (1, 2))
-        assert_allclose(h5table[['b', 'a']], [(3, 1),
-                                              (4, 2)])
+        assert_allclose(h5table[['b', 'a']], [(3, 1), (4, 2)])
 
 
 def test_keys():

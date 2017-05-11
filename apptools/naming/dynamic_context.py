@@ -4,7 +4,6 @@
 #  All rights reserved.
 #
 #-----------------------------------------------------------------------------
-
 """ Provider of a framework that dynamically determines the contents of a
     context at the time of interaction with the contents rather than at the
     time a class is written.
@@ -44,10 +43,9 @@
 import logging
 
 # Local imports
-from binding import Binding
-from context import Context
-from exception import OperationNotSupportedError
-
+from .binding import Binding
+from .context import Context
+from .exception import OperationNotSupportedError
 
 # Setup a logger for this module.
 logger = logging.getLogger(__name__)
@@ -78,7 +76,6 @@ class DynamicContext(Context):
 
         return result
 
-
     def _is_context(self, name):
         """ Returns True if a name is bound to a context.
         """
@@ -91,7 +88,6 @@ class DynamicContext(Context):
 
         return result
 
-
     def _list_bindings(self):
         """ Lists the bindings in this context.
         """
@@ -100,14 +96,12 @@ class DynamicContext(Context):
 
         return result
 
-
     def _list_names(self):
         """ Lists the names bound in this context.
         """
-        result = [ n for n, o, t in self._get_contributed_context_items() ]
+        result = [n for n, o, t in self._get_contributed_context_items()]
 
         return result
-
 
     def _lookup(self, name):
         """ Looks up a name in this context.
@@ -121,7 +115,6 @@ class DynamicContext(Context):
 
         return result
 
-
     def _rename(self, old_name, new_name):
         """ Renames an object in this context.
         """
@@ -133,7 +126,6 @@ class DynamicContext(Context):
         else:
             raise ValueError('Name "%s" not in context', old_name)
 
-
     def _unbind(self, name):
         """ Unbinds a name from this context.
         """
@@ -142,7 +134,6 @@ class DynamicContext(Context):
         if item != (None, None):
             raise OperationNotSupportedError('Unable to unbind ' + \
                 'built-in with name [%s]' % name)
-
 
     ##########################################################################
     # 'DynamicContext' interface.
@@ -163,7 +154,6 @@ class DynamicContext(Context):
 
         return result
 
-
     def _get_contributed_context_items(self):
         """ Returns an ordered list of items to be treated as part of our
             context.
@@ -173,13 +163,11 @@ class DynamicContext(Context):
         """
         # Our traits that get treated as context items are those that declare
         # themselves via metadata on the trait definition.
-        filter = {
-            'context_name': lambda v: v is not None and len(v) > 0
-            }
+        filter = {'context_name': lambda v: v is not None and len(v) > 0}
         traits = self.traits(**filter)
 
         # Sort the list of context items according to the name of the item.
-        traits = [ (t.context_order, n, t) for n, t in traits.items() ]
+        traits = [(t.context_order, n, t) for n, t in list(traits.items())]
         traits.sort()
 
         # Convert these trait definitions into a list of name and object tuples.
@@ -190,4 +178,3 @@ class DynamicContext(Context):
 
 
 ### EOF ######################################################################
-

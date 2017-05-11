@@ -19,6 +19,7 @@ class NamingError(Exception):
 
     """
 
+
 class InvalidNameError(NamingError):
     """ Invalid name.
 
@@ -26,6 +27,7 @@ class InvalidNameError(NamingError):
     not conform to the syntax of the naming system (or is empty etc).
 
     """
+
 
 class NameAlreadyBoundError(NamingError):
     """ Name already bound.
@@ -35,6 +37,7 @@ class NameAlreadyBoundError(NamingError):
 
     """
 
+
 class NameNotFoundError(NamingError):
     """ Name not found.
 
@@ -42,6 +45,7 @@ class NameNotFoundError(NamingError):
     because it is not bound in the current context.
 
     """
+
 
 class NotContextError(NamingError):
     """ Not a context.
@@ -52,9 +56,11 @@ class NotContextError(NamingError):
 
     """
 
+
 class OperationNotSupportedError(NamingError):
     """ The context does support the requested operation.
 
     """
+
 
 #### EOF ######################################################################

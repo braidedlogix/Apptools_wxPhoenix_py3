@@ -6,7 +6,6 @@ import logging
 # Enthought library imports.
 from traits.api import HasTraits
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -61,11 +60,10 @@ class AbstractFactory(HasTraits):
 
         """
 
-        message = "%s failed to create a %s" % (
-            self.__class__.__name__,
-            target_class.__name__
-        )
+        message = "%s failed to create a %s" % (self.__class__.__name__,
+                                                target_class.__name__)
 
         return message
+
 
 #### EOF ######################################################################

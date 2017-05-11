@@ -15,13 +15,12 @@ import apptools.sweet_pickle as sweet_pickle
 from apptools.sweet_pickle.global_registry import _clear_global_registry
 from traits.api import Bool, Float, HasTraits, Int, Str
 
-
 logger = logging.getLogger(__name__)
-
 
 ##############################################################################
 # Classes to use within the tests
 ##############################################################################
+
 
 class Foo(HasTraits):
     _enthought_pickle_version = Int(1)
@@ -30,6 +29,7 @@ class Foo(HasTraits):
     i1 = Int(1)
     s1 = Str('foo')
 
+
 class Bar(HasTraits):
     _enthought_pickle_version = Int(2)
     b2 = Bool(True)
@@ -37,12 +37,14 @@ class Bar(HasTraits):
     i2 = Int(2)
     s2 = Str('bar')
 
+
 class Baz(HasTraits):
     _enthought_pickle_version = Int(3)
     b3 = Bool(False)
     f3 = Float(3)
     i3 = Int(3)
     s3 = Str('baz')
+
     def __setstate__(self, state):
         logger.debug('Running Baz\'s original __setstate__')
         if state['_enthought_pickle_version'] < 3:
@@ -53,5 +55,6 @@ class Baz(HasTraits):
                     del state[old]
             state['_enthought_pickle_version'] = 3
         self.__dict__.update(state)
+
 
 ### EOF ######################################################################

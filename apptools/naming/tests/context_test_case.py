@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ Tests operations that span contexts. """
 
-
 # Standard library imports.
 import unittest
 
@@ -62,7 +61,7 @@ class ContextTestCase(unittest.TestCase):
         # Convenience.
         context = self.context
         sub = self.context.lookup('sub')
-        self.assert_(isinstance(sub, Context))
+        self.assertTrue(isinstance(sub, Context))
 
         # Make sure that the sub-context is empty.
         self.assertEqual(len(sub.list_bindings('')), 0)
@@ -93,7 +92,7 @@ class ContextTestCase(unittest.TestCase):
         # Convenience.
         context = self.context
         sub = self.context.lookup('sub')
-        self.assert_(isinstance(sub, Context))
+        self.assertTrue(isinstance(sub, Context))
 
         # Make sure that the sub-context is empty.
         self.assertEqual(len(sub.list_bindings('')), 0)
@@ -151,7 +150,7 @@ class ContextTestCase(unittest.TestCase):
         # Convenience.
         context = self.context
         sub = self.context.lookup('sub')
-        self.assert_(isinstance(sub, Context))
+        self.assertTrue(isinstance(sub, Context))
 
         # Make sure that the sub-context is empty.
         self.assertEqual(len(sub.list_bindings('')), 0)
@@ -330,9 +329,7 @@ class ContextTestCase(unittest.TestCase):
         self.assertRaises(InvalidNameError, context.create_subcontext, '')
 
         # Attempt to resolve via a non-existent context.
-        self.assertRaises(
-            NameNotFoundError, context.create_subcontext, 'xx/a'
-        )
+        self.assertRaises(NameNotFoundError, context.create_subcontext, 'xx/a')
         self.assertEqual(len(sub.list_bindings('')), 0)
 
         # Create a sub-context.
@@ -340,18 +337,16 @@ class ContextTestCase(unittest.TestCase):
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         # Try to bind it again.
-        self.assertRaises(
-            NameAlreadyBoundError, context.create_subcontext, 'sub/a'
-        )
+        self.assertRaises(NameAlreadyBoundError, context.create_subcontext,
+                          'sub/a')
 
         # Bind a name.
         context.bind('sub/b', 1)
         self.assertEqual(len(sub.list_bindings('')), 2)
 
         # Attempt to resolve via an existing name that is not a context.
-        self.assertRaises(
-            NotContextError, context.create_subcontext, 'sub/b/xx'
-        )
+        self.assertRaises(NotContextError, context.create_subcontext,
+                          'sub/b/xx')
         self.assertEqual(len(sub.list_bindings('')), 2)
 
         return
@@ -370,9 +365,8 @@ class ContextTestCase(unittest.TestCase):
         self.assertRaises(InvalidNameError, context.destroy_subcontext, '')
 
         # Attempt to resolve via a non-existent context.
-        self.assertRaises(
-            NameNotFoundError, context.destroy_subcontext, 'xx/a'
-        )
+        self.assertRaises(NameNotFoundError, context.destroy_subcontext,
+                          'xx/a')
         self.assertEqual(len(sub.list_bindings('')), 0)
 
         # Create a sub-context.
@@ -388,19 +382,15 @@ class ContextTestCase(unittest.TestCase):
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         # Try to destroy it.
-        self.assertRaises(
-            NotContextError, context.destroy_subcontext, 'sub/a'
-        )
+        self.assertRaises(NotContextError, context.destroy_subcontext, 'sub/a')
 
         # Try to destroy a non-existent name.
-        self.assertRaises(
-            NameNotFoundError, context.destroy_subcontext, 'sub/b'
-        )
+        self.assertRaises(NameNotFoundError, context.destroy_subcontext,
+                          'sub/b')
 
         # Attempt to resolve via an existing name that is not a context.
-        self.assertRaises(
-            NotContextError, context.destroy_subcontext, 'sub/a/xx'
-        )
+        self.assertRaises(NotContextError, context.destroy_subcontext,
+                          'sub/a/xx')
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         return
@@ -429,9 +419,7 @@ class ContextTestCase(unittest.TestCase):
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         # Attempt to resolve via an existing name that is not a context.
-        self.assertRaises(
-            NotContextError, context.list_bindings, 'sub/a/xx'
-        )
+        self.assertRaises(NotContextError, context.list_bindings, 'sub/a/xx')
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         return
@@ -460,9 +448,7 @@ class ContextTestCase(unittest.TestCase):
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         # Attempt to resolve via an existing name that is not a context.
-        self.assertRaises(
-            NotContextError, context.list_names, 'sub/a/xx'
-        )
+        self.assertRaises(NotContextError, context.list_names, 'sub/a/xx')
         self.assertEqual(len(sub.list_bindings('')), 1)
 
         return
@@ -471,14 +457,12 @@ class ContextTestCase(unittest.TestCase):
         """ default object and state factories. """
 
         object_factory = ObjectFactory()
-        self.assertRaises(
-            NotImplementedError, object_factory.get_object_instance, 0, 0, 0
-        )
+        self.assertRaises(NotImplementedError,
+                          object_factory.get_object_instance, 0, 0, 0)
 
         state_factory = StateFactory()
-        self.assertRaises(
-            NotImplementedError, state_factory.get_state_to_bind, 0, 0, 0
-        )
+        self.assertRaises(NotImplementedError, state_factory.get_state_to_bind,
+                          0, 0, 0)
 
         return
 
@@ -491,35 +475,36 @@ class ContextTestCase(unittest.TestCase):
         sub_sibling = context.create_subcontext('sub sibling')
         sub_sub = sub.create_subcontext('sub sub')
 
-        context.bind('one',1)
-        names = context.search( 1 )
-        self.assertEqual( len(names), 1)
-        self.assertEqual( names[0], 'one' )
+        context.bind('one', 1)
+        names = context.search(1)
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names[0], 'one')
 
         names = sub.search(1)
-        self.assertEqual( len(names), 0)
+        self.assertEqual(len(names), 0)
 
-        context.bind('sub/two',2)
-        names = context.search( 2 )
-        self.assertEqual( len(names), 1)
-        self.assertEqual( names[0], 'sub/two' )
+        context.bind('sub/two', 2)
+        names = context.search(2)
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names[0], 'sub/two')
 
-        names = sub.search( 2 )
-        self.assertEqual( len(names), 1)
-        self.assertEqual( names[0], 'two' )
+        names = sub.search(2)
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names[0], 'two')
 
-        context.bind('sub/sub sub/one',1)
-        names = context.search( 1 )
-        self.assertEqual( len(names), 2)
-        self.assertEqual( sorted(names), sorted(['one', 'sub/sub sub/one']) )
+        context.bind('sub/sub sub/one', 1)
+        names = context.search(1)
+        self.assertEqual(len(names), 2)
+        self.assertEqual(sorted(names), sorted(['one', 'sub/sub sub/one']))
 
         names = sub.search(None)
-        self.assertEqual( len(names), 0)
+        self.assertEqual(len(names), 0)
 
-        names = context.search( sub_sub )
-        self.assertEqual( len(names), 1)
-        self.assertEqual( names[0], 'sub/sub sub' )
+        names = context.search(sub_sub)
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names[0], 'sub/sub sub')
 
         return
+
 
 #### EOF ######################################################################

@@ -12,8 +12,8 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
 
-
 from traits.api import Interface, File, Str
+
 
 class IHelpCode(Interface):
     """ The interface for help code.

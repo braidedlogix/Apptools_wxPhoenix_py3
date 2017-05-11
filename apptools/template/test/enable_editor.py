@@ -9,7 +9,6 @@
 #  (c) Copyright 2007 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-
 """ Traits UI editor for displaying Enable Components.
 """
 
@@ -32,7 +31,8 @@ from enable.wx_backend.api \
 #  '_EnableEditor' class:
 #-------------------------------------------------------------------------------
 
-class _EnableEditor ( Editor ):
+
+class _EnableEditor(Editor):
     """ Traits UI editor for displaying Enable Components.
     """
 
@@ -44,15 +44,17 @@ class _EnableEditor ( Editor ):
     #  widget:
     #---------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self._window = Window( parent, -1,
-                               component = self.value,
-                               bg_color  = ( 0.698, 0.698, 0.698, 1.0 ) )
+        self._window = Window(
+            parent,
+            -1,
+            component=self.value,
+            bg_color=(0.698, 0.698, 0.698, 1.0))
         self.control = self._window.control
-        self.control.SetSize( wx.Size( 300, 300 ) )
+        self.control.SetSize(wx.Size(300, 300))
 
         self.set_tooltip()
 
@@ -60,19 +62,20 @@ class _EnableEditor ( Editor ):
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._window.component = self.value
 
+
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
 #-------------------------------------------------------------------------------
 
+
 # wxPython editor factory for Enable component editors:
-class EnableEditor ( BasicEditorFactory ):
+class EnableEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _EnableEditor
-

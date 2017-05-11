@@ -13,7 +13,6 @@
 #------------------------------------------------------------------------------
 """ Tests the Python namespace context. """
 
-
 # Enthought library imports.
 from apptools.naming.api import PyContext
 
@@ -32,5 +31,6 @@ class PyContextTestCase(ContextTestCase):
         """ Creates the context that we are testing. """
 
         return PyContext(namespace={})
+
 
 #### EOF ######################################################################

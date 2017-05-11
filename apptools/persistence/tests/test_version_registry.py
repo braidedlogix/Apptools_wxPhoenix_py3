@@ -14,13 +14,16 @@ import unittest
 from traits.api import HasTraits
 
 from apptools.persistence import version_registry, state_pickler
+import imp
 
 
 class Classic:
     __version__ = 0
 
+
 class New(object):
     __version__ = 0
+
 
 class TraitClass(HasTraits):
     __version__ = 0
@@ -28,14 +31,18 @@ class TraitClass(HasTraits):
 
 class Test(New):
     __version__ = 1
+
     def __init__(self):
         self.a = Classic()
+
 
 class Handler:
     def __init__(self):
         self.calls = []
+
     def upgrade(self, state, version):
         self.calls.append(('upgrade', state, version))
+
     def upgrade1(self, state, version):
         self.calls.append(('upgrade1', state, version))
 
@@ -63,15 +70,16 @@ class TestVersionRegistry(unittest.TestCase):
 
         t = TraitClass()
         v = version_registry.get_version(t)
-        res = extra + [(('CHasTraits', 'traits.ctraits'), -1),
-               (('HasTraits', 'traits.has_traits'), -1),
-               (('TraitClass', __name__), 0)]
+        res = extra + [(('CHasTraits', 'traits.ctraits'), -1), (
+            ('HasTraits', 'traits.has_traits'), -1), (
+                ('TraitClass', __name__), 0)]
         self.assertEqual(v, res)
         state = state_pickler.get_state(t)
         self.assertEqual(state.__metadata__['version'], res)
 
     def test_reload(self):
         """Test if the registry is reload safe."""
+
         # A dummy handler.
         def h(x, y):
             pass
@@ -79,7 +87,7 @@ class TestVersionRegistry(unittest.TestCase):
         registry = version_registry.registry
         registry.register('A', __name__, h)
         self.assertEqual(registry.handlers.get(('A', __name__)), h)
-        reload(version_registry)
+        imp.reload(version_registry)
         registry = version_registry.registry
         self.assertEqual(registry.handlers.get(('A', __name__)), h)
         del registry.handlers[('A', __name__)]
@@ -111,10 +119,9 @@ class TestVersionRegistry(unittest.TestCase):
         state_pickler.set_state(t1, state)
         # This should call New handler, then the Test and then
         # Classic.
-        self.assertEqual(h.calls, [('upgrade', state, 0),
-                                   ('upgrade1', state, 1),
-                                   ('upgrade', state.a, 0)])
-
+        self.assertEqual(h.calls,
+                         [('upgrade', state, 0), ('upgrade1', state, 1),
+                          ('upgrade', state.a, 0)])
 
 
 if __name__ == "__main__":

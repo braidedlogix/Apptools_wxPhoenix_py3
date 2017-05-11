@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import logging
 
@@ -23,7 +22,6 @@ from pyface.workbench.api import Workbench
 # Local imports.
 from example_script_window import ExampleScriptWindow
 from model import Label
-
 
 # Log to stderr.
 logging.getLogger().addHandler(logging.StreamHandler())
@@ -85,6 +83,7 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    import sys; main(sys.argv)
+    import sys
+    main(sys.argv)
 
 #### EOF ######################################################################

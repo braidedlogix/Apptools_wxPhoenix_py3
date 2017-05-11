@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.action.api import Action
 from traits.api import Bool, Event, HasTraits, provides, \
@@ -23,14 +22,12 @@ from apptools.permissions.i_user import IUser
 from apptools.permissions.i_user_manager import IUserManager
 from apptools.permissions.package_globals import get_permissions_manager
 from apptools.permissions.permission import ManageUsersPermission
-from i_user_database import IUserDatabase
+from .i_user_database import IUserDatabase
 
 
 @provides(IUserManager)
 class UserManager(HasTraits):
     """The default user manager implementation."""
-
-
 
     #### 'IUserManager' interface #############################################
 
@@ -71,7 +68,8 @@ class UserManager(HasTraits):
     def unauthenticate_user(self):
         """Unauthenticate the user."""
 
-        if self.user.authenticated and self.user_db.unauthenticate_user(self.user):
+        if self.user.authenticated and self.user_db.unauthenticate_user(
+                self.user):
             self.user.authenticated = False
 
             # Tell the policy manager before everybody else.
@@ -102,13 +100,13 @@ class UserManager(HasTraits):
             actions.append(SecureProxy(act, permissions=[perm], show=False))
 
         if user_db.can_modify_user:
-            act = Action(name="&Modify a User...",
-                    on_perform=user_db.modify_user)
+            act = Action(
+                name="&Modify a User...", on_perform=user_db.modify_user)
             actions.append(SecureProxy(act, permissions=[perm], show=False))
 
         if user_db.can_delete_user:
-            act = Action(name="&Delete a User...",
-                    on_perform=user_db.delete_user)
+            act = Action(
+                name="&Delete a User...", on_perform=user_db.delete_user)
             actions.append(SecureProxy(act, permissions=[perm], show=False))
 
         return actions
@@ -160,7 +158,8 @@ class _ChangePasswordAction(Action):
 
         super(_ChangePasswordAction, self).__init__(**traits)
 
-        get_permissions_manager().user_manager.on_trait_event(self._refresh_enabled, 'user_authenticated')
+        get_permissions_manager().user_manager.on_trait_event(
+            self._refresh_enabled, 'user_authenticated')
 
     ###########################################################################
     # 'Action' interface.

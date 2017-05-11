@@ -1,6 +1,5 @@
 """ The interface for pages in a preferences dialog. """
 
-
 # Enthought library imports.
 from traits.api import Interface, Str
 
@@ -25,10 +24,10 @@ class IPreferencesPage(Interface):
     # fixme: We would like to be able to have the following API so that
     # developers are not forced into using traits UI for their preferences
     # pages, but at the moment I can't work out how to do it!
-##     def create_control(self, parent):
-##         """ Create the toolkit-specific control that represents the page. """
+    ##     def create_control(self, parent):
+    ##         """ Create the toolkit-specific control that represents the page. """
 
-##     def destroy_control(self, parent):
-##         """ Destroy the toolkit-specific control that represents the page. """
+    ##     def destroy_control(self, parent):
+    ##         """ Destroy the toolkit-specific control that represents the page. """
 
-#### EOF ######################################################################
+    #### EOF ######################################################################

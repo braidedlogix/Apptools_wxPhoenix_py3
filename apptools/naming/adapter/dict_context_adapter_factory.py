@@ -1,11 +1,10 @@
 """ Context adapter factory for Python dictionaries. """
 
-
 # Enthought library imports.
 from apptools.naming.api import ContextAdapterFactory
 
 # Local imports.
-from dict_context_adapter import DictContextAdapter
+from .dict_context_adapter import DictContextAdapter
 
 
 class DictContextAdapterFactory(ContextAdapterFactory):
@@ -24,11 +23,9 @@ class DictContextAdapterFactory(ContextAdapterFactory):
         """ Returns an adapter that adapts an object to the target class. """
 
         adapter = DictContextAdapter(
-            adaptee     = adaptee,
-            environment = environment,
-            context     = context
-        )
+            adaptee=adaptee, environment=environment, context=context)
 
         return adapter
+
 
 #### EOF ######################################################################

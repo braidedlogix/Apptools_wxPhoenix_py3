@@ -1,11 +1,10 @@
 """ Context adapter factory for Python tuple. """
 
-
 # Enthought library imports.
 from apptools.naming.api import ContextAdapterFactory
 
 # Local imports.
-from tuple_context_adapter import TupleContextAdapter
+from .tuple_context_adapter import TupleContextAdapter
 
 
 class TupleContextAdapterFactory(ContextAdapterFactory):
@@ -24,11 +23,9 @@ class TupleContextAdapterFactory(ContextAdapterFactory):
         """ Returns an adapter that adapts an object to the target class. """
 
         adapter = TupleContextAdapter(
-            adaptee     = adaptee,
-            environment = environment,
-            context     = context
-        )
+            adaptee=adaptee, environment=environment, context=context)
 
         return adapter
+
 
 #### EOF ######################################################################

@@ -6,10 +6,11 @@ A Recorder subclass that presents a simple user interface.
 # License: BSD Style.
 
 from traits.api import Code, Button, Int, on_trait_change, Any
-from traitsui.api import (View, Item, Group, HGroup, CodeEditor,
-                                     spring, Handler)
+from traitsui.api import (View, Item, Group, HGroup, CodeEditor, spring,
+                          Handler)
 
 from .recorder import Recorder
+
 
 ######################################################################
 # `CloseHandler` class.
@@ -47,20 +48,21 @@ class RecorderWithUI(Recorder):
     ########################################
     # Traits View.
     view = View(
-             Group(
-                HGroup(Item('recording', show_label=True),
-                       spring,
-                       Item('save_script', show_label=False),
-                ),
-                Group(Item('code', show_label=False)),
-                ),
-             width=600,
-             height=360,
-             id='apptools.scripting.recorder_with_ui',
-             buttons=['Cancel'],
-             resizable=True,
-             handler=CloseHandler()
-             )
+        Group(
+            HGroup(
+                Item(
+                    'recording', show_label=True),
+                spring,
+                Item(
+                    'save_script', show_label=False), ),
+            Group(Item(
+                'code', show_label=False)), ),
+        width=600,
+        height=360,
+        id='apptools.scripting.recorder_with_ui',
+        buttons=['Cancel'],
+        resizable=True,
+        handler=CloseHandler())
 
     ######################################################################
     # RecorderWithUI interface.
@@ -69,8 +71,8 @@ class RecorderWithUI(Recorder):
         """Called from the CloseHandler when the UI is closed. This
         method basically stops the recording.
         """
-        from util import stop_recording
-        from package_globals import get_recorder
+        from .util import stop_recording
+        from .package_globals import get_recorder
 
         if get_recorder() is self:
             stop_recording(self.root, save=False)

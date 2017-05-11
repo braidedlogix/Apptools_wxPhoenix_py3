@@ -1,6 +1,5 @@
 """ The interface for a node in a preferences hierarchy. """
 
-
 # Enthought library imports.
 from traits.api import Instance, Interface, Str
 
@@ -170,5 +169,6 @@ class IPreferences(Interface):
         This includes any changes to the node's descendants.
 
         """
+
 
 #### EOF ######################################################################

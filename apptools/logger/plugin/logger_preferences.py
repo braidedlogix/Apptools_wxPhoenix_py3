@@ -11,15 +11,16 @@ class LoggerPreferences(PreferencesHelper):
     #### Preferences ###########################################################
 
     # The log levels
-    level = Trait('Info',
-        {'Debug'    : logging.DEBUG,
-         'Info'     : logging.INFO,
-         'Warning'  : logging.WARNING,
-         'Error'    : logging.ERROR,
-         'Critical' : logging.CRITICAL,
+    level = Trait(
+        'Info',
+        {
+            'Debug': logging.DEBUG,
+            'Info': logging.INFO,
+            'Warning': logging.WARNING,
+            'Error': logging.ERROR,
+            'Critical': logging.CRITICAL,
         },
-        is_str = True,
-    )
+        is_str=True, )
 
     enable_agent = Bool(False)
     smtp_server = Str()

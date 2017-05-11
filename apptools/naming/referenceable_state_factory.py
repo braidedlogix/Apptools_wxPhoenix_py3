@@ -13,10 +13,9 @@
 #------------------------------------------------------------------------------
 """ State factory for referenceable objects. """
 
-
 # Local imports.
-from referenceable import Referenceable
-from state_factory import StateFactory
+from .referenceable import Referenceable
+from .state_factory import StateFactory
 
 
 class ReferenceableStateFactory(StateFactory):
@@ -37,5 +36,6 @@ class ReferenceableStateFactory(StateFactory):
             state = obj.reference
 
         return state
+
 
 ### EOF #######################################################################

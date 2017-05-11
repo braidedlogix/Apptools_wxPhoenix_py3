@@ -12,12 +12,11 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Bool, HasTraits, Property, Str, Unicode
 
 # Locals imports.
-from package_globals import get_permissions_manager
+from .package_globals import get_permissions_manager
 
 
 class Permission(HasTraits):
@@ -88,7 +87,7 @@ class ManagePolicyPermission(Permission):
 
     id = Str('ets.permissions.manage_policy')
 
-    description = Unicode(u"Manage permissions policy")
+    description = Unicode("Manage permissions policy")
 
     bootstrap = Bool(True)
 
@@ -100,6 +99,6 @@ class ManageUsersPermission(Permission):
 
     id = Str('ets.permissions.manage_users')
 
-    description = Unicode(u"Manage users")
+    description = Unicode("Manage users")
 
     bootstrap = Bool(True)

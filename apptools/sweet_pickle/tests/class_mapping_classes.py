@@ -11,11 +11,14 @@
 # Classes to use within the tests
 ##############################################################################
 
+
 class Foo:
     pass
 
+
 class Bar:
     pass
+
 
 class Baz:
     pass

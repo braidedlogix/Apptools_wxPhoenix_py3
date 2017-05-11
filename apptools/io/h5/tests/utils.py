@@ -4,7 +4,6 @@ import os
 
 from ..utils import open_h5file
 
-
 SEPARATOR = '-' * 60
 
 

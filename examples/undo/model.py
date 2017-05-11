@@ -12,7 +12,6 @@
 # Description: <Enthought undo package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from traits.api import Enum, HasTraits, Int, Unicode
 

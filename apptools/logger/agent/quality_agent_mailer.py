@@ -19,13 +19,18 @@ import os
 # Enthought library imports.
 from traits.util.home_directory import get_home_directory
 
-
 # Setup a logger for this module.
 logger = logging.getLogger(__name__)
 
 
-def create_email_message(fromaddr, toaddrs, ccaddrs, subject, priority,
-                         include_project=False, stack_trace="", comments=""):
+def create_email_message(fromaddr,
+                         toaddrs,
+                         ccaddrs,
+                         subject,
+                         priority,
+                         include_project=False,
+                         stack_trace="",
+                         comments=""):
     # format a message suitable to be sent to the Roundup bug tracker
 
     from email.MIMEMultipart import MIMEMultipart
@@ -38,7 +43,7 @@ def create_email_message(fromaddr, toaddrs, ccaddrs, subject, priority,
     message['Cc'] = ', '.join(ccaddrs)
     message['From'] = fromaddr
     message.preamble = 'You will not see this in a MIME-aware mail reader.\n'
-    message.epilogue = ' ' # To guarantee the message ends with a newline
+    message.epilogue = ' '  # To guarantee the message ends with a newline
 
     # First section is simple ASCII data ...
     m = []
@@ -74,7 +79,8 @@ def create_email_message(fromaddr, toaddrs, ccaddrs, subject, priority,
             msg = MIMEBase(maintype, subtype)
 
             msg = MIMEText(''.join(entries))
-            msg.add_header('Content-Disposition', 'attachment', filename='logfile.txt')
+            msg.add_header(
+                'Content-Disposition', 'attachment', filename='logfile.txt')
             message.attach(msg)
         except:
             logger.exception('Failed to include log file with message')
@@ -88,7 +94,7 @@ def create_email_message(fromaddr, toaddrs, ccaddrs, subject, priority,
         """
         try:
             entries = []
-            for key, value in os.environ.iteritems():
+            for key, value in os.environ.items():
                 entries.append('%30s : %s\n' % (key, value))
 
             ctype = 'application/octet-stream'
@@ -96,12 +102,15 @@ def create_email_message(fromaddr, toaddrs, ccaddrs, subject, priority,
             msg = MIMEBase(maintype, subtype)
 
             msg = MIMEText(''.join(entries))
-            msg.add_header('Content-Disposition', 'attachment', filename='environment.txt')
+            msg.add_header(
+                'Content-Disposition',
+                'attachment',
+                filename='environment.txt')
             message.attach(msg)
 
         except:
-            logger.exception('Failed to include environment variables with message')
-
+            logger.exception(
+                'Failed to include environment variables with message')
 
 # FIXME: no project plugins exist for Envisage 3, yet, and this isn't the right
 # way to do it, either. See the docstring of attachments.py.
@@ -115,5 +124,3 @@ def create_email_message(fromaddr, toaddrs, ccaddrs, subject, priority,
 #            logger.exception('Failed to include workspace files with message')
 
     return message
-
-

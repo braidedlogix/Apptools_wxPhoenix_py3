@@ -130,7 +130,7 @@ def gunzip_string(data):
     """Given a gzipped string (`data`) this unzips the string and
     returns it.
     """
-    if PY_VER== 2 or (bytes is not str and type(data) is bytes):
+    if PY_VER == 2 or (bytes is not str and type(data) is bytes):
         s = BytesIO(data)
     else:
         s = StringIO(data)
@@ -139,14 +139,18 @@ def gunzip_string(data):
     writer.close()
     return data
 
+
 class StatePicklerError(Exception):
     pass
+
 
 class StateUnpicklerError(Exception):
     pass
 
+
 class StateSetterError(Exception):
     pass
+
 
 ######################################################################
 # `State` class
@@ -157,9 +161,11 @@ class State(dict):
     that has class specific details like the class name, module name
     etc.
     """
+
     def __init__(self, **kw):
         dict.__init__(self, **kw)
         self.__dict__ = self
+
 
 ######################################################################
 # `StateDict` class
@@ -169,9 +175,11 @@ class StateDict(dict):
     The has_instance attribute specifies if the dict has an instance
     embedded in it.
     """
+
     def __init__(self, **kw):
         dict.__init__(self, **kw)
         self.has_instance = False
+
 
 ######################################################################
 # `StateList` class
@@ -181,12 +189,14 @@ class StateList(list):
     has_instance attribute specifies if the list has an instance
     embedded in it.
     """
+
     def __init__(self, seq=None):
         if seq:
             list.__init__(self, seq)
         else:
             list.__init__(self)
         self.has_instance = False
+
 
 ######################################################################
 # `StateTuple` class
@@ -196,6 +206,7 @@ class StateTuple(tuple):
     has_instance attribute specifies if the tuple has an instance
     embedded in it.
     """
+
     def __new__(cls, seq=None):
         if seq:
             obj = super(StateTuple, cls).__new__(cls, tuple(seq))
@@ -253,24 +264,26 @@ class StatePickler:
     can be pickled and are stored as a gzipped base64 encoded string.
 
     """
+
     def __init__(self):
         self._clear()
-        type_map = {bool: self._do_basic_type,
-                    complex: self._do_basic_type,
-                    float: self._do_basic_type,
-                    int: self._do_basic_type,
-                    type(None): self._do_basic_type,
-                    str: self._do_basic_type,
-                    bytes: self._do_basic_type,
-                    tuple: self._do_tuple,
-                    list: self._do_list,
-                    dict: self._do_dict,
-                    NumpyArrayType: self._do_numeric,
-                    State: self._do_state,
-                    }
+        type_map = {
+            bool: self._do_basic_type,
+            complex: self._do_basic_type,
+            float: self._do_basic_type,
+            int: self._do_basic_type,
+            type(None): self._do_basic_type,
+            str: self._do_basic_type,
+            bytes: self._do_basic_type,
+            tuple: self._do_tuple,
+            list: self._do_list,
+            dict: self._do_dict,
+            NumpyArrayType: self._do_numeric,
+            State: self._do_state,
+        }
         if PY_VER == 2:
-            type_map[long] = self._do_basic_type
-            type_map[unicode] = self._do_basic_type
+            type_map[int] = self._do_basic_type
+            type_map[str] = self._do_basic_type
         self.type_map = type_map
 
     def dump(self, value, file):
@@ -399,13 +412,14 @@ class StatePickler:
         module = value.__class__.__module__
         class_name = value.__class__.__name__
 
-        return dict(type='instance',
-                    module=module,
-                    class_name=class_name,
-                    version=version,
-                    id=idx,
-                    initargs=args_data,
-                    data=data)
+        return dict(
+            type='instance',
+            module=module,
+            class_name=class_name,
+            version=version,
+            id=idx,
+            initargs=args_data,
+            data=data)
 
     def _do_state(self, value):
         metadata = value.__metadata__
@@ -419,13 +433,14 @@ class StatePickler:
         args_data = self._do(args)
         data = self._do(state)
 
-        return dict(type='instance',
-                    module=metadata['module'],
-                    class_name=metadata['class_name'],
-                    version=metadata['version'],
-                    id=idx,
-                    initargs=args_data,
-                    data=data)
+        return dict(
+            type='instance',
+            module=metadata['module'],
+            class_name=metadata['class_name'],
+            version=metadata['version'],
+            id=idx,
+            initargs=args_data,
+            data=data)
 
     def _do_tuple(self, value):
         idx = self._register(value)
@@ -439,8 +454,8 @@ class StatePickler:
 
     def _do_dict(self, value):
         idx = self._register(value)
-        vals = [self._do(x) for x in value.values()]
-        data = dict(zip(value.keys(), vals))
+        vals = [self._do(x) for x in list(value.values())]
+        data = dict(list(zip(list(value.keys()), vals)))
         return dict(type='dict', id=idx, data=data)
 
     def _do_numeric(self, value):
@@ -450,7 +465,6 @@ class StatePickler:
         else:
             data = base64.encodestring(gzip_string(numpy.ndarray.dumps(value)))
         return dict(type='numeric', id=idx, data=data)
-
 
 
 ######################################################################
@@ -496,13 +510,14 @@ class StateUnpickler:
 
     def __init__(self):
         self._clear()
-        self.type_map = {'reference': self._do_reference,
-                         'instance': self._do_instance,
-                         'tuple': self._do_tuple,
-                         'list': self._do_list,
-                         'dict': self._do_dict,
-                         'numeric': self._do_numeric,
-                         }
+        self.type_map = {
+            'reference': self._do_reference,
+            'instance': self._do_instance,
+            'tuple': self._do_tuple,
+            'list': self._do_list,
+            'dict': self._do_dict,
+            'numeric': self._do_numeric,
+        }
 
     def load_state(self, file):
         """Returns the state of an object loaded from the pickled data
@@ -550,24 +565,24 @@ class StateUnpickler:
 
         # Setup all the Numeric arrays.  Do this first since
         # references use this.
-        for key, (path, val) in self._numeric.items():
+        for key, (path, val) in list(self._numeric.items()):
             if isinstance(result, StateTuple):
                 result = list(result)
-                exec('result%s = val'%path)
+                exec('result%s = val' % path)
                 result = StateTuple(result)
             else:
-                exec('result%s = val'%path)
+                exec('result%s = val' % path)
 
         # Setup the references so they really are references.
-        for key, paths in self._refs.items():
+        for key, paths in list(self._refs.items()):
             for path in paths:
                 x = self._obj_cache[key]
                 if isinstance(result, StateTuple):
                     result = list(result)
-                    exec('result%s = x'%path)
+                    exec('result%s = x' % path)
                     result = StateTuple(result)
                 else:
-                    exec('result%s = x'%path)
+                    exec('result%s = x' % path)
                 # if the reference is to an instance append its path.
                 if isinstance(x, State):
                     self._instances.append(path)
@@ -579,7 +594,7 @@ class StateUnpickler:
             pth = path
             while pth:
                 ns = {'result': result}
-                exec('val = result%s'%pth, ns, ns)
+                exec('val = result%s' % pth, ns, ns)
                 self._set_has_instance(ns['val'], True)
                 end = pth.rfind('[')
                 pth = pth[:end]
@@ -618,13 +633,14 @@ class StateUnpickler:
         self._handle_file_path(value)
 
         d = self._do(value['data'], path)
-        md = dict(type='instance',
-                  module=value['module'],
-                  class_name=value['class_name'],
-                  version=value['version'],
-                  id=value['id'],
-                  initargs=initargs,
-                  has_instance=True)
+        md = dict(
+            type='instance',
+            module=value['module'],
+            class_name=value['class_name'],
+            version=value['version'],
+            id=value['id'],
+            initargs=initargs,
+            has_instance=True)
         result = State(**d)
         result.__metadata__ = md
         self._obj_cache[value['id']] = result
@@ -633,7 +649,7 @@ class StateUnpickler:
     def _do_tuple(self, value, path):
         res = []
         for i, x in enumerate(value['data']):
-            res.append(self._do(x, path + '[%d]'%i))
+            res.append(self._do(x, path + '[%d]' % i))
         result = StateTuple(res)
         self._obj_cache[value['id']] = result
         return result
@@ -641,14 +657,14 @@ class StateUnpickler:
     def _do_list(self, value, path):
         result = StateList()
         for i, x in enumerate(value['data']):
-            result.append(self._do(x, path + '[%d]'%i))
+            result.append(self._do(x, path + '[%d]' % i))
         self._obj_cache[value['id']] = result
         return result
 
     def _do_dict(self, value, path):
         result = StateDict()
-        for key, val in value['data'].items():
-            result[key] = self._do(val, path + '["%s"]'%key)
+        for key, val in list(value['data'].items()):
+            result[key] = self._do(val, path + '["%s"]' % key)
         self._obj_cache[value['id']] = result
         return result
 
@@ -676,14 +692,16 @@ class StateSetter:
     checks to see if a `__set_pure_state__` method exists and calls
     that when it sets the state.
     """
+
     def __init__(self):
         # Stores the ids of instances already done.
         self._instance_ids = []
-        self.type_map = {State: self._do_instance,
-                         StateTuple: self._do_tuple,
-                         StateList: self._do_list,
-                         StateDict: self._do_dict,
-                         }
+        self.type_map = {
+            State: self._do_instance,
+            StateTuple: self._do_tuple,
+            StateList: self._do_list,
+            StateDict: self._do_dict,
+        }
 
     def set(self, obj, state, ignore=None, first=None, last=None):
         """Sets the state of the object.
@@ -729,8 +747,7 @@ class StateSetter:
         if (not isinstance(state, State)) and \
                state.__metadata__['type'] != 'instance':
             raise StateSetterError(
-                'Can only set the attributes of an instance.'
-            )
+                'Can only set the attributes of an instance.')
 
         # Upgrade the state to the latest using the registry.
         self._update_and_check_state(obj, state)
@@ -802,16 +819,14 @@ class StateSetter:
         """
         result = value
         if self._has_instance(value):
-            raise StateSetterError(
-                'Value has an instance: %s'%value
-            )
+            raise StateSetterError('Value has an instance: %s' % value)
         if isinstance(value, (StateList, StateTuple)):
             result = [self._get_pure(x) for x in value]
             if isinstance(value, StateTuple):
                 result = tuple(result)
         elif isinstance(value, StateDict):
             result = {}
-            for k, v in value.items():
+            for k, v in list(value.items()):
                 result[k] = self._get_pure(v)
         return result
 
@@ -843,8 +858,7 @@ class StateSetter:
             attr = getattr(obj, key)
         except AttributeError:
             raise StateSetterError(
-                'Object %s does not have an attribute called: %s'%(obj, key)
-            )
+                'Object %s does not have an attribute called: %s' % (obj, key))
 
         if isinstance(value, (State, StateDict, StateList, StateTuple)):
             # Special handlers are needed.
@@ -899,11 +913,10 @@ class StateSetter:
                     self._do_object(obj[i], state[i])
         else:
             raise StateSetterError(
-                'Cannot set state of list of incorrect size.'
-            )
+                'Cannot set state of list of incorrect size.')
 
     def _do_dict(self, obj, state):
-        for key, value in state.items():
+        for key, value in list(state.items()):
             if not self._has_instance(value):
                 obj[key] = self._get_pure(value)
             elif isinstance(value, tuple):
@@ -920,6 +933,7 @@ def _get_file_read(f):
         return f
     else:
         return open(f, 'rb')
+
 
 def _get_file_write(f):
     if hasattr(f, 'write'):
@@ -981,6 +995,8 @@ def get_state(obj):
 
 def set_state(obj, state, ignore=None, first=None, last=None):
     StateSetter().set(obj, state, ignore, first, last)
+
+
 set_state.__doc__ = StateSetter.set.__doc__
 
 

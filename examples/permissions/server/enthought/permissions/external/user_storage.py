@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import errno
 import socket
@@ -22,14 +21,12 @@ from apptools.permissions.default.api import IUserStorage, UserStorageError
 from traits.api import HasTraits, provides, List, Str
 
 # Local imports.
-from proxy_server import ProxyServer
+from .proxy_server import ProxyServer
 
 
 @provides(IUserStorage)
 class UserStorage(HasTraits):
     """This implements a user database accessed via XML RPC."""
-
-
 
     #### 'IUserStorage' interface #############################################
 
@@ -44,7 +41,7 @@ class UserStorage(HasTraits):
 
         try:
             ProxyServer.add_user(name, description, password, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise UserStorageError(ProxyServer.error(e))
 
     def authenticate_user(self, name, password):
@@ -52,13 +49,13 @@ class UserStorage(HasTraits):
         was successfully authenticated."""
 
         try:
-            key, name, description, blob = ProxyServer.authenticate_user(name,
-                    password)
+            key, name, description, blob = ProxyServer.authenticate_user(
+                name, password)
 
             # We don't save the cache because we should be about to read the
             # real permission ids and we do it then.
             ProxyServer.cache = description, blob, []
-        except Exception, e:
+        except Exception as e:
             # See if we couldn't connect to the server.
             if not isinstance(e, socket.error):
                 raise UserStorageError(ProxyServer.error(e))
@@ -70,7 +67,7 @@ class UserStorage(HasTraits):
 
             try:
                 ok = ProxyServer.read_cache()
-            except Exception, e:
+            except Exception as e:
                 raise UserStorageError(str(e))
 
             if not ok:
@@ -89,7 +86,7 @@ class UserStorage(HasTraits):
 
         try:
             ProxyServer.delete_user(name, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise UserStorageError(ProxyServer.error(e))
 
     def is_empty(self):
@@ -104,7 +101,7 @@ class UserStorage(HasTraits):
 
         try:
             return ProxyServer.matching_users(name, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise UserStorageError(ProxyServer.error(e))
 
     def modify_user(self, name, description, password):
@@ -112,8 +109,8 @@ class UserStorage(HasTraits):
 
         try:
             ProxyServer.modify_user(name, description, password,
-                    ProxyServer.key)
-        except Exception, e:
+                                    ProxyServer.key)
+        except Exception as e:
             raise UserStorageError(ProxyServer.error(e))
 
     def unauthenticate_user(self, user):
@@ -124,7 +121,7 @@ class UserStorage(HasTraits):
         else:
             try:
                 ok = ProxyServer.unauthenticate_user(ProxyServer.key)
-            except Exception, e:
+            except Exception as e:
                 raise UserStorageError(ProxyServer.error(e))
 
         if ok:
@@ -146,7 +143,7 @@ class UserStorage(HasTraits):
         else:
             try:
                 ProxyServer.update_blob(name, blob, ProxyServer.key)
-            except Exception, e:
+            except Exception as e:
                 raise UserStorageError(ProxyServer.error(e))
 
             # Write the cache but ignore any errors.
@@ -161,12 +158,13 @@ class UserStorage(HasTraits):
         # If the remote server disappeared after the capabilities were read but
         # before the user was authenticated then we could get here.
         if ProxyServer.key is None:
-            raise UserStorageError("It is not possible to change password "
-                    "when disconnected from the permissions server.")
+            raise UserStorageError(
+                "It is not possible to change password "
+                "when disconnected from the permissions server.")
 
         try:
             ProxyServer.update_password(name, password, ProxyServer.key)
-        except Exception, e:
+        except Exception as e:
             raise UserStorageError(ProxyServer.error(e))
 
     ###########################################################################

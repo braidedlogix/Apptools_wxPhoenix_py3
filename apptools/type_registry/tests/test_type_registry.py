@@ -6,7 +6,6 @@ from .dummies import A, B, C, D, Mixed, Abstract, Concrete, ConcreteSubclass
 
 
 class TestTypeRegistry(unittest.TestCase):
-
     def setUp(self):
         self.registry = TypeRegistry()
 
@@ -71,8 +70,8 @@ class TestTypeRegistry(unittest.TestCase):
     def test_abc(self):
         self.registry.push_abc(Abstract, 'Abstract')
         self.assertEqual(self.registry.lookup_by_type(Concrete), 'Abstract')
-        self.assertEqual(self.registry.lookup_by_type(ConcreteSubclass),
-            'Abstract')
+        self.assertEqual(
+            self.registry.lookup_by_type(ConcreteSubclass), 'Abstract')
 
     def test_stack_type(self):
         self.registry.push(A, 'A1')

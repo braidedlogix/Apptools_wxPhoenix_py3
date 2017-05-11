@@ -14,17 +14,15 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import errno
 import logging
 import os
 import shelve
-import SimpleXMLRPCServer
+import xmlrpc.server
 import socket
 import sys
 import time
-
 
 # Log to stderr.
 logger = logging.getLogger()
@@ -73,7 +71,7 @@ class ServerImplementation(object):
 
         # Remove any expired session keys.
         now = time.time()
-        keys = self._keys.keys()
+        keys = list(self._keys.keys())
         for k in keys:
             name, perm_ids, used_at = self._keys[k]
 
@@ -117,7 +115,7 @@ class ServerImplementation(object):
 
         try:
             return shelve.open(fname, writeback=True)
-        except Exception, e:
+        except Exception as e:
             logger.error("Unable to open %s: %s" % (fname, e))
             sys.exit(1)
 
@@ -125,7 +123,7 @@ class ServerImplementation(object):
     def _sync(shelf):
         try:
             shelf.sync()
-        except Exception, e:
+        except Exception as e:
             logger.error("Unable to sync:" % e)
             Exception("An error occurred on the permissions server.")
 
@@ -209,7 +207,7 @@ class ServerImplementation(object):
         self._check_users_authorisation(key)
 
         if self._local_user_db:
-            if self._users.has_key(name):
+            if name in self._users:
                 raise Exception("The user \"%s\" already exists." % name)
 
             self._users[name] = (description, password)
@@ -245,7 +243,7 @@ class ServerImplementation(object):
             for ch in os.urandom(16):
                 key += '%02x' % ord(ch)
 
-            if not self._keys.has_key(key):
+            if key not in self._keys:
                 break
         else:
             # Something is seriously wrong if we get here.
@@ -273,9 +271,11 @@ class ServerImplementation(object):
 
         if self._local_user_db:
             # Get any user that starts with the name.
-            users = [(full_name, description) for full_name, (description, _)
-                            in self._users.items()
-                            if full_name.startswith(name)]
+            users = [
+                (full_name, description)
+                for full_name, (description, _) in list(self._users.items())
+                if full_name.startswith(name)
+            ]
 
             users = sorted(users)
         else:
@@ -290,7 +290,7 @@ class ServerImplementation(object):
         self._check_users_authorisation(key)
 
         if self._local_user_db:
-            if not self._users.has_key(name):
+            if name not in self._users:
                 raise Exception("The user \"%s\" does not exist." % name)
 
             self._users[name] = (description, password)
@@ -310,7 +310,8 @@ class ServerImplementation(object):
             try:
                 del self._users[name]
             except KeyError:
-                raise UserStorageError("The user \"%s\" does not exist." % name)
+                raise UserStorageError("The user \"%s\" does not exist." %
+                                       name)
 
             self._sync(self._users)
         else:
@@ -375,7 +376,7 @@ class ServerImplementation(object):
 
         self._check_policy_authorisation(key)
 
-        if self._roles.has_key(name):
+        if name in self._roles:
             raise Exception("The role \"%s\" already exists." % name)
 
         self._roles[name] = (description, perm_ids)
@@ -390,20 +391,20 @@ class ServerImplementation(object):
         self._check_policy_authorisation(key)
 
         return [(name, description)
-                for name, (description, _) in self._roles.items()]
+                for name, (description, _) in list(self._roles.items())]
 
     def delete_role(self, name, key=None):
         """Delete a role."""
 
         self._check_policy_authorisation(key)
 
-        if not self._roles.has_key(name):
+        if name not in self._roles:
             raise Exception("The role \"%s\" does not exist." % name)
 
         del self._roles[name]
 
         # Remove the role from any users who have it.
-        for user, role_names in self._assignments.items():
+        for user, role_names in list(self._assignments.items()):
             try:
                 role_names.remove(name)
             except ValueError:
@@ -452,9 +453,11 @@ class ServerImplementation(object):
         self._check_policy_authorisation(key)
 
         # Return any role that starts with the name.
-        roles = [(full_name, description, perm_ids)
-                for full_name, (description, perm_ids) in self._roles.items()
-                        if full_name.startswith(name)]
+        roles = [
+            (full_name, description, perm_ids)
+            for full_name, (description, perm_ids) in list(self._roles.items())
+            if full_name.startswith(name)
+        ]
 
         return sorted(roles)
 
@@ -463,7 +466,7 @@ class ServerImplementation(object):
 
         self._check_policy_authorisation(key)
 
-        if not self._roles.has_key(name):
+        if name not in self._roles:
             raise Exception("The role \"%s\" does not exist." % name)
 
         self._roles[name] = (description, perm_ids)
@@ -493,15 +496,19 @@ class ServerImplementation(object):
         return True
 
 
-class RPCServer(SimpleXMLRPCServer.SimpleXMLRPCServer):
+class RPCServer(xmlrpc.server.SimpleXMLRPCServer):
     """A thin wrapper around SimpleXMLRPCServer that handles its
     initialisation."""
 
-    def __init__(self, addr=DEFAULT_ADDR, port=DEFAULT_PORT,
-            data_dir=DEFAULT_DATADIR, insecure=False, local_user_db=False):
+    def __init__(self,
+                 addr=DEFAULT_ADDR,
+                 port=DEFAULT_PORT,
+                 data_dir=DEFAULT_DATADIR,
+                 insecure=False,
+                 local_user_db=False):
         """Initialise the object."""
 
-        SimpleXMLRPCServer.SimpleXMLRPCServer.__init__(self, (addr, port))
+        xmlrpc.server.SimpleXMLRPCServer.__init__(self, (addr, port))
 
         self._impl = ServerImplementation(data_dir, insecure, local_user_db)
         self.register_instance(self._impl)
@@ -509,7 +516,7 @@ class RPCServer(SimpleXMLRPCServer.SimpleXMLRPCServer):
     def server_close(self):
         """Reimplemented to tidy up the implementation."""
 
-        SimpleXMLRPCServer.SimpleXMLRPCServer.server_close(self)
+        xmlrpc.server.SimpleXMLRPCServer.server_close(self)
 
         self._impl._close()
 
@@ -519,23 +526,40 @@ if __name__ == '__main__':
     # Parse the command line.
     import optparse
 
-    p = optparse.OptionParser(description="This is an XML-RPC server that "
-            "provides user, role and permissions data to a user and policy "
-            "manager that is part of the ETS Permissions Framework.")
+    p = optparse.OptionParser(
+        description="This is an XML-RPC server that "
+        "provides user, role and permissions data to a user and policy "
+        "manager that is part of the ETS Permissions Framework.")
 
-    p.add_option('--data-dir', default=DEFAULT_DATADIR, dest='data_dir',
-            metavar="DIR",
-            help="the server's data directory [default: %s]" % DEFAULT_DATADIR)
-    p.add_option('--insecure', action='store_true', default=False,
-            dest='insecure',
-            help="don't require a session key for data changes")
-    p.add_option('--ip-address', default=DEFAULT_ADDR, dest='addr',
-            help="the IP address to listen on [default: %s]" % DEFAULT_ADDR)
-    p.add_option('--local-user-db', action='store_true', default=False,
-            dest='local_user_db',
-            help="use a local user database instead of an LDAP directory")
-    p.add_option('--port', type='int', default=DEFAULT_PORT, dest='port',
-            help="the TCP port to listen on [default: %d]" % DEFAULT_PORT)
+    p.add_option(
+        '--data-dir',
+        default=DEFAULT_DATADIR,
+        dest='data_dir',
+        metavar="DIR",
+        help="the server's data directory [default: %s]" % DEFAULT_DATADIR)
+    p.add_option(
+        '--insecure',
+        action='store_true',
+        default=False,
+        dest='insecure',
+        help="don't require a session key for data changes")
+    p.add_option(
+        '--ip-address',
+        default=DEFAULT_ADDR,
+        dest='addr',
+        help="the IP address to listen on [default: %s]" % DEFAULT_ADDR)
+    p.add_option(
+        '--local-user-db',
+        action='store_true',
+        default=False,
+        dest='local_user_db',
+        help="use a local user database instead of an LDAP directory")
+    p.add_option(
+        '--port',
+        type='int',
+        default=DEFAULT_PORT,
+        dest='port',
+        help="the TCP port to listen on [default: %d]" % DEFAULT_PORT)
 
     opts, args = p.parse_args()
 
@@ -546,18 +570,25 @@ if __name__ == '__main__':
     if not opts.insecure:
         try:
             os.urandom(1)
-        except AttributeError, NotImplementedError:
-            sys.stderr.write("os.urandom() isn't implemented so the --insecure flag must be used\n")
+        except AttributeError as NotImplementedError:
+            sys.stderr.write(
+                "os.urandom() isn't implemented so the --insecure flag must be used\n"
+            )
             sys.exit(1)
 
     # FIXME: Add LDAP support.
     if not opts.local_user_db:
-        sys.stderr.write("Until LDAP support is implemented use the --local-user-db flag\n")
+        sys.stderr.write(
+            "Until LDAP support is implemented use the --local-user-db flag\n")
         sys.exit(1)
 
     # Create and start the server.
-    server = RPCServer(addr=opts.addr, port=opts.port, data_dir=opts.data_dir,
-            insecure=opts.insecure, local_user_db=opts.local_user_db)
+    server = RPCServer(
+        addr=opts.addr,
+        port=opts.port,
+        data_dir=opts.data_dir,
+        insecure=opts.insecure,
+        local_user_db=opts.local_user_db)
 
     if opts.insecure:
         logger.warn("Server starting in insecure mode")

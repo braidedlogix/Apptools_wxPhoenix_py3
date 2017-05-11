@@ -6,6 +6,7 @@ from tables.table import Table as PyTablesTable
 class _TableRowAccessor(object):
     """ A simple object which provides read access to the rows in a Table.
     """
+
     def __init__(self, h5_table):
         self._h5_table = h5_table
 
@@ -78,7 +79,7 @@ class H5TableNode(object):
         data : dict
             A dictionary of column name -> values items
         """
-        rows = zip(*[data[name] for name in self.keys()])
+        rows = list(zip(* [data[name] for name in list(self.keys())]))
         self._h5_table.append(rows)
 
     def __getitem__(self, col_or_cols):
@@ -95,7 +96,7 @@ class H5TableNode(object):
             An array of column data with the column order matching that of
             `col_or_cols`.
         """
-        if isinstance(col_or_cols, basestring):
+        if isinstance(col_or_cols, str):
             return self._h5_table.col(col_or_cols)
 
         column_data = [self._h5_table.col(name) for name in col_or_cols]

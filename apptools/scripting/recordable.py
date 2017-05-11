@@ -7,7 +7,6 @@ Decorator to mark functions and methods as recordable.
 
 from .package_globals import get_recorder
 
-
 # Guard to ensure that only the outermost recordable call is recorded
 # and nested calls ignored.
 _outermost_call = True

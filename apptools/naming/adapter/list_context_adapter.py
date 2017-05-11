@@ -1,6 +1,5 @@
 """ Context adapter for Python lists. """
 
-
 # Enthought library imports.
 from apptools.naming.api import Binding, ContextAdapter, naming_manager
 from traits.api import List, Property
@@ -16,7 +15,7 @@ class ListContextAdapter(ContextAdapter):
     # fixme: We would like to specialize the 'adaptee' trait here, but if we
     # make it of type 'List' then, on assignment, traits will create a *copy*
     # of the actual list which I think you'll agree is not very adapter-like!
-##     adaptee = List
+    ##     adaptee = List
 
     #### 'ListContextAdapter' interface #######################################
 
@@ -173,5 +172,6 @@ class ListContextAdapter(ContextAdapter):
             raise SystemError('no binding with name %s' % name)
 
         return binding
+
 
 #### EOF ######################################################################

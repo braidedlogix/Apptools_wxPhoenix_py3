@@ -10,7 +10,6 @@
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
 
-
 # Standard library imports.
 import logging
 
@@ -20,19 +19,20 @@ from pyface.action.api import Group, MenuManager
 from traits.api import Any, provides, Instance, List, Property
 
 # Local imports.
-from action.doc_action import DocAction
-from action.demo_action import DemoAction
-from action.example_action import ExampleAction
-from action.load_url_action import LoadURLAction
-from examples_preferences import ExamplesPreferences
-from i_help_doc import IHelpDoc
-from i_help_code import IHelpCode
+from .action.doc_action import DocAction
+from .action.demo_action import DemoAction
+from .action.example_action import ExampleAction
+from .action.load_url_action import LoadURLAction
+from .examples_preferences import ExamplesPreferences
+from .i_help_doc import IHelpDoc
+from .i_help_code import IHelpCode
 
 # Logging.
 logger = logging.getLogger(__name__)
 
 # This module's package.
 PKG = '.'.join(__name__.split('.')[:-1])
+
 
 @provides(IExtensionPointUser)
 class HelpSubmenuManager(MenuManager):
@@ -41,7 +41,6 @@ class HelpSubmenuManager(MenuManager):
         This class is adapted from
         pyface.ui.workbench.action.view_menu_manager.ViewMenuManager.
     """
-
 
     ### IExtensionPointUser interface
     extension_registry = Property(Instance(IExtensionRegistry))
@@ -97,6 +96,7 @@ class HelpSubmenuManager(MenuManager):
         """ Initializes a group containing the items. """
         raise NotImplementedError
 
+
 class DocumentsMenuManager(HelpSubmenuManager):
     """ Controls the 'Help/Documents' menu.
     """
@@ -110,7 +110,7 @@ class DocumentsMenuManager(HelpSubmenuManager):
 
     # The menu manager's name (if the manager is a sub-menu, this is what its
     # label will be).
-    name = u'&Documents'
+    name = '&Documents'
 
     #### 'DocMenuManager' interface ##########################################
 
@@ -132,11 +132,10 @@ class DocumentsMenuManager(HelpSubmenuManager):
 
         for doc in docs:
             #logger.info('Adding Helpaction for "%s", %s' % (doc.label, str(doc)))
-            group.append(
-                DocAction(name=doc.label, window=window)
-                )
+            group.append(DocAction(name=doc.label, window=window))
 
         return
+
 
 class DemosMenuManager(HelpSubmenuManager):
     """ Controls the 'Help/Demos' menu.
@@ -151,7 +150,7 @@ class DemosMenuManager(HelpSubmenuManager):
 
     # The menu manager's name (if the manager is a sub-menu, this is what its
     # label will be).
-    name = u'D&emos'
+    name = 'D&emos'
 
     #### 'DemoMenuManager' interface ##########################################
 
@@ -172,11 +171,10 @@ class DemosMenuManager(HelpSubmenuManager):
         demos.sort(None, lambda demo: demo.label)
 
         for demo in demos:
-            group.append(
-                DemoAction(name=demo.label, window=window)
-                )
+            group.append(DemoAction(name=demo.label, window=window))
 
         return
+
 
 class ExamplesMenuManager(HelpSubmenuManager):
     """ Controls the 'Help/Examples' menu.
@@ -191,7 +189,7 @@ class ExamplesMenuManager(HelpSubmenuManager):
 
     # The menu manager's name (if the manager is a sub-menu, this is what its
     # label will be).
-    name = u'&Examples'
+    name = '&Examples'
 
     #### 'ExampleMenuManager' interface ##########################################
 
@@ -216,9 +214,9 @@ class ExamplesMenuManager(HelpSubmenuManager):
 
         for ex in examples:
             group.append(
-                ExampleAction(name=ex.label, window=window,
-                                  preferences=self.preferences)
-                )
+                ExampleAction(
+                    name=ex.label, window=window,
+                    preferences=self.preferences))
 
         return
 
@@ -236,7 +234,7 @@ class DownloadsMenuManager(HelpSubmenuManager):
 
     # The menu manager's name (if the manager is a sub-menu, this is what its
     # label will be).
-    name = u'&Downloads'
+    name = '&Downloads'
 
     #### 'DocMenuManager' interface ##########################################
 
@@ -257,9 +255,9 @@ class DownloadsMenuManager(HelpSubmenuManager):
         #docs.sort(None, lambda doc: doc.label)
 
         for url in urls:
-            group.append(
-                LoadURLAction(name=url.label, window=window)
-                )
+            group.append(LoadURLAction(name=url.label, window=window))
 
         return
+
+
 #### EOF ######################################################################

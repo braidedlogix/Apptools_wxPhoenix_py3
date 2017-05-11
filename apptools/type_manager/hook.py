@@ -21,12 +21,14 @@ def add_pre(klass, method_name, callable):
 
     return
 
+
 def add_post(klass, method_name, callable):
     """ Adds a post-hook to method 'method_name' on class 'klass'. """
 
     _add_hook(klass, method_name, callable, pre=False)
 
     return
+
 
 def remove_pre(klass, method_name, callable):
     """ Removes a pre-hook from method 'method_name' on class 'klass'. """
@@ -35,6 +37,7 @@ def remove_pre(klass, method_name, callable):
 
     return
 
+
 def remove_post(klass, method_name, callable):
     """ Removes a post-hook from method 'method_name' on class 'klass'. """
 
@@ -42,9 +45,11 @@ def remove_post(klass, method_name, callable):
 
     return
 
+
 ###############################################################################
 # Private functions.
 ###############################################################################
+
 
 def _add_hook(klass, method_name, callable, pre):
     """ Adds a pre/post hook to method 'method_name' on class 'klass'. """
@@ -58,6 +63,7 @@ def _add_hook(klass, method_name, callable, pre):
 
     # Obviously not!
     else:
+
         def hooked_method(self, *args, **kw):
             for pre in hooked_method.__pre__:
                 pre(self, *args, **kw)
@@ -71,17 +77,17 @@ def _add_hook(klass, method_name, callable, pre):
 
         # Python < 2.4 does not allow this.
         try:
-            hooked_method.func_name = method_name
+            hooked_method.__name__ = method_name
 
         except:
             pass
 
-        hooked_method.__pre__  = []
+        hooked_method.__pre__ = []
         hooked_method.__post__ = []
 
         # Is the original method actually defined on the class, or is it
         # inherited?
-        hooked_method.__inherited__ = not klass.__dict__.has_key(method_name)
+        hooked_method.__inherited__ = method_name not in klass.__dict__
 
         # Save the original method...
         #
@@ -99,6 +105,7 @@ def _add_hook(klass, method_name, callable, pre):
         hooked_method.__post__.append(callable)
 
     return
+
 
 def _remove_hook(klass, method_name, callable, pre):
     """ Removes a pre/post hook from method 'method_name' on class 'klass'. """
@@ -130,5 +137,6 @@ def _remove_hook(klass, method_name, callable, pre):
             delattr(klass, '__hooked__' + method_name)
 
     return
+
 
 #### EOF ######################################################################

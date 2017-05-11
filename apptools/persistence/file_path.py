@@ -19,6 +19,7 @@ class FilePath(object):
     stored relative path is used to set the absolute path correctly
     based on the path of the saved file.
     """
+
     def __init__(self, value=''):
         self.set(value)
 
@@ -55,7 +56,7 @@ class FilePath(object):
 
         # Now strip out any common prefix between the two paths.
         for part in _src.split(os.sep):
-            if _dst.startswith(part+os.sep):
+            if _dst.startswith(part + os.sep):
                 length = len(part) + 1
                 _src = _src[length:]
                 _dst = _dst[length:]
@@ -82,4 +83,3 @@ class FilePath(object):
         file_name = join(dirname(base_f_name), rel_file_name)
         file_name = os.path.normpath(file_name)
         self.abs_pth = file_name
-

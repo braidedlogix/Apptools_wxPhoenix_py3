@@ -1,6 +1,5 @@
 """ Context adapter for Python instances. """
 
-
 # Standard library imports.
 import re
 
@@ -144,7 +143,7 @@ class InstanceContextAdapter(ContextAdapter):
             names = obj.trait_names()
 
         elif hasattr(obj, '__dict__'):
-            names = self.adaptee.__dict__.keys()
+            names = list(self.adaptee.__dict__.keys())
 
         else:
             names = []
@@ -177,5 +176,6 @@ class InstanceContextAdapter(ContextAdapter):
             matches = False
 
         return matches
+
 
 #### EOF ######################################################################

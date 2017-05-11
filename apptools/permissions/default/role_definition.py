@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.api import confirm, error, YES
 from traits.api import Instance
@@ -22,9 +21,9 @@ from traitsui.menu import Action, CancelButton
 # Local imports.
 from apptools.permissions.package_globals import get_permissions_manager
 from apptools.permissions.permission import Permission
-from i_policy_storage import PolicyStorageError
-from policy_data import Role
-from select_role import select_role
+from .i_policy_storage import PolicyStorageError
+from .policy_data import Role
+from .select_role import select_role
 
 
 class _RoleView(View):
@@ -43,21 +42,32 @@ class _RoleView(View):
     def __init__(self, **traits):
         """Initialise the object."""
 
-        buttons = [Action(name="Search"), Action(name="Add"),
-                Action(name="Modify"), Action(name="Delete"), CancelButton]
+        buttons = [
+            Action(name="Search"), Action(name="Add"), Action(name="Modify"),
+            Action(name="Delete"), CancelButton
+        ]
 
-        all_perms = get_permissions_manager().policy_manager.permissions.values()
+        all_perms = list(get_permissions_manager()
+                         .policy_manager.permissions.values())
 
-        perms_editor = SetEditor(values=all_perms,
-                left_column_title="Available Permissions",
-                right_column_title="Assigned Permissions")
+        perms_editor = SetEditor(
+            values=all_perms,
+            left_column_title="Available Permissions",
+            right_column_title="Assigned Permissions")
 
-        perms_group = Group(Item(name='permissions', editor=perms_editor),
-                label='Permissions', show_border=True, show_labels=False)
+        perms_group = Group(
+            Item(
+                name='permissions', editor=perms_editor),
+            label='Permissions',
+            show_border=True,
+            show_labels=False)
 
-        super(_RoleView, self).__init__(Item(name='name'),
-                Item(name='description'), perms_group, buttons=buttons,
-                **traits)
+        super(_RoleView, self).__init__(
+            Item(name='name'),
+            Item(name='description'),
+            perms_group,
+            buttons=buttons,
+            **traits)
 
 
 class _RoleHandler(Handler):
@@ -74,8 +84,9 @@ class _RoleHandler(Handler):
 
         # Get all roles that satisfy the criteria.
         try:
-            roles = get_permissions_manager().policy_manager.policy_storage.matching_roles(role.name)
-        except PolicyStorageError, e:
+            roles = get_permissions_manager(
+            ).policy_manager.policy_storage.matching_roles(role.name)
+        except PolicyStorageError as e:
             self._ps_error(e)
             return
 
@@ -101,10 +112,9 @@ class _RoleHandler(Handler):
         # Add the data to the database.
         try:
             get_permissions_manager().policy_manager.policy_storage.add_role(
-                    role.name, role.description,
-                    [p.id for p in role.permissions])
+                role.name, role.description, [p.id for p in role.permissions])
             info.ui.dispose()
-        except PolicyStorageError, e:
+        except PolicyStorageError as e:
             self._ps_error(e)
 
     def _modify_clicked(self, info):
@@ -116,11 +126,11 @@ class _RoleHandler(Handler):
 
         # Update the data in the database.
         try:
-            get_permissions_manager().policy_manager.policy_storage.modify_role(
-                    role.name, role.description,
-                    [p.id for p in role.permissions])
+            get_permissions_manager(
+            ).policy_manager.policy_storage.modify_role(
+                role.name, role.description, [p.id for p in role.permissions])
             info.ui.dispose()
-        except PolicyStorageError, e:
+        except PolicyStorageError as e:
             self._ps_error(e)
 
     def _delete_clicked(self, info):
@@ -130,13 +140,15 @@ class _RoleHandler(Handler):
         if role is None:
             return
 
-        if confirm(None, "Are you sure you want to delete the role \"%s\"?" % role.name) == YES:
+        if confirm(None, "Are you sure you want to delete the role \"%s\"?" %
+                   role.name) == YES:
             # Delete the data from the database.
             try:
-                get_permissions_manager().policy_manager.policy_storage.delete_role(role.name)
+                get_permissions_manager(
+                ).policy_manager.policy_storage.delete_role(role.name)
 
                 info.ui.dispose()
-            except PolicyStorageError, e:
+            except PolicyStorageError as e:
                 self._ps_error(e)
 
     ###########################################################################

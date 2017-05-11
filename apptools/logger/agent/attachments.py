@@ -13,7 +13,6 @@ from email.MIMEBase import MIMEBase
 
 from traits.api import Any, HasTraits
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -26,7 +25,6 @@ class Attachments(HasTraits):
         traits = traits.copy()
         traits['message'] = message
         super(Attachments, self).__init__(**traits)
-
 
     # FIXME: all of the package_*() methods refer to deprecated project plugins.
 
@@ -44,7 +42,8 @@ class Attachments(HasTraits):
         if self.application is None:
             pass
 
-        single_project = self.application.get_service('envisage.single_project.ModelService')
+        single_project = self.application.get_service(
+            'envisage.single_project.ModelService')
         if single_project is not None:
             dir = single_project.location
             self._attach_directory(dir)
@@ -58,7 +57,7 @@ class Attachments(HasTraits):
         relpath = os.path.basename(dir)
 
         import zipfile
-        from cStringIO import StringIO
+        from io import StringIO
 
         ctype = 'application/octet-stream'
         maintype, subtype = ctype.split('/', 1)
@@ -71,14 +70,13 @@ class Attachments(HasTraits):
 
         msg.set_payload(file_object.getvalue())
 
-        Encoders.encode_base64(msg) # Encode the payload using Base64
-        msg.add_header('Content-Disposition', 'attachment', filename='project.zip')
+        Encoders.encode_base64(msg)  # Encode the payload using Base64
+        msg.add_header(
+            'Content-Disposition', 'attachment', filename='project.zip')
 
         self.message.attach(msg)
 
         file_object.close()
-
-
 
 
 def _append_to_zip_archive(zip, dir, relpath):
@@ -91,8 +89,8 @@ def _append_to_zip_archive(zip, dir, relpath):
             zip.write(path, name)
             logger.debug('adding %s to error report' % path)
         else:
-            if filename != ".svn": # skip svn files if any
+            if filename != ".svn":  # skip svn files if any
                 subdir = os.path.join(dir, filename)
-                _append_to_zip_archive(zip, subdir, os.path.join(relpath, filename))
+                _append_to_zip_archive(zip, subdir,
+                                       os.path.join(relpath, filename))
     return
-

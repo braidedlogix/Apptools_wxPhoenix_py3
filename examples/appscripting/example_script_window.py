@@ -12,7 +12,6 @@
 # Description: <Enthought application scripting package component>
 #------------------------------------------------------------------------------
 
-
 # Enthought library imports.
 from pyface.action.api import Action, Group, MenuManager
 from pyface.workbench.api import WorkbenchWindow
@@ -63,11 +62,12 @@ class ExampleScriptWindow(WorkbenchWindow):
     def __label_menu_default(self):
         """ Trait initialiser. """
 
-        size_group = Group(LabelIncrementSizeAction(window=self),
-                LabelDecrementSizeAction(window=self))
+        size_group = Group(
+            LabelIncrementSizeAction(window=self),
+            LabelDecrementSizeAction(window=self))
 
-        normal = LabelNormalFontAction(window=self, id='normal', style='radio',
-                checked=True)
+        normal = LabelNormalFontAction(
+            window=self, id='normal', style='radio', checked=True)
         bold = LabelBoldFontAction(window=self, id='bold', style='radio')
         italic = LabelItalicFontAction(window=self, id='italic', style='radio')
 
@@ -80,10 +80,10 @@ class ExampleScriptWindow(WorkbenchWindow):
 
         # ZZZ: This is temporary until we put the script into a view.
         get_script_manager().on_trait_event(self._on_script_updated,
-                'script_updated')
+                                            'script_updated')
 
-        return MenuManager(StartRecordingAction(), StopRecordingAction(),
-                name="&Scripts")
+        return MenuManager(
+            StartRecordingAction(), StopRecordingAction(), name="&Scripts")
 
     def __exit_action_default(self):
         """ Trait initialiser. """
@@ -98,8 +98,8 @@ class ExampleScriptWindow(WorkbenchWindow):
     def _menu_bar_manager_default(self):
         """ Trait initialiser. """
 
-        return MenuBarManager(self._file_menu, self._label_menu,
-                self._scripts_menu, window=self)
+        return MenuBarManager(
+            self._file_menu, self._label_menu, self._scripts_menu, window=self)
 
     def _tool_bar_manager_default(self):
         """ Trait initialiser. """
@@ -111,8 +111,9 @@ class ExampleScriptWindow(WorkbenchWindow):
         script = script_manager.script
 
         if script:
-            print script,
+            print(script, end=' ')
         else:
-            print "Script empty"
+            print("Script empty")
+
 
 #### EOF ######################################################################

@@ -103,7 +103,7 @@ class PyConfigFile(dict):
 
         f = self._get_file(file_or_filename, 'w')
 
-        for section_name, section_data in self.items():
+        for section_name, section_data in list(self.items()):
             self._write_section(f, section_name, section_data)
 
         f.close()
@@ -121,7 +121,7 @@ class PyConfigFile(dict):
 
         """
 
-        if isinstance(file_or_filename, basestring):
+        if isinstance(file_or_filename, str):
             f = open(file_or_filename, mode)
 
         else:
@@ -167,7 +167,7 @@ class PyConfigFile(dict):
         #
         # [acme.blargle]
         # blitzel = acme.foo.bar + acme.foo.baz
-        exec section_body in self._namespaces, section
+        exec(section_body, self._namespaces, section)
 
         # The '__builtins__' dictionary gets added to 'self._namespaces' as
         # by the call to 'exec'. However, we want 'self._namespaces' to only
@@ -186,7 +186,7 @@ class PyConfigFile(dict):
 
         f.write('[%s]\n' % section_name)
 
-        for name, value in section_data.items():
+        for name, value in list(section_data.items()):
             f.write('%s = %s\n' % (name, repr(value)))
 
         f.write('\n')
@@ -200,8 +200,8 @@ class PyConfigFile(dict):
     def _pretty_print_namespaces(self):
         """ Pretty print the 'dotted' namespaces. """
 
-        for name, value in self._namespaces.items():
-            print 'Namespace:', name
+        for name, value in list(self._namespaces.items()):
+            print('Namespace:', name)
             value.pretty_print('  ')
 
         return
@@ -210,6 +210,7 @@ class PyConfigFile(dict):
 ###############################################################################
 # Internal use only.
 ###############################################################################
+
 
 class _Namespace(object):
     """ An object that represents a node in a dotted namespace.
@@ -248,14 +249,15 @@ class _Namespace(object):
     def pretty_print(self, indent=''):
         """ Pretty print the namespace. """
 
-        for name, value in self.__dict__.items():
+        for name, value in list(self.__dict__.items()):
             if isinstance(value, _Namespace):
-                print indent, 'Namespace:', name
+                print(indent, 'Namespace:', name)
                 value.pretty_print(indent + '  ')
 
             else:
-                print indent, name, ':', value
+                print(indent, name, ':', value)
 
         return
+
 
 #### EOF ######################################################################

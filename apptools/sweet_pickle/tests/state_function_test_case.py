@@ -6,7 +6,6 @@
 #  Author: Dave Peterson <dpeterson@enthought.com>
 #
 #-----------------------------------------------------------------------------
-
 """ Tests the state function functionality of the apptools.sweet_pickle
     framework.
 """
@@ -20,9 +19,7 @@ import apptools.sweet_pickle as sweet_pickle
 from apptools.sweet_pickle.global_registry import _clear_global_registry
 from traits.api import Bool, Float, HasTraits, Int, Str
 
-
 logger = logging.getLogger(__name__)
-
 
 ##############################################################################
 # Classes to use within the tests
@@ -37,6 +34,7 @@ from apptools.sweet_pickle.tests.state_function_classes import Foo, Bar, Baz
 # State functions to use within the tests
 ##############################################################################
 
+
 def bar_state_function(state):
     for old, new in [('b1', 'b2'), ('f1', 'f2'), ('i1', 'i2'), ('s1', 's2')]:
         state[new] = state[old]
@@ -48,6 +46,7 @@ def bar_state_function(state):
 ##############################################################################
 # class 'StateFunctionTestCase'
 ##############################################################################
+
 
 class StateFunctionTestCase(unittest.TestCase):
     """ Tests the state function functionality of the apptools.sweet_pickle
@@ -73,11 +72,8 @@ class StateFunctionTestCase(unittest.TestCase):
         self.registry = sweet_pickle.get_global_registry()
 
         # Add the class mappings to the registry
-        self.registry.add_mapping_to_class(Foo.__module__, Foo.__name__,
-            Bar)
-        self.registry.add_mapping_to_class(Bar.__module__, Bar.__name__,
-            Baz)
-
+        self.registry.add_mapping_to_class(Foo.__module__, Foo.__name__, Bar)
+        self.registry.add_mapping_to_class(Bar.__module__, Bar.__name__, Baz)
 
     ##########################################################################
     # 'StateFunctionTestCase' interface
@@ -111,14 +107,12 @@ class StateFunctionTestCase(unittest.TestCase):
         self._assertAttributes(end, 2, None)
         self._assertAttributes(end, 3, (True, 2, 2, 'bar'))
 
-
     def test_unpickled_chain_functionality(self):
         """ Validates that the registered state functions are used when
             unpickling.
         """
         # Add the state function to the registry
-        self.registry.add_state_function_for_class(Bar, 2,
-            bar_state_function)
+        self.registry.add_state_function_for_class(Bar, 2, bar_state_function)
 
         # Validate that unpickling the first class gives us an instance of
         # the third class with the appropriate attribute values.
@@ -137,7 +131,6 @@ class StateFunctionTestCase(unittest.TestCase):
         self._assertAttributes(end, 2, None)
         self._assertAttributes(end, 3, (True, 2, 2, 'bar'))
 
-
     ### protected interface ##################################################
 
     def _assertAttributes(self, obj, suffix, values):
@@ -149,8 +142,9 @@ class StateFunctionTestCase(unittest.TestCase):
         for i in range(len(attributeNames)):
             name = attributeNames[i] + str(suffix)
             if values is None:
-                self.assertEqual(False, hasattr(obj, name),
-                    'Obj [%s] has attribute [%s]' % (obj, name))
+                self.assertEqual(False,
+                                 hasattr(obj, name),
+                                 'Obj [%s] has attribute [%s]' % (obj, name))
             else:
                 self.assertEqual(values[i], getattr(obj, name),
                     'Obj [%s] attribute [%s] has [%s] instead of [%s]' % \
@@ -159,6 +153,5 @@ class StateFunctionTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
 
 ### EOF ######################################################################

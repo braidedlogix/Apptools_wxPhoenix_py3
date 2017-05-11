@@ -12,7 +12,6 @@
 # Description: <Enthought permissions package component>
 #------------------------------------------------------------------------------
 
-
 # Standard library imports.
 import os
 
@@ -25,9 +24,9 @@ from traitsui.menu import Action, OKCancelButtons
 
 # Local imports.
 from apptools.permissions.i_user import IUser
-from i_user_database import IUserDatabase
-from i_user_storage import IUserStorage, UserStorageError
-from select_user import select_user
+from .i_user_database import IUserDatabase
+from .i_user_storage import IUserStorage, UserStorageError
+from .select_user import select_user
 
 
 @provides(IUser)
@@ -43,8 +42,12 @@ class _LoginUser(HasTraits):
     password = Password
 
     # The default view.
-    traits_view = View(Item(name='name'), Item(name='password'),
-            title="Login", kind='modal', buttons=OKCancelButtons)
+    traits_view = View(
+        Item(name='name'),
+        Item(name='password'),
+        title="Login",
+        kind='modal',
+        buttons=OKCancelButtons)
 
 
 class _ChangePassword(HasTraits):
@@ -62,9 +65,14 @@ class _ChangePassword(HasTraits):
     confirm_new_password = Password
 
     # The default view.
-    traits_view = View(Item(name='name', style='readonly'),
-            Item(name='new_password'), Item(name='confirm_new_password'),
-            title="Change password", kind='modal', buttons=OKCancelButtons)
+    traits_view = View(
+        Item(
+            name='name', style='readonly'),
+        Item(name='new_password'),
+        Item(name='confirm_new_password'),
+        title="Change password",
+        kind='modal',
+        buttons=OKCancelButtons)
 
 
 class _ViewUserAccount(HasTraits):
@@ -210,9 +218,12 @@ class _AddUserAccountView(_UserAccountView):
     def __init__(self, **traits):
         """Initialise the object."""
 
-        super(_AddUserAccountView, self).__init__(Item(name='name'),
-                Item(name='description'), Item(name='password'),
-                Item(name='confirm_password'), **traits)
+        super(_AddUserAccountView, self).__init__(
+            Item(name='name'),
+            Item(name='description'),
+            Item(name='password'),
+            Item(name='confirm_password'),
+            **traits)
 
 
 class _ModifyUserAccountView(_AddUserAccountView):
@@ -237,15 +248,16 @@ class _DeleteUserAccountView(_UserAccountView):
     def __init__(self, **traits):
         """Initialise the object."""
 
-        super(_DeleteUserAccountView, self).__init__(Item(name='name'),
-                Item(name='description', style='readonly'), **traits)
+        super(_DeleteUserAccountView, self).__init__(
+            Item(name='name'),
+            Item(
+                name='description', style='readonly'),
+            **traits)
 
 
 class User(HasTraits):
     """The user implementation.  We don't store any extra information other
     than that defined by IUser."""
-
-
 
     #### 'IUser' interface ####################################################
 
@@ -263,8 +275,6 @@ class UserDatabase(HasTraits):
     """This implements a user database that supports IUser for the default user
     manager (ie. using password authorisation) except that it leaves the actual
     access of the data to an implementation of IUserStorage."""
-
-
 
     #### 'IUserDatabase' interface ############################################
 
@@ -311,8 +321,8 @@ class UserDatabase(HasTraits):
         # Get the user account and compare passwords.
         try:
             name, description, blob = self.user_storage.authenticate_user(
-                    lu.name.strip(), lu.password)
-        except UserStorageError, e:
+                lu.name.strip(), lu.password)
+        except UserStorageError as e:
             self._us_error(e)
             return False
 
@@ -349,7 +359,7 @@ class UserDatabase(HasTraits):
         # Update the password in the database.
         try:
             self.user_storage.update_password(name, np.new_password)
-        except UserStorageError, e:
+        except UserStorageError as e:
             self._us_error(e)
 
     def add_user(self):
@@ -364,8 +374,8 @@ class UserDatabase(HasTraits):
             # Add the data to the database.
             try:
                 self.user_storage.add_user(vuac.name.strip(), vuac.description,
-                        vuac.password)
-            except UserStorageError, e:
+                                           vuac.password)
+            except UserStorageError as e:
                 self._us_error(e)
 
     def modify_user(self):
@@ -380,8 +390,8 @@ class UserDatabase(HasTraits):
             # Update the data in the database.
             try:
                 self.user_storage.modify_user(vuac.name.strip(),
-                        vuac.description, vuac.password)
-            except UserStorageError, e:
+                                              vuac.description, vuac.password)
+            except UserStorageError as e:
                 self._us_error(e)
 
     def delete_user(self):
@@ -396,11 +406,12 @@ class UserDatabase(HasTraits):
             # Make absolutely sure.
             name = vuac.name.strip()
 
-            if confirm(None, "Are you sure you want to delete the user \"%s\"?" % name) == YES:
+            if confirm(None, "Are you sure you want to delete the user \"%s\"?"
+                       % name) == YES:
                 # Delete the data from the database.
                 try:
                     self.user_storage.delete_user(name)
-                except UserStorageError, e:
+                except UserStorageError as e:
                     self._us_error(e)
 
     def matching_user(self, name):
@@ -463,7 +474,7 @@ class UserDatabase(HasTraits):
         if not self._updating_blob_internally:
             try:
                 self.user_storage.update_blob(user.name, user.blob)
-            except UserStorageError, e:
+            except UserStorageError as e:
                 self._us_error(e)
 
     ###########################################################################
@@ -477,7 +488,7 @@ class UserDatabase(HasTraits):
         # Get all users that satisfy the criteria.
         try:
             users = self.user_storage.matching_users(name)
-        except UserStorageError, e:
+        except UserStorageError as e:
             self._us_error(e)
             return '', ''
 
@@ -512,7 +523,8 @@ def _validate_password(password, confirmation):
         return False
 
     if len(password) < MIN_PASSWORD_LEN:
-        error(None, "The password must be at least %d characters long." % MIN_PASSWORD_LEN)
+        error(None, "The password must be at least %d characters long." %
+              MIN_PASSWORD_LEN)
         return False
 
     return True

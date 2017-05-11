@@ -29,8 +29,8 @@ class BogusSelectionProvider(HasTraits):
     selection = Event
 
     def get_selection(self):
-        return BogusSelection(provider_id=self.provider_id,
-                              content='get_selection')
+        return BogusSelection(
+            provider_id=self.provider_id, content='get_selection')
 
     def set_selection(self, items, ignore_missing=False):
         pass
@@ -38,8 +38,8 @@ class BogusSelectionProvider(HasTraits):
     #### 'BogusSelectionProvider' protocol ####################################
 
     def trigger_selection(self, content):
-        self.selection = BogusSelection(provider_id=self.provider_id,
-                                        content=content)
+        self.selection = BogusSelection(
+            provider_id=self.provider_id, content=content)
 
 
 class BogusListener(HasTraits):
@@ -62,8 +62,7 @@ class SimpleListProvider(HasTraits):
         selection = ListSelection.from_available_items(
             provider_id=self.provider_id,
             selected=self._selected,
-            all_items=self.items
-        )
+            all_items=self.items)
         return selection
 
     def set_selection(self, items, ignore_missing=False):
@@ -80,7 +79,6 @@ class SimpleListProvider(HasTraits):
 
 
 class TestSelectionService(unittest.TestCase):
-
     def test_add_selection_provider(self):
         service = SelectionService()
         provider = BogusSelectionProvider()
@@ -222,7 +220,7 @@ class TestSelectionService(unittest.TestCase):
 
     def test_set_selection(self):
         service = SelectionService()
-        provider = SimpleListProvider(items=range(10))
+        provider = SimpleListProvider(items=list(range(10)))
         service.add_selection_provider(provider)
 
         provider_id = provider.provider_id
@@ -253,7 +251,7 @@ class TestSelectionService(unittest.TestCase):
         # raise an exception.
 
         service = SelectionService()
-        provider = SimpleListProvider(items=range(10))
+        provider = SimpleListProvider(items=list(range(10)))
         service.add_selection_provider(provider)
 
         new_selection = [0, 11, 1]
@@ -266,8 +264,8 @@ class TestSelectionService(unittest.TestCase):
 
         new_selection = [0, 11, 1]
         with self.assertRaises(ValueError):
-            service.set_selection(provider_id, new_selection,
-                                  ignore_missing=False)
+            service.set_selection(
+                provider_id, new_selection, ignore_missing=False)
 
 
 if __name__ == '__main__':
