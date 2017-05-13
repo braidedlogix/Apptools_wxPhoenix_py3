@@ -44,7 +44,7 @@ class H5DictNode(object):
         dict_node = getattr(h5_group, self._pyobject_data_node)
         with closing(filenode.open_node(dict_node)) as f:
             self._pyobject_data = json.loads(
-                f.read().decode('ascii'), object_hook=self._object_hook)
+                f.read(), object_hook=self._object_hook)
 
     #--------------------------------------------------------------------------
     #  Dictionary interface
